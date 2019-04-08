@@ -15,6 +15,7 @@ import {
 } from '../../entities';
 
 import * as jwt from 'jsonwebtoken';
+import { DecodedTokenModel } from '../../_models/decoded-token.model';
 
 
 @injectable()
@@ -32,19 +33,23 @@ export class AuthService implements IAuthService {
                 if (!found_user) {
                     throw new AppError(
                         'AppError',
-                        'Wron Username or Password.',
+                        'Wrong Username or Password.',
                         404
                     );
                 }
-                let token = jwt.sign({
-                    id: found_user._id,
+                console.log("Found User : ", found_user);
+                let decodedToken: DecodedTokenModel = {
+                    id: found_user.id,
                     username: found_user.username,
                     email: found_user.email,
                     name: found_user.name,
                     surname: found_user.surname
+                }
+                let token = jwt.sign({
+                    ...decodedToken
                 }, 'MySecret', { expiresIn: 86400000 });
                 let loginResult: any = {
-                    id: found_user._id,
+                    id: found_user.id,
                     email: found_user.email,
                     token: token
                 }

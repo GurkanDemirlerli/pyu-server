@@ -31,4 +31,10 @@ export class UserEntity {
         length: 100
     })
     password: string;
+
+    @Column()
+    createdAt: Date;
+
+    @OneToMany(type => TaskEntity, task => task.creator)
+    createdTasks: TaskEntity[];
 }

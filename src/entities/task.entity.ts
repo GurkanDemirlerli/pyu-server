@@ -1,5 +1,6 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 import { CommentEntity } from './comment.entity';
+import { UserEntity } from './user.entity';
 @Entity("task")
 export class TaskEntity {
 
@@ -18,4 +19,12 @@ export class TaskEntity {
 
     @OneToMany(type => CommentEntity, comment => comment.task)
     comments: CommentEntity[];
+
+    @Column("int")
+    creatorId: number;
+
+    @ManyToOne(type => UserEntity, user => user.createdTasks)
+
+    @JoinColumn({ name: "creatorId" })
+    creator: UserEntity;
 }

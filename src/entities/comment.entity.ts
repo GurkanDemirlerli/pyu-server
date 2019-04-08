@@ -17,9 +17,6 @@ export class CommentEntity {
     })
     content: string;
 
-    // @ManyToOne(type => TaskEntity, task => task.comments)
-    // task: TaskEntity;
-
     @Column("int")
     taskId: number;
 

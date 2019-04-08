@@ -2,6 +2,7 @@ import { TaskController } from './../@controllers/task.controller';
 import * as express from 'express';
 import { IOC } from '../ioc';
 import 'reflect-metadata';
+import { authorize } from '../middlewares/authorize.middleware';
 export class TaskRoutes {
     public static configureRoutes(app: express.Application): void {
         const root = "/api/tasks";
@@ -11,7 +12,7 @@ export class TaskRoutes {
             .get((req, res, next) => ctrl.list(req, res, next));
 
         app.route(root + '/')
-            .post((req, res, next) => ctrl.insert(req, res, next));
+            .post(authorize, (req, res, next) => ctrl.insert(req, res, next));
 
     }
 }

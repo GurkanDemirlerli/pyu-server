@@ -12,6 +12,8 @@ import {
 import { TaskEntity } from "../entities/task.entity";
 import { ITaskRepository } from './../@repository/abstract/i-task.repository';
 import 'reflect-metadata';
+import { TaskCreateDto } from '../_models/task-create.dto';
+import { ErrorHandler } from '../errors/error-handler';
 @injectable()
 export class TaskController {
 
@@ -20,9 +22,6 @@ export class TaskController {
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-
-        console.log("Received GetAllTasks ==> GET");
-
         this._taskRepository.list().then((result: any) => {
             console.log("Result : " + result);
             res.send(result);
@@ -31,17 +30,16 @@ export class TaskController {
 
 
     insert(req: Request, res: Response, next: NextFunction) {
-
-        console.log("Received SaveEmployee ==> POST");
-        console.log(req.body);
-
-        let emp: TaskEntity = new TaskEntity();
-        emp.description = req.body.description;
-        emp.title = req.body.title;
-
-        this._taskRepository.insert(emp).then((result: any) => {
-            console.log("Result : " + result);
-            res.send(result);
+        let tskDto: TaskCreateDto = Object.assign(new TaskCreateDto(), req.body);
+        tskDto.creatorId = req.decoded.id;
+        let task: TaskEntity = Object.assign(new TaskEntity(), tskDto);
+        this._taskRepository.insert(task).then((result) => {
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'TaskController');
         });
     }
 }
