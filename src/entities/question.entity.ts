@@ -1,9 +1,9 @@
 import { ProjectEntity } from './project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
-import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
-@Entity("task")
-export class TaskEntity {
+import { AnswerEntity } from './answer.entity';
+@Entity("question")
+export class QuestionEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,14 +16,14 @@ export class TaskEntity {
     @Column({
         length: 100
     })
-    description: string;
+    content: string;
 
-    @OneToMany(type => CommentEntity, comment => comment.task)
-    comments: CommentEntity[];
+    @OneToMany(type => AnswerEntity, answer => answer.question)
+    answers: AnswerEntity[];
 
     @Column("int")
     creatorId: number;
-    @ManyToOne(type => UserEntity, user => user.createdTasks)
+    @ManyToOne(type => UserEntity, user => user.questions)
     @JoinColumn({ name: "creatorId" })
     creator: UserEntity;
 

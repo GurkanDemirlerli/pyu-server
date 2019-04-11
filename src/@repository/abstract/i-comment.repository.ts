@@ -1,6 +1,6 @@
 import { CommentEntity } from "./../../entities/comment.entity";
+import { IRepositoryBase } from "./base/i-repository.base";
 
-export interface ICommentRepository {
-    list();
-    insert(task: CommentEntity);
+export interface ICommentRepository extends IRepositoryBase<CommentEntity> {
+
 }

@@ -1,3 +1,7 @@
+import { AnswerEntity } from './../entities/answer.entity';
+import { QuestionEntity } from './../entities/question.entity';
+import { CompanyEntity } from './../entities/company.entity';
+import { ProjectEntity } from './../entities/project.entity';
 import {
     CommentEntity,
     TaskEntity,
@@ -17,7 +21,11 @@ export let dbOptions: ConnectionOptions = {
     entities: [
         TaskEntity,
         CommentEntity,
-        UserEntity
+        UserEntity,
+        ProjectEntity,
+        CompanyEntity,
+        QuestionEntity,
+        AnswerEntity
     ],
     synchronize: true,
 }
