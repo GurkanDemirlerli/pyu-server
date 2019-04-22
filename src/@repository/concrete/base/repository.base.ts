@@ -13,16 +13,22 @@ export class RepositoryBase<T> implements IRepositoryBase<T> {
     list() {
         return getManager().getRepository(this.type).find();
     }
-    findById(id) {
-
+    findById(id): Promise<T> {
+        throw new Error("Method not implemented.");
     }
+
+    findOne(id: number, options) {
+        return getManager().getRepository(this.type).findOne(id, options);
+    }
+
     insert(model: T) {
         return getManager().getRepository(this.type).save(model);
     }
-    update(model: T) {
+    update(model: T): Promise<any> {
+        throw new Error("Method not implemented.");
 
     }
-    delete(id) {
-
+    delete(id): Promise<any> {
+        throw new Error("Method not implemented.");
     }
 }

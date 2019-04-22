@@ -1,8 +1,10 @@
+import { IssueEntity } from './issue.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
 import { TaskEntity } from "./task.entity";
 import { CompanyEntity } from "./company.entity";
+import { StatusEntity } from "./status.entity";
 @Entity("project")
 export class ProjectEntity {
 
@@ -20,7 +22,13 @@ export class ProjectEntity {
     description: string;
 
     @OneToMany(type => TaskEntity, task => task.project)
-    tasks: CommentEntity[];
+    tasks: TaskEntity[];
+
+    @OneToMany(type => StatusEntity, status => status.project)
+    statuses: StatusEntity[];
+
+    @OneToMany(type => IssueEntity, issue => issue.project)
+    issues: IssueEntity[];
 
     @Column("int")
     companyId: number;

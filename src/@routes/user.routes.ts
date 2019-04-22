@@ -1,5 +1,5 @@
 import { validationMiddleware } from '../middlewares/validation.middleware';
-import { LoginDto } from './../_models/login.dto.model';
+import { LoginDto } from './../_models/dtos';
 import { UserController } from './../@controllers/user.controller';
 import * as express from 'express';
 import { IOC } from '../ioc';

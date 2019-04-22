@@ -1,3 +1,4 @@
+import { IssueEntity } from './issue.entity';
 import { CommentEntity } from './comment.entity';
 import { QuestionEntity } from './question.entity';
 import { CompanyEntity } from './company.entity';
@@ -5,6 +6,7 @@ import { TaskEntity } from './task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany } from "typeorm";
 import { ProjectEntity } from './project.entity';
 import { AnswerEntity } from './answer.entity';
+import { StatusEntity } from './status.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -57,6 +59,12 @@ export class UserEntity {
 
     @OneToMany(type => CommentEntity, comment => comment.creator)
     comments: AnswerEntity[];
+
+    @OneToMany(type => IssueEntity, issue => issue.creator)
+    createdIssues: IssueEntity[];
+    
+    @OneToMany(type => StatusEntity, status => status.creator)
+    createdStatuses: StatusEntity[];
 
     @ManyToMany(type => ProjectEntity, project => project.users)
     projects: ProjectEntity[];

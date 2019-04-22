@@ -6,7 +6,7 @@ import 'reflect-metadata';
 import { IAuthService } from '../abstract';
 import {
     LoginDto
-} from "../../_models";
+} from "../../_models/dtos";
 import {
     IUserRepository
 } from '../../@repository/abstract';

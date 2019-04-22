@@ -9,18 +9,18 @@ import {
     NextFunction
 } from 'express';
 import 'reflect-metadata';
-import { TaskCreateDto } from '../_models/dtos';
+import { CompanyCreateDto } from '../_models/dtos/company/company-create.dto';
 import { ErrorHandler } from '../errors/error-handler';
-import { ITaskService } from '../@services/abstract/i-task.service';
+import { ICompanyService } from '../@services/abstract/i-company.service';
 @injectable()
-export class TaskController {
+export class CompanyController {
 
     constructor(
-        @inject(InjectTypes.Service.TASK) private readonly _taskService: ITaskService
+        @inject(InjectTypes.Service.COMPANY) private readonly _companyService: ICompanyService
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._taskRepository.list().then((result: any) => {
+        // this._companyRepository.list().then((result: any) => {
         //     console.log("Result : " + result);
             res.send("aaa");
         // });
@@ -28,15 +28,15 @@ export class TaskController {
 
 
     insert(req: Request, res: Response, next: NextFunction) {
-        let tskDto: TaskCreateDto = Object.assign(new TaskCreateDto(), req.body);
-        tskDto.creatorId = req.decoded.id;
-        this._taskService.add(tskDto).then((result) => {
+        let cmpDto: CompanyCreateDto = Object.assign(new CompanyCreateDto(), req.body);
+        cmpDto.ownerId = req.decoded.id;
+        this._companyService.add(cmpDto).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
             });
         }).catch((error: Error) => {
-            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'TaskController');
+            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'CompanyController');
         });
     }
 }

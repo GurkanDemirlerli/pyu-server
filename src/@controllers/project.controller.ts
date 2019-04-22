@@ -9,18 +9,18 @@ import {
     NextFunction
 } from 'express';
 import 'reflect-metadata';
-import { TaskCreateDto } from '../_models/dtos';
+import { ProjectCreateDto } from '../_models/dtos/project/project-create.dto';
 import { ErrorHandler } from '../errors/error-handler';
-import { ITaskService } from '../@services/abstract/i-task.service';
+import { IProjectService } from '../@services/abstract/i-project.service';
 @injectable()
-export class TaskController {
+export class ProjectController {
 
     constructor(
-        @inject(InjectTypes.Service.TASK) private readonly _taskService: ITaskService
+        @inject(InjectTypes.Service.PROJECT) private readonly _projectService: IProjectService
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._taskRepository.list().then((result: any) => {
+        // this._projectRepository.list().then((result: any) => {
         //     console.log("Result : " + result);
             res.send("aaa");
         // });
@@ -28,15 +28,15 @@ export class TaskController {
 
 
     insert(req: Request, res: Response, next: NextFunction) {
-        let tskDto: TaskCreateDto = Object.assign(new TaskCreateDto(), req.body);
-        tskDto.creatorId = req.decoded.id;
-        this._taskService.add(tskDto).then((result) => {
+        let prjDto: ProjectCreateDto = Object.assign(new ProjectCreateDto(), req.body);
+        prjDto.userId = req.decoded.id;
+        this._projectService.add(prjDto).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
             });
         }).catch((error: Error) => {
-            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'TaskController');
+            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'ProjectController');
         });
     }
 }

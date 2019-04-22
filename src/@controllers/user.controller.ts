@@ -1,7 +1,6 @@
-import { RegisterDto } from './../_models/register.dto';
+import { RegisterDto, LoginDto } from './../_models/dtos';
 import { IAuthService } from './../@services/abstract/i-auth.service';
 import 'reflect-metadata';
-import { LoginDto } from './../_models';
 import { injectable, inject } from 'inversify';
 import { InjectTypes } from '../ioc';
 import { validate } from 'class-validator';

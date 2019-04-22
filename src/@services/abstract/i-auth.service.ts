@@ -1,4 +1,4 @@
-import { LoginDto } from "../../_models";
+import { LoginDto } from "../../_models/dtos";
 
 export interface IAuthService {
     // register(model: RegisterRequestModel): Promise<RegisterResultModel>;
