@@ -5,7 +5,7 @@ import 'reflect-metadata';
 
 import { IAuthService } from '../abstract';
 import {
-    LoginDto
+    LoginDto, RegisterDto
 } from "../../_models/dtos";
 import {
     IUserRepository
@@ -61,12 +61,14 @@ export class AuthService implements IAuthService {
         })
     }
 
-    // register(model: RegisterRequestModel): Promise<RegisterResultModel> {
-    //     return new Promise<RegisterResultModel>((resolve, reject) => {
-    //         this._userRepository.create(model).then((created_user_domain: IUser) => {
-    //             resolve(Mapper.IUser_to_IRegisterResultModel(created_user_domain));
-    //         }).catch((error: Error) => {
-    //             reject(error);
+
+    // register(model: RegisterDto) {
+    //     return new Promise<any>((resolve, reject) => {
+    //         let user: UserEntity = Object.assign(new UserEntity(), model);
+    //         this._userRepository.insert(user).then((res) => {
+    //             resolve(res);
+    //         }).catch((err) => {
+    //             reject(err);
     //         });
     //     });
     // }

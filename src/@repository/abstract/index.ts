@@ -1,3 +1,6 @@
+export { IQuestionRepository } from './i-question.repository';
+export { IIssueRepository } from './i-issue.repository';
+export { IAnswerRepository } from './i-answer.repository';
 export { IStatusRepository } from './i-status.repository';
 export { IProjectRepository } from './i-project.repository';
 export { ICompanyRepository } from './i-company.repository';

@@ -1,21 +1,21 @@
-import { IAnswerRepository } from "../../@repository/abstract/i-answer.repository";
+import { IIssueRepository } from "../../@repository/abstract/i-issue.repository";
 import { injectable, inject } from "inversify";
-import { IAnswerService } from "../abstract/i-answer.service";
+import { IIssueService } from "../abstract/i-issue.service";
 import { InjectTypes } from "../../ioc";
-import { AnswerEntity } from "../../entities/answer.entity";
-import { AnswerCreateDto } from "../../_models/dtos/answer/answer-create.dto";
+import { IssueEntity } from "../../entities/issue.entity";
+import { IssueCreateDto } from "../../_models/dtos/issue/issue-create.dto";
 
 @injectable()
-export class AnswerService implements IAnswerService {
+export class IssueService implements IIssueService {
 
     constructor(
-        @inject(InjectTypes.Repository.ANSWER) private readonly _answerRepository: IAnswerRepository
+        @inject(InjectTypes.Repository.ISSUE) private readonly _issueRepository: IIssueRepository
     ) { }
 
-    add(model: AnswerCreateDto) {
+    add(model: IssueCreateDto) {
         return new Promise<any>((resolve, reject) => {
-            let answer: AnswerEntity = Object.assign(new AnswerEntity(), model);
-            this._answerRepository.insert(answer).then((res) => {
+            let issue: IssueEntity = Object.assign(new IssueEntity(), model);
+            this._issueRepository.insert(issue).then((res) => {
                 resolve(res);
             }).catch((err) => {
                 reject(err);

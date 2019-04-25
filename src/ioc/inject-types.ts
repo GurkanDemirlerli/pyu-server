@@ -1,18 +1,25 @@
 export module InjectTypes {
     export enum Repository {
-        TASK = 'TaskRepository',
+        ANSWER = 'AnswerRepository',
         COMMENT = 'CommentRepository',
-        USER = 'UserRepository',
         COMPANY = 'CompanyRepository',
+        ISSUE = 'IssueRepository',
         PROJECT = 'ProjectRepository',
-        STATUS = 'StatusRepository'
+        QUESTION = 'QuestionRepository',
+        STATUS = 'StatusRepository',
+        TASK = 'TaskRepository',
+        USER = 'UserRepository'
     }
 
     export enum Service {
-        PROJECT = 'ProjectService',
+        ANSWER = 'AnswerService',
+        COMMENT = 'CommentService',
         COMPANY = 'CompanyService',
-        AUTH = 'AuthService',
-        TASK = 'TaskService'
+        ISSUE = 'IssueService',
+        PROJECT = 'ProjectService',
+        QUESTION = 'QuestionService',
+        TASK = 'TaskService',
+        USER = 'UserService'
     }
 
 }

@@ -9,18 +9,18 @@ import {
     NextFunction
 } from 'express';
 import 'reflect-metadata';
-import { CommentCreateDto } from '../_models/dtos/comment/comment-create.dto';
+import { AnswerCreateDto } from '../_models/dtos/answer/answer-create.dto';
 import { ErrorHandler } from '../errors/error-handler';
-import { ICommentService } from '../@services/abstract/i-comment.service';
+import { IAnswerService } from '../@services/abstract/i-answer.service';
 @injectable()
-export class CommentController {
+export class AnswerController {
 
     constructor(
-        @inject(InjectTypes.Service.COMMENT) private readonly _commentService: ICommentService
+        @inject(InjectTypes.Service.ANSWER) private readonly _answerService: IAnswerService
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._commentRepository.list().then((result: any) => {
+        // this._answerRepository.list().then((result: any) => {
         //     console.log("Result : " + result);
             res.send("aaa");
         // });
@@ -28,15 +28,15 @@ export class CommentController {
 
 
     insert(req: Request, res: Response, next: NextFunction) {
-        let issDto: CommentCreateDto = Object.assign(new CommentCreateDto(), req.body);
-        issDto.creatorId = req.decoded.id;
-        this._commentService.add(issDto).then((result) => {
+        let ansDto: AnswerCreateDto = Object.assign(new AnswerCreateDto(), req.body);
+        ansDto.creatorId = req.decoded.id;
+        this._answerService.add(ansDto).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
             });
         }).catch((error: Error) => {
-            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'CommentController');
+            return ErrorHandler.handleErrorResponses(error, res, 'insert', 'AnswerController');
         });
     }
 }

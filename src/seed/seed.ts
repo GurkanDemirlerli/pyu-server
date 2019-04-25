@@ -3,7 +3,6 @@ import { createConnection } from "typeorm";
 import * as appConfig from "./../common/app-config";
 import { InjectTypes } from './../ioc/inject-types';
 import { ITaskRepository, IUserRepository, ICommentRepository } from "./../@repository/abstract";
-import { IAuthService } from './../@services/abstract/i-auth.service';
 import * as faker from 'faker';
 import { RegisterDto } from "./../_models/dtos";
 import { UserEntity } from "./../entities/user.entity";
@@ -14,7 +13,6 @@ export class SeedDatabase {
         @inject(InjectTypes.Repository.COMMENT) private readonly _commentRepository: ICommentRepository,
         @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
         @inject(InjectTypes.Repository.USER) private readonly _userRepository: IUserRepository,
-        @inject(InjectTypes.Service.AUTH) private readonly _authService: IAuthService,
     ) { }
 
     public initialize() {

@@ -1,7 +1,9 @@
+import { QuestionCreateDto } from './../../_models/dtos/question/question-create.dto';
+import { QuestionFilter } from './../../_models/filters/question-filter';
 export interface IQuestionService {
-    add();
-    list(filters);
-    find(filters);
-    update();
-    delete();
+    add(model: QuestionCreateDto);
+    list(filters: QuestionFilter);
+    find(id: number);
+    update(model);
+    delete(id:number);
 }
