@@ -71,4 +71,7 @@ export class UserEntity {
 
     @ManyToMany(type => CompanyEntity, company => company.users)
     companies: CompanyEntity[];
+
+    @ManyToMany(type => TaskEntity, task => task.assignees)
+    assignedTasks: TaskEntity[];
 }

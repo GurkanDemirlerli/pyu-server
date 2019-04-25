@@ -1,3 +1,4 @@
+import { FindManyOptions } from 'typeorm';
 import { IProjectRepository } from './../../@repository/abstract/i-project.repository';
 import { ITaskRepository } from "../../@repository/abstract/i-task.repository";
 import { TaskCreateDto } from "../../_models/dtos";
@@ -50,8 +51,29 @@ export class TaskService implements ITaskService {
             });
         });
     }
-    list(filters: TaskFilter) {
-        throw new Error("Method not implemented.");
+
+    list(filters: TaskFilter, userId: number) {
+        return new Promise<any>((resolve, reject) => {
+            this.validateAuthority(filters.projectId, userId).then(() => {
+                let query: FindManyOptions<TaskEntity> = {
+                    relations: [
+                        "assignees"
+                    ],
+                    where: {
+                        projectId: filters.projectId,
+                        assignees: {
+                            id: filters.assignedTo
+                        },
+                        creatorId: filters.createdBy
+                    }
+                };
+                return this._taskRepository.list(query);
+            }).then((tasks) => {
+                resolve(tasks);
+            }).catch((err) => {
+                reject(err);
+            })
+        });
     }
     find(id: number) {
         throw new Error("Method not implemented.");

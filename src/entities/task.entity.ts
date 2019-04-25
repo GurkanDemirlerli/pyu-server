@@ -1,6 +1,6 @@
 import { IssueEntity } from './issue.entity';
 import { ProjectEntity } from './project.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
 import { StatusEntity } from './status.entity';
@@ -46,4 +46,9 @@ export class TaskEntity {
     @ManyToOne(type => IssueEntity, issue => issue.tasks)
     @JoinColumn({ name: "creatorId" })
     fromIssue: IssueEntity;
+
+    @ManyToMany(type => UserEntity, user => user.assignedTasks)
+    @JoinTable()
+    assignees: UserEntity[];
+
 }

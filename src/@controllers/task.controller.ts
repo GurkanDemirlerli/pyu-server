@@ -1,3 +1,4 @@
+import { TaskFilter } from './../_models/filters/task-filter';
 // import { AppError } from '../errors/app-error';
 // import { ErrorHandler } from '../errors/error-handler';
 import { injectable, inject } from 'inversify';
@@ -20,10 +21,20 @@ export class TaskController {
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._taskRepository.list().then((result: any) => {
-        //     console.log("Result : " + result);
-            res.send("aaa");
-        // });
+        let filters: TaskFilter;
+        filters.assignedTo = Number(req.query.assignedTo);
+        filters.createdBy = Number(req.query.createdBy);
+        filters.projectId = Number(req.query.projectId);
+        filters.status = Number(req.query.status);
+        
+        this._taskService.list(filters, req.decoded.id).then((result) => {
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'list', 'TaskController');
+        });
     }
 
 

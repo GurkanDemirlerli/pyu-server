@@ -15,21 +15,20 @@ export class UserService implements IUserService {
         @inject(InjectTypes.Repository.USER) private readonly _userRepository: IUserRepository
     ) { }
 
+    public list(filters) {
+        throw new Error("Method not implemented.");
+    }
+    public find(id: number) {
+        throw new Error("Method not implemented.");
+    }
+    public update(model: any) {
+        throw new Error("Method not implemented.");
+    }
+    public delete(id: number) {
+        throw new Error("Method not implemented.");
+    }
 
-    list(filters) {
-        throw new Error("Method not implemented.");
-    }
-    find(id: number) {
-        throw new Error("Method not implemented.");
-    }
-    update(model: any) {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: number) {
-        throw new Error("Method not implemented.");
-    }
-
-    login(model: LoginDto): Promise<any> {
+    public login(model: LoginDto): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this._userRepository.findByLogin(model.email, model.password).then((found_user) => {
                 console.log(found_user);
@@ -56,7 +55,6 @@ export class UserService implements IUserService {
                     email: found_user.email,
                     token: token
                 }
-
                 resolve(loginResult);
             }).catch((error) => {
                 reject(error)
@@ -64,14 +62,38 @@ export class UserService implements IUserService {
         })
     }
 
-    register(model: RegisterDto) {
+    public register(model: RegisterDto) {
         return new Promise<any>((resolve, reject) => {
-            let user: UserEntity = Object.assign(new UserEntity(), model);
-            this._userRepository.insert(user).then((res) => {
+            this.checkUniqueness(model.email, model.username).then(() => {
+                let user: UserEntity = Object.assign(new UserEntity(), model, { createdAt: new Date });
+                return this._userRepository.insert(user);
+            }).then((res) => {
                 resolve(res);
             }).catch((err) => {
                 reject(err);
             });
+        });
+    }
+
+    private checkUniqueness(email: string, username: string): Promise<void> {
+        return new Promise<any>((resolve, reject) => {
+            let query = {
+                where: [
+                    { email: email },
+                    { username: username }
+                ]
+            }
+            this._userRepository.list(query).then((users) => {
+                if (users.length > 0) {
+                    if (users[0].email === email)
+                        throw new AppError('AppError', 'This email is already taken', 422);
+                    else
+                        throw new AppError('AppError', 'This username is already taken', 422);
+                }
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
         });
     }
 

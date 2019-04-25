@@ -1,5 +1,5 @@
 import { IRepositoryBase } from './../../abstract/base/i-repository.base';
-import { getManager, Repository } from 'typeorm';
+import { getManager, Repository, FindManyOptions, FindOneOptions } from 'typeorm';
 import { unmanaged, injectable } from 'inversify';
 
 export type ObjectType<T> = { new(): T } | Function;
@@ -10,14 +10,14 @@ export class RepositoryBase<T> implements IRepositoryBase<T> {
         this.type = type;
     }
 
-    list() {
-        return getManager().getRepository(this.type).find();
+    list(options: FindManyOptions<T>) {
+        return getManager().getRepository(this.type).find(options);
     }
     findById(id): Promise<T> {
         throw new Error("Method not implemented.");
     }
 
-    findOne(id: number, options) {
+    findOne(id: number, options: FindOneOptions<T>) {
         return getManager().getRepository(this.type).findOne(id, options);
     }
 

@@ -11,4 +11,5 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
             TaskEntity
         );
     }
+
 }
