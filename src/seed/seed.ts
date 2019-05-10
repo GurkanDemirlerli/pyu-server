@@ -107,7 +107,6 @@ export class SeedDatabase {
             companies = createdCompanies;
             for (let i = 0; i < PROJECTCOUNT; i++) {
                 let ind = Math.floor(Math.random() * (COMPANYCOUNT));
-                console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",companies[ind].ownerId);
                 let prj: ProjectEntity = Object.assign(new ProjectEntity(), {
                     userId: companies[ind].ownerId,
                     title: faker.name.jobTitle(),
@@ -177,6 +176,7 @@ export class SeedDatabase {
             }
             console.log("Projeler tamamen eklendi");
             console.log(projects);
+            process.exit(0);
 
         }).catch((err) => {
             console.log(err);

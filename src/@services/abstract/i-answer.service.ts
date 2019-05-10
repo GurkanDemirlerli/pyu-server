@@ -6,4 +6,5 @@ export interface IAnswerService {
     find(id: number);
     update(model);
     delete(id:number);
+
 }

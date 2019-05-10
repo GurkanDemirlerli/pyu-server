@@ -17,12 +17,14 @@ export class ProjectService implements IProjectService {
     ) { }
 
     add(model: ProjectCreateDto) {
+      let prjRes;
         return new Promise<any>((resolve, reject) => {
             let project: ProjectEntity = Object.assign(new ProjectEntity(), model);
             this._projectRepository.insert(project).then((prj) => {
+              prjRes=prj;
                 return this.fillDefaultStatuses(prj);
             }).then((res) => {
-                resolve(res);
+                resolve(prjRes);
             }).catch((err) => {
                 reject(err);
             });
@@ -40,7 +42,7 @@ export class ProjectService implements IProjectService {
     delete(id: number) {
         throw new Error("Method not implemented.");
     }
-    
+
     //Bu işlemi daha sonra atomik yap
     private fillDefaultStatuses(project: ProjectEntity) {
         return new Promise<any>((resolve, reject) => {

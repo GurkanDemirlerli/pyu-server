@@ -38,13 +38,13 @@ export class TaskEntity {
     @Column("int")
     statusId: number;
     @ManyToOne(type => StatusEntity, status => status.tasks)
-    @JoinColumn({ name: "projectId" })
+    @JoinColumn({ name: "statusId" })
     status: StatusEntity;
 
     @Column("int", { nullable: true })
     fromIssueId: number;
     @ManyToOne(type => IssueEntity, issue => issue.tasks)
-    @JoinColumn({ name: "creatorId" })
+    @JoinColumn({ name: "fromIssueId" })
     fromIssue: IssueEntity;
 
     @ManyToMany(type => UserEntity, user => user.assignedTasks)

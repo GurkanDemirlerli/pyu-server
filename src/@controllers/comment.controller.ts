@@ -2,7 +2,6 @@
 // import { ErrorHandler } from '../errors/error-handler';
 import { injectable, inject } from 'inversify';
 import { InjectTypes } from '../ioc';
-import { validate } from 'class-validator';
 import {
     Request,
     Response,
@@ -22,14 +21,14 @@ export class CommentController {
     list(req: Request, res: Response, next: NextFunction) {
         // this._commentRepository.list().then((result: any) => {
         //     console.log("Result : " + result);
-            res.send("aaa");
+            res.send("aaaaa");
         // });
     }
 
 
     insert(req: Request, res: Response, next: NextFunction) {
         let issDto: CommentCreateDto = Object.assign(new CommentCreateDto(), req.body);
-        issDto.creatorId = req.decoded.id;
+        issDto.userId = req.decoded.id;
         this._commentService.add(issDto).then((result) => {
             return res.status(201).json({
                 success: true,

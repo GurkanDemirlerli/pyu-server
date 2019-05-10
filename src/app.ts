@@ -95,7 +95,8 @@ export class Server {
 
         createConnection(appConfig.dbOptions).then(async connection => {
             console.log(__dirname);
-            console.log("Connected to DB");
+            console.log("SERVER STARTED\n\n")
+
 
         }).catch(error => console.log("TypeORM connection error: ", error));
     }

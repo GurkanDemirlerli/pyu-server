@@ -11,6 +11,6 @@ export class CommentCreateDto {
     @IsNotEmpty()
     public taskId: number;
 
-    public creatorId: number;
+    public userId: number;
 
 }

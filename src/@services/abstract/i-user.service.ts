@@ -1,6 +1,6 @@
 import { RegisterDto } from './../../_models/dtos/user/register.dto';
-import { LoginDto } from "_models/dtos/user/login.dto.model";
 import { UserFilter } from './../../_models/filters/user-filter';
+import { LoginDto } from '@models/dtos/user/login.dto.model';
 
 export interface IUserService {
     register(model: RegisterDto);

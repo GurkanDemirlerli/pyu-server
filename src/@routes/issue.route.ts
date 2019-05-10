@@ -6,7 +6,7 @@ export class IssueRoutes {
     public static configureRoutes(app: express.Application): void {
         const root = "/api/issues";
         const ctrl = IOC.container.get(IssueController);
-        
+
         app.route(root + '/')
             .get((req, res, next) => ctrl.list(req, res, next));
 

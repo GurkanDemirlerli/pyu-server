@@ -9,7 +9,10 @@ export function validationMiddleware<T>(type: any, skipMissingProperties = false
       .then((errors: ValidationError[]) => {
         if (errors.length > 0) {
           const message = errors.map((error: ValidationError) => Object.values(error.constraints)).join(', ');
-          next(new HttpException(400, message));
+          return res.status(422).json({
+              message: message,
+              success: false
+          });
         } else {
           next();
         }
