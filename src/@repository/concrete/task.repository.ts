@@ -31,4 +31,16 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
         return query.orderBy("task.id", "DESC").getMany();
     }
 
+    findForDetails(id: number): Promise<TaskEntity> {
+        let query = getManager().createQueryBuilder(TaskEntity, "task").select("task")
+            .where("task.id =:id", { id: id })
+            .innerJoin("task.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
+            .leftJoin("task.assignees", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
+            .leftJoin("task.comments", "comment").addSelect(["comment.id", "comment.title", "comment.content", "comment.taskId"])
+            .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
+            .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
+
+        return query.getOne();
+    }
+
 }

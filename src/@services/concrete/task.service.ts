@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import { InjectTypes } from "../../ioc";
 import { AppError } from '../../errors/app-error';
 import { ITaskRepository, IProjectRepository } from "@repositories/abstract";
-import { TaskCreateDto, TaskUpdateDto } from "@models/dtos";
+import { TaskCreateDto, TaskUpdateDto, TaskDetailDto } from "@models/dtos";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ITaskService } from "@services/abstract/i-task.service";
 import { BaseStatus } from "@enums/base-status.enum";
@@ -55,15 +55,16 @@ export class TaskService implements ITaskService {
         });
     }
 
-    find(id: number, requestorId: number) {
-        return new Promise<any>((resolve, reject) => {
-            let task: TaskEntity;
-            this._taskRepository.findById(id).then((foundTask) => {
+    find(id: number, requestorId: number): Promise<TaskDetailDto> {
+        return new Promise<TaskDetailDto>((resolve, reject) => {
+            let taskEntity: TaskEntity;
+            this._taskRepository.findForDetails(id).then((foundTask) => {
                 if (!foundTask) throw new AppError('AppError', 'Task not found.', 404);
-                task = foundTask;
+                taskEntity = foundTask;
                 return this.validateAuthority(foundTask.projectId, requestorId);
             }).then(() => {
-                resolve(task);
+                let taskDto: TaskDetailDto = Object.assign(new TaskDetailDto(), taskEntity);
+                resolve(taskDto);
             }).catch((err) => {
                 reject(err);
             });
@@ -104,7 +105,7 @@ export class TaskService implements ITaskService {
         });
     }
 
-    private validateAuthority(projectId, userId): Promise<void> {
+    private validateAuthority(projectId: number, userId: number): Promise<void> {
         return new Promise<any>((resolve, reject) => {
             this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
                 let prjct = res;
