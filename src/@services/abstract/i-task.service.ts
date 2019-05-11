@@ -1,9 +1,10 @@
-import { TaskCreateDto } from './../../_models/dtos/task/task-create.dto';
-import { TaskFilter } from './../../_models/filters/task-filter';
+import { TaskCreateDto, TaskUpdateDto } from "@models/dtos";
+import { TaskFilter } from "@models/filters";
+
 export interface ITaskService {
     add(model: TaskCreateDto);
-    list(filters: TaskFilter, userId: number);
-    find(id: number);
-    update(model);
-    delete(id:number);
+    list(filters: TaskFilter, requestorId: number);
+    find(id: number, requestorId: number);
+    update(id: number, model: TaskUpdateDto, requestorId: number);
+    delete(id: number, requestorId: number);
 }

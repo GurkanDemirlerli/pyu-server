@@ -10,6 +10,9 @@
       "@middlewares/*":[
         "./src/middlewares/*"
       ],
+      "@middlewares":[
+        "./src/middlewares/index"
+      ],
       "@controllers/*":[
         "./src/@controllers/*"
       ],
@@ -36,6 +39,9 @@
       ],
       "@ioc/*":[
         "./src/ioc/*",
+      ],
+      "@ioc":[
+        "./src/ioc/index",
       ],
       "@seed/*":[
         "./src/seed/*",

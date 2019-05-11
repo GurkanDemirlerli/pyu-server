@@ -1,6 +1,6 @@
 import { injectable, inject } from "inversify";
-import { Request,Response,NextFunction } from "express";
-import { TaskCreateDto } from "@models/dtos";
+import { Request, Response, NextFunction } from "express";
+import { TaskCreateDto, TaskUpdateDto } from "@models/dtos";
 import { ITaskService } from "@services/abstract";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ErrorHandler } from "@errors/error-handler";
@@ -24,7 +24,7 @@ export class TaskController {
         if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
 
         this._taskService.list(filters, req.decoded.id).then((result) => {
-            return res.status(201).json({
+            return res.status(200).json({
                 success: true,
                 data: result
             });
@@ -32,7 +32,6 @@ export class TaskController {
             return ErrorHandler.handleErrorResponses(error, res, 'list', 'TaskController');
         });
     }
-
 
     insert(req: Request, res: Response, next: NextFunction) {
 
@@ -45,6 +44,42 @@ export class TaskController {
             });
         }).catch((error: Error) => {
             return ErrorHandler.handleErrorResponses(error, res, 'insert', 'TaskController');
+        });
+    }
+
+    find(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._taskService.find(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'find', 'TaskController');
+        });
+    }
+
+    update(req: Request, res: Response, next: NextFunction) {
+        const id: number = req.params.id;
+        const tskDto: TaskUpdateDto = Object.assign(new TaskCreateDto(), req.body);
+        this._taskService.update(id, tskDto, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'update', 'TaskController');
+        });
+    }
+
+    delete(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._taskService.delete(id, req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'delete', 'TaskController');
         });
     }
 }

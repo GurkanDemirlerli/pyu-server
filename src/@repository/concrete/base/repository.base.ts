@@ -1,5 +1,5 @@
 import { IRepositoryBase } from './../../abstract/base/i-repository.base';
-import { getManager, Repository, FindManyOptions, FindOneOptions } from 'typeorm';
+import { getManager, FindManyOptions, FindOneOptions } from 'typeorm';
 import { unmanaged, injectable } from 'inversify';
 
 export type ObjectType<T> = { new(): T } | Function;
@@ -10,25 +10,26 @@ export class RepositoryBase<T> implements IRepositoryBase<T> {
         this.type = type;
     }
 
-    list(options: FindManyOptions<T>) {
+    list(options: FindManyOptions<T>): Promise<T[]> {
         return getManager().getRepository(this.type).find(options);
     }
-    findById(id): Promise<T> {
-        throw new Error("Method not implemented.");
+    findById(id: number): Promise<T> {
+        return getManager().getRepository(this.type).findOne(id);
     }
 
-    findOne(id: number, options: FindOneOptions<T>) {
+    findOne(id: number, options: FindOneOptions<T>): Promise<T> {
         return getManager().getRepository(this.type).findOne(id, options);
     }
 
-    insert(model: T) {
+    insert(model: T): Promise<T> {
         return getManager().getRepository(this.type).save(model);
     }
-    update(model: T): Promise<any> {
-        throw new Error("Method not implemented.");
+
+    update(id: number, model: T): Promise<any> {
+        return getManager().getRepository(this.type).update(id, model);
 
     }
-    delete(id): Promise<any> {
-        throw new Error("Method not implemented.");
+    delete(id: number): Promise<any> {
+        return getManager().getRepository(this.type).delete(id);
     }
 }
