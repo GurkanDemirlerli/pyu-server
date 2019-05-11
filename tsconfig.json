@@ -1,22 +1,58 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "paths": {
       "@models/*":[
         "./src/_models/*"
       ],
       "@middlewares/*":[
         "./src/middlewares/*"
+      ],
+      "@controllers/*":[
+        "./src/@controllers/*"
+      ],
+      "@repositories/*":[
+        "./src/@repository/*"
+      ],
+      "@routes/*":[
+        "./src/@routes/*"
+      ],
+      "@services/*":[
+        "./src/@services/*"
+      ],
+      "@entities/*":[
+        "./src/entities/*",
+      ],
+      "@enums/*":[
+        "./src/enums/*",
+      ],
+      "@common/*":[
+        "./src/common/*",
+      ],
+      "@errors/*":[
+        "./src/errors/*",
+      ],
+      "@ioc/*":[
+        "./src/ioc/*",
+      ],
+      "@seed/*":[
+        "./src/seed/*",
+      ],
+      "@helpers/*":[
+        "./src/helpers/*",
+      ],
+      "@exceptions/*":[
+        "./src/exceptions/*",
       ]
     },
     "outDir": "dist",
-    "module": "commonjs",
     "target": "es6",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
     "resolveJsonModule": true,
-    "moduleResolution": "node",
   },
 
   "include": [
@@ -25,5 +61,28 @@
   ],
   "exclude": [
     "node_modules",
-  ]
+  ],
+
+  "formatCodeOptions": {
+      "baseIndentSize": 0,
+      "indentSize": 4,
+      "tabSize": 4,
+      "newLineCharacter": "\n",
+      "convertTabsToSpaces": true,
+      "indentStyle": "Smart",
+      "insertSpaceAfterCommaDelimiter": true,
+      "insertSpaceAfterSemicolonInForStatements": true,
+      "insertSpaceBeforeAndAfterBinaryOperators": true,
+      "insertSpaceAfterConstructor": false,
+      "insertSpaceAfterKeywordsInControlFlowStatements": true,
+      "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+      "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+      "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+      "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+      "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+      "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+      "insertSpaceBeforeFunctionParenthesis": false,
+      "placeOpenBraceOnNewLineForFunctions": false,
+      "placeOpenBraceOnNewLineForControlBlocks": false
+  }
 }

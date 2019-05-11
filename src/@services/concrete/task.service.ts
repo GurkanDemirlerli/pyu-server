@@ -1,14 +1,13 @@
-import { FindManyOptions } from 'typeorm';
-import { IProjectRepository } from './../../@repository/abstract/i-project.repository';
-import { ITaskRepository } from "../../@repository/abstract/i-task.repository";
-import { TaskCreateDto } from "../../_models/dtos";
 import { injectable, inject } from "inversify";
-import { ITaskService } from "../abstract/i-task.service";
 import { InjectTypes } from "../../ioc";
-import { TaskFilter } from "../../_models/filters/task-filter";
-import { TaskEntity } from "../../entities/task.entity";
-import { BaseStatus } from '../../enums/base-status.enum';
 import { AppError } from '../../errors/app-error';
+import { ITaskRepository, IProjectRepository } from "@repositories/abstract";
+import { TaskCreateDto } from "@models/dtos";
+import { TaskFilter } from "@models/filters/task-filter";
+import { ITaskService } from "@services/abstract/i-task.service";
+import { BaseStatus } from "@enums/base-status.enum";
+import { TaskEntity } from "@entities/task.entity";
+
 
 @injectable()
 export class TaskService implements ITaskService {
@@ -53,22 +52,36 @@ export class TaskService implements ITaskService {
     }
 
     list(filters: TaskFilter, userId: number) {
+        console.log(filters.projectId);
         return new Promise<any>((resolve, reject) => {
             this.validateAuthority(filters.projectId, userId).then(() => {
-                let query: FindManyOptions<TaskEntity> = {
-                    relations: [
-                        "assignees"
-                    ],
-                    where: {
-                        projectId: filters.projectId,
-                        assignees: {
-                            id: filters.assignedTo
-                        },
-                        creatorId: filters.createdBy
-                    }
-                };
-                return this._taskRepository.list(query);
+                //
+                // let query: FindManyOptions<TaskEntity> = { where: {} };
+                // query.relations = ["assignees"];
+                // (query.where as FindConditions<TaskEntity>).projectId = filters.projectId;
+                // if (filters.createdBy !== undefined) (query.where as FindConditions<TaskEntity>).creatorId = filters.createdBy;
+                // if (filters.status !== undefined) (query.where as FindConditions<TaskEntity>).statusId = filters.status;
+                // if (filters.assignedTo !== undefined) ((query.where as FindConditions<TaskEntity>).assignees as any) = { id: filters.assignedTo };
+                //
+                // let querya: FindManyOptions<TaskEntity> = {
+                //     relations: [
+                //         "assignees"
+                //     ],
+                //     where: {
+                //         projectId: filters.projectId,
+                //         assignees: {
+                //             id: filters.assignedTo
+                //         },
+                //         creatorId: filters.createdBy,
+                //     }
+                // };
+                //
+                // console.log(query);
+                //
+                // return this._taskRepository.list(querya);
+                return this._taskRepository.find(filters);
             }).then((tasks) => {
+                console.log("OK");
                 resolve(tasks);
             }).catch((err) => {
                 reject(err);

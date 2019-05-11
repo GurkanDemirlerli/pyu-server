@@ -17,11 +17,11 @@ export class ProjectService implements IProjectService {
     ) { }
 
     add(model: ProjectCreateDto) {
-      let prjRes;
+        let prjRes;
         return new Promise<any>((resolve, reject) => {
             let project: ProjectEntity = Object.assign(new ProjectEntity(), model);
             this._projectRepository.insert(project).then((prj) => {
-              prjRes=prj;
+                prjRes = prj;
                 return this.fillDefaultStatuses(prj);
             }).then((res) => {
                 resolve(prjRes);

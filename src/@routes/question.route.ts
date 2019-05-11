@@ -2,6 +2,9 @@ import { QuestionController } from './../@controllers/question.controller';
 import * as express from 'express';
 import { IOC } from '../ioc';
 import 'reflect-metadata';
+import { authorize } from '@middlewares/authorize.middleware';
+import { validationMiddleware } from '@middlewares/validation.middleware';
+import { QuestionCreateDto } from '@models/dtos/question/question-create.dto';
 export class QuestionRoutes {
     public static configureRoutes(app: express.Application): void {
         const root = "/api/questions";
@@ -11,7 +14,7 @@ export class QuestionRoutes {
             .get((req, res, next) => ctrl.list(req, res, next));
 
         app.route(root + '/')
-            .post((req, res, next) => ctrl.insert(req, res, next));
+            .post(validationMiddleware(QuestionCreateDto) , authorize,(req, res, next) => ctrl.insert(req, res, next));
 
     }
 }

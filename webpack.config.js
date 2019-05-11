@@ -26,6 +26,18 @@ module.exports = {
         alias: {
             '@models': path.resolve(__dirname, "src/_models"),
             '@middlewares': path.resolve(__dirname, "src/middlewares"),
+            '@controllers': path.resolve(__dirname, "src/@controllers"),
+            '@repositories': path.resolve(__dirname, "src/@repository"),
+            '@routes': path.resolve(__dirname, "src/@routes"),
+            '@services': path.resolve(__dirname, "src/@services"),
+            '@entities': path.resolve(__dirname, "src/entities"),
+            '@common': path.resolve(__dirname, "src/common"),
+            '@errors': path.resolve(__dirname, "src/errors"),
+            '@ioc': path.resolve(__dirname, "src/ioc"),
+            '@seed': path.resolve(__dirname, "src/seed"),
+            '@helpers': path.resolve(__dirname, "src/helpers"),
+            '@exceptions': path.resolve(__dirname, "src/exceptions"),
+            '@enums': path.resolve(__dirname, "src/enums")
         },
         extensions: [".ts", ".js"]
     },

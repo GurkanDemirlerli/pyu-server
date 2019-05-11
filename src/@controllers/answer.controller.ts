@@ -2,7 +2,6 @@
 // import { ErrorHandler } from '../errors/error-handler';
 import { injectable, inject } from 'inversify';
 import { InjectTypes } from '../ioc';
-import { validate } from 'class-validator';
 import {
     Request,
     Response,

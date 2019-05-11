@@ -15,7 +15,7 @@ export class CommentRoutes {
             .get((req, res, next) => ctrl.list(req, res, next));
 
         app.route(root + '/')
-            .post(validationMiddleware(CommentCreateDto) ,authorize ,(req, res, next) => ctrl.insert(req, res, next));
+            .post(validationMiddleware(CommentCreateDto) , authorize ,(req, res, next) => ctrl.insert(req, res, next));
 
     }
 }
