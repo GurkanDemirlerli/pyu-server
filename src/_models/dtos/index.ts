@@ -2,6 +2,7 @@ export { TaskUpdateDto } from './task/task-update.dto';
 export { TaskCreateDto } from './task/task-create.dto';
 
 export { TaskDetailDto } from './task/task-detail.dto';
+export { TaskListDto } from './task/task-list.dto';
 
 export { LoginDto } from './user/login.dto.model';
 export { RegisterDto } from './user/register.dto';

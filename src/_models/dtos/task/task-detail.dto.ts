@@ -10,4 +10,5 @@ export class TaskDetailDto {
     status: StatusSummaryDto;
     fromIssue: IssueSummaryDto;
     assignees: UserSummaryDto[] = [];
+    comentCount: number = 0;
 }

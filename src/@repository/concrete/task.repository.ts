@@ -27,7 +27,7 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
             query = query.take(filters.take);
             if (filters.skip !== undefined) query = query.skip(filters.skip);
         }
-
+        query = query.leftJoin("task.comments", "comment").addSelect(["comment.id"])
         return query.orderBy("task.id", "DESC").getMany();
     }
 

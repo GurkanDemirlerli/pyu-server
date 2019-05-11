@@ -2,7 +2,7 @@ import { injectable, inject } from "inversify";
 import { InjectTypes } from "../../ioc";
 import { AppError } from '../../errors/app-error';
 import { ITaskRepository, IProjectRepository } from "@repositories/abstract";
-import { TaskCreateDto, TaskUpdateDto, TaskDetailDto } from "@models/dtos";
+import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto } from "@models/dtos";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ITaskService } from "@services/abstract/i-task.service";
 import { BaseStatus } from "@enums/base-status.enum";
@@ -18,7 +18,7 @@ export class TaskService implements ITaskService {
         @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository
     ) { }
 
-    add(model: TaskCreateDto) {
+    add(model: TaskCreateDto): Promise<number> {
         return new Promise<any>((resolve, reject) => {
             let firstStatus: StatusEntity;
             this.validateAuthority(model.projectId, model.creatorId).then(() => {
@@ -35,7 +35,7 @@ export class TaskService implements ITaskService {
                 let task: TaskEntity = Object.assign(new TaskEntity(), model, { statusId: firstStatus.id });
                 return this._taskRepository.insert(task);
             }).then((res) => {
-                resolve(res);
+                resolve(res.id);
             }).catch((err) => {
                 reject(err);
             });
@@ -44,11 +44,16 @@ export class TaskService implements ITaskService {
 
     list(filters: TaskFilter, requestorId: number) {
         return new Promise<any>((resolve, reject) => {
+            let taskDtos: TaskListDto[] = [];
             this.validateAuthority(filters.projectId, requestorId).then(() => {
                 return this._taskRepository.find(filters);
             }).then((tasks) => {
-                console.log("OK");
-                resolve(tasks);
+                tasks.map((tsk) => {
+                    let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })
+                    taskDto.commentCount = tsk.comments.length;
+                    taskDtos.push(taskDto);
+                });
+                resolve(taskDtos);
             }).catch((err) => {
                 reject(err);
             })

@@ -20,6 +20,8 @@ export class TaskEntity {
     })
     description: string;
 
+    likesQty:number;
+
     @OneToMany(type => CommentEntity, comment => comment.task)
     comments: CommentEntity[];
 

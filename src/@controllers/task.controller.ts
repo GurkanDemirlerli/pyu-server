@@ -37,7 +37,9 @@ export class TaskController {
 
         let tskDto: TaskCreateDto = Object.assign(new TaskCreateDto(), req.body);
         tskDto.creatorId = req.decoded.id;
-        this._taskService.add(tskDto).then((result) => {
+        this._taskService.add(tskDto).then((createdId) => {
+            return this._taskService.find(createdId, req.decoded.id);
+        }).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
