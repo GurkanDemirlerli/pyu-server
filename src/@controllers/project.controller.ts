@@ -1,17 +1,11 @@
-// import { AppError } from '../errors/app-error';
-// import { ErrorHandler } from '../errors/error-handler';
-import { injectable, inject } from 'inversify';
-import { InjectTypes } from '../ioc';
-import { validate } from 'class-validator';
-import {
-    Request,
-    Response,
-    NextFunction
-} from 'express';
-import 'reflect-metadata';
-import { ProjectCreateDto } from '../_models/dtos/project/project-create.dto';
-import { ErrorHandler } from '../errors/error-handler';
-import { IProjectService } from '../@services/abstract/i-project.service';
+import { injectable, inject } from "inversify";
+import { Request, Response, NextFunction } from "express";
+import { ProjectCreateDto, ProjectUpdateDto } from "@models/dtos";
+import { IProjectService } from "@services/abstract";
+import { ProjectFilter } from "@models/filters/project-filter";
+import { ErrorHandler } from "@errors/error-handler";
+import { InjectTypes } from "@ioc/inject-types";
+
 @injectable()
 export class ProjectController {
 
@@ -20,23 +14,68 @@ export class ProjectController {
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._projectRepository.list().then((result: any) => {
-        //     console.log("Result : " + result);
-            res.send("aaa");
-        // });
+
+        let filters: ProjectFilter = {};
+
+        this._projectService.list(filters, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'list', 'ProjectController');
+        });
     }
 
-
     insert(req: Request, res: Response, next: NextFunction) {
+
         let prjDto: ProjectCreateDto = Object.assign(new ProjectCreateDto(), req.body);
         prjDto.userId = req.decoded.id;
-        this._projectService.add(prjDto).then((result) => {
+        this._projectService.add(prjDto).then((createdId) => {
+            return this._projectService.find(createdId, req.decoded.id);
+        }).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
             });
         }).catch((error: Error) => {
             return ErrorHandler.handleErrorResponses(error, res, 'insert', 'ProjectController');
+        });
+    }
+
+    find(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._projectService.find(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'find', 'ProjectController');
+        });
+    }
+
+    update(req: Request, res: Response, next: NextFunction) {
+        const id: number = req.params.id;
+        const prjDto: ProjectUpdateDto = Object.assign(new ProjectCreateDto(), req.body);
+        this._projectService.update(id, prjDto, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'update', 'ProjectController');
+        });
+    }
+
+    delete(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._projectService.delete(id, req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'delete', 'ProjectController');
         });
     }
 }

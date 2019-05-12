@@ -1,57 +1,64 @@
-import { IQuestionRepository } from "../../@repository/abstract/i-question.repository";
-import { IProjectRepository } from "../../@repository/abstract/i-project.repository";
+import { IQuestionService } from "@services/abstract";
 import { injectable, inject } from "inversify";
-import { IQuestionService } from "../abstract/i-question.service";
-import { InjectTypes } from "../../ioc";
-import { QuestionEntity } from "../../entities/question.entity";
-import { QuestionCreateDto } from "../../_models/dtos/question/question-create.dto";
-import { AppError } from '../../errors/app-error';
+import { InjectTypes } from "@ioc";
+import { IQuestionRepository } from "@repositories/abstract";
+import { QuestionCreateDto, QuestionListDto, QuestionDetailDto, QuestionUpdateDto } from "@models/dtos";
+import { QuestionEntity } from "@entities/question.entity";
+import { QuestionFilter } from "@models/filters";
+import { AppError } from "@errors/app-error";
 
 @injectable()
 export class QuestionService implements IQuestionService {
 
     constructor(
-        @inject(InjectTypes.Repository.QUESTION) private readonly _questionRepository: IQuestionRepository,
-        @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
-
+        @inject(InjectTypes.Repository.QUESTION) private readonly _questionRepository: IQuestionRepository
     ) { }
 
-    add(model: QuestionCreateDto) {
+    add(model: QuestionCreateDto): Promise<number> {
         return new Promise<any>((resolve, reject) => {
-            this.validateAuthority(model.projectId, model.creatorId).then(() => {
-                let question: QuestionEntity = Object.assign(new QuestionEntity(), model);
-                return this._questionRepository.insert(question);
-            }).then((res) => {
-                resolve(res);
+            //TODO yetkisi var mı diye kontrol et
+            let questionEn: QuestionEntity = Object.assign(new QuestionEntity(), model);
+            this._questionRepository.insert(questionEn).then((res) => {
+                resolve(res.id);
             }).catch((err) => {
                 reject(err);
             });
         });
     }
-    list(filters) {
-        throw new Error("Method not implemented.");
-    }
-    find(id: number) {
-        throw new Error("Method not implemented.");
-    }
-    update(model: any) {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: number) {
+
+    list(filters: QuestionFilter, requestorId: number): Promise<QuestionListDto[]> {
         throw new Error("Method not implemented.");
     }
 
-    private validateAuthority(projectId, userId): Promise<void> {
+    find(id: number, requestorId: number): Promise<QuestionDetailDto> {
+        throw new Error("Method not implemented.");
+    }
+
+    update(id: number, model: QuestionUpdateDto, requestorId: number) {
         return new Promise<any>((resolve, reject) => {
-            this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
-                let prjct = res;
-                if (prjct.users.filter(x => x.id === userId).length < 1 && prjct.creator.id !== userId) {
-                    throw new AppError(
-                        'AppError',
-                        'Bu projede yetkiniz yoktur.',
-                        403
-                    );
-                }
+            let oldQuestion: QuestionEntity;
+            let updatedQuestion: QuestionEntity;
+            this._questionRepository.findById(id).then((foundQuestion) => {
+                oldQuestion = foundQuestion;
+                if (!foundQuestion) throw new AppError('AppError', 'Question not found.', 404);
+                //TODO yetkisi var mı diye kontrol et
+                updatedQuestion = Object.assign(oldQuestion, model);
+                return this._questionRepository.update(id, updatedQuestion);
+            }).then(() => {
+                resolve(updatedQuestion);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    delete(id: number, requestorId: number) {
+        return new Promise<any>((resolve, reject) => {
+            this._questionRepository.findById(id).then((foundQuestion) => {
+                if (!foundQuestion) throw new AppError('AppError', 'Question not found.', 404);
+                //TODO yetkisi var mı diye kontrol et
+                return this._questionRepository.delete(id);
+            }).then(() => {
                 resolve();
             }).catch((err) => {
                 reject(err);
@@ -59,5 +66,7 @@ export class QuestionService implements IQuestionService {
         });
     }
 
+
+    //TODO Auth fonksiyonu yaz
 
 }

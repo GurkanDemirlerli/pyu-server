@@ -76,7 +76,8 @@ export class TaskService implements ITaskService {
         });
     }
 
-    update(id: number, model: TaskUpdateDto, requestorId: number) {
+    //TODO update entity donmemeli
+    update(id: number, model: TaskUpdateDto, requestorId: number): Promise<TaskEntity> {
         return new Promise<any>((resolve, reject) => {
             let oldTask: TaskEntity;
             let updatedTask: TaskEntity;

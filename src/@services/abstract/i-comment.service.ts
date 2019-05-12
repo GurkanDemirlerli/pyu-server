@@ -1,9 +1,11 @@
-import { CommentCreateDto } from './../../_models/dtos/comment/comment-create.dto';
-import { CommentFilter } from './../../_models/filters/comment-filter';
+import { CommentCreateDto, CommentUpdateDto, CommentDetailDto, CommentListDto } from "@models/dtos";
+import { CommentFilter } from "@models/filters";
+import { CommentEntity } from "@entities/comment.entity";
+
 export interface ICommentService {
-    add(model: CommentCreateDto);
-    list(filters: CommentFilter);
-    find(id: number);
-    update(model);
-    delete(id:number);
+    add(model: CommentCreateDto): Promise<number>;
+    list(filters: CommentFilter, requestorId: number): Promise<CommentListDto[]>;
+    find(id: number, requestorId: number): Promise<CommentDetailDto>;
+    update(id: number, model: CommentUpdateDto, requestorId: number): Promise<CommentEntity>;
+    delete(id: number, requestorId: number): Promise<void>;
 }

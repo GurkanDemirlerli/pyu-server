@@ -1,16 +1,11 @@
-import { injectable, inject } from 'inversify';
-import { InjectTypes } from '../ioc';
-import {
-    Request,
-    Response,
-    NextFunction
-} from 'express';
-import 'reflect-metadata';
-import { CompanyCreateDto } from '../_models/dtos/company/company-create.dto';
-import { ErrorHandler } from '../errors/error-handler';
-import { ICompanyService } from '../@services/abstract/i-company.service';
-import { CompanyFilter } from '@models/filters';
-import { CompanyUpdateDto } from '@models/dtos';
+import { injectable, inject } from "inversify";
+import { Request, Response, NextFunction } from "express";
+import { ErrorHandler } from "@errors/error-handler";
+import { InjectTypes } from "@ioc/inject-types";
+import { CompanyFilter } from "@models/filters";
+import { ICompanyService } from "@services/abstract";
+import { CompanyCreateDto, CompanyUpdateDto } from "@models/dtos";
+
 @injectable()
 export class CompanyController {
 

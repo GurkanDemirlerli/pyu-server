@@ -1,11 +1,10 @@
-import { ICompanyRepository } from "../../@repository/abstract/i-company.repository";
+import { ICompanyService } from "@services/abstract";
 import { injectable, inject } from "inversify";
-import { ICompanyService } from "../abstract/i-company.service";
-import { InjectTypes } from "../../ioc";
-import { CompanyEntity } from "../../entities/company.entity";
-import { CompanyCreateDto } from "../../_models/dtos/company/company-create.dto";
+import { InjectTypes } from "@ioc";
+import { ICompanyRepository } from "@repositories/abstract";
+import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto } from "@models/dtos";
+import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
-import { CompanyListDto, CompanyDetailDto, CompanyUpdateDto } from "@models/dtos";
 import { AppError } from "@errors/app-error";
 
 @injectable()

@@ -1,16 +1,9 @@
-import { RegisterDto, LoginDto } from './../_models/dtos';
-import { IUserService } from './../@services/abstract/i-user.service';
-import 'reflect-metadata';
-import { injectable, inject } from 'inversify';
-import { InjectTypes } from '../ioc';
-import { AppError } from '../errors/app-error';
-import { ErrorHandler } from '../errors/error-handler';
-
-import {
-    Request,
-    Response,
-    NextFunction
-} from 'express';
+import { injectable, inject } from "inversify";
+import { Request, Response, NextFunction } from "express";
+import { RegisterDto, LoginDto } from "@models/dtos";
+import { IUserService } from "@services/abstract";
+import { ErrorHandler } from "@errors/error-handler";
+import { InjectTypes } from "@ioc/inject-types";
 
 @injectable()
 export class UserController {
@@ -43,4 +36,3 @@ export class UserController {
         });
     }
 }
-

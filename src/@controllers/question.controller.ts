@@ -1,42 +1,81 @@
-// import { AppError } from '../errors/app-error';
-// import { ErrorHandler } from '../errors/error-handler';
-import { injectable, inject } from 'inversify';
-import { InjectTypes } from '../ioc';
-import { validate } from 'class-validator';
-import {
-    Request,
-    Response,
-    NextFunction
-} from 'express';
-import 'reflect-metadata';
-import { QuestionCreateDto } from '../_models/dtos/question/question-create.dto';
-import { ErrorHandler } from '../errors/error-handler';
-import { IQuestionService } from '../@services/abstract/i-question.service';
+import { injectable, inject } from "inversify";
+import { Request, Response, NextFunction } from "express";
+import { QuestionCreateDto, QuestionUpdateDto } from "@models/dtos";
+import { IQuestionService } from "@services/abstract";
+import { QuestionFilter } from "@models/filters/question-filter";
+import { ErrorHandler } from "@errors/error-handler";
+import { InjectTypes } from "@ioc/inject-types";
+
 @injectable()
 export class QuestionController {
 
     constructor(
-        @inject(InjectTypes.Service.QUESTION) private readonly _questionService: IQuestionService
+        @inject(InjectTypes.Service.TASK) private readonly _questionService: IQuestionService
     ) { }
 
     list(req: Request, res: Response, next: NextFunction) {
-        // this._questionRepository.list().then((result: any) => {
-        //     console.log("Result : " + result);
-            res.send("aaa");
-        // });
+
+        let filters: QuestionFilter = {};
+
+        this._questionService.list(filters, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'list', 'QuestionController');
+        });
     }
 
-
     insert(req: Request, res: Response, next: NextFunction) {
-        let issDto: QuestionCreateDto = Object.assign(new QuestionCreateDto(), req.body);
-        issDto.creatorId = req.decoded.id;
-        this._questionService.add(issDto).then((result) => {
+
+        let qstDto: QuestionCreateDto = Object.assign(new QuestionCreateDto(), req.body);
+        qstDto.creatorId = req.decoded.id;
+        this._questionService.add(qstDto).then((createdId) => {
+            return this._questionService.find(createdId, req.decoded.id);
+        }).then((result) => {
             return res.status(201).json({
                 success: true,
                 data: result
             });
         }).catch((error: Error) => {
             return ErrorHandler.handleErrorResponses(error, res, 'insert', 'QuestionController');
+        });
+    }
+
+    find(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._questionService.find(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'find', 'QuestionController');
+        });
+    }
+
+    update(req: Request, res: Response, next: NextFunction) {
+        const id: number = req.params.id;
+        const qstDto: QuestionUpdateDto = Object.assign(new QuestionCreateDto(), req.body);
+        this._questionService.update(id, qstDto, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'update', 'QuestionController');
+        });
+    }
+
+    delete(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._questionService.delete(id, req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'delete', 'QuestionController');
         });
     }
 }

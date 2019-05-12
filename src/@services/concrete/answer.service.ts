@@ -1,9 +1,11 @@
-import { IAnswerRepository } from "../../@repository/abstract/i-answer.repository";
+import { IAnswerService } from "@services/abstract";
 import { injectable, inject } from "inversify";
-import { IAnswerService } from "../abstract/i-answer.service";
-import { InjectTypes } from "../../ioc";
-import { AnswerEntity } from "../../entities/answer.entity";
-import { AnswerCreateDto } from "../../_models/dtos/answer/answer-create.dto";
+import { InjectTypes } from "@ioc";
+import { IAnswerRepository } from "@repositories/abstract";
+import { AnswerCreateDto, AnswerListDto, AnswerDetailDto, AnswerUpdateDto } from "@models/dtos";
+import { AnswerEntity } from "@entities/answer.entity";
+import { AnswerFilter } from "@models/filters";
+import { AppError } from "@errors/app-error";
 
 @injectable()
 export class AnswerService implements IAnswerService {
@@ -12,29 +14,59 @@ export class AnswerService implements IAnswerService {
         @inject(InjectTypes.Repository.ANSWER) private readonly _answerRepository: IAnswerRepository
     ) { }
 
-    add(model: AnswerCreateDto) {
+    add(model: AnswerCreateDto): Promise<number> {
         return new Promise<any>((resolve, reject) => {
-            let answer: AnswerEntity = Object.assign(new AnswerEntity(), model);
-            this._answerRepository.insert(answer).then((res) => {
-                resolve(res);
+            //TODO yetkisi var mı diye kontrol et
+            let answerEn: AnswerEntity = Object.assign(new AnswerEntity(), model);
+            this._answerRepository.insert(answerEn).then((res) => {
+                resolve(res.id);
             }).catch((err) => {
                 reject(err);
             });
         });
     }
-    list(filters) {
-        throw new Error("Method not implemented.");
-    }
-    find(id: number) {
-        throw new Error("Method not implemented.");
-    }
-    update(model: any) {
-        throw new Error("Method not implemented.");
-    }
-    delete(id: number) {
+
+    list(filters: AnswerFilter, requestorId: number): Promise<AnswerListDto[]> {
         throw new Error("Method not implemented.");
     }
 
+    find(id: number, requestorId: number): Promise<AnswerDetailDto> {
+        throw new Error("Method not implemented.");
+    }
 
+    update(id: number, model: AnswerUpdateDto, requestorId: number) {
+        return new Promise<any>((resolve, reject) => {
+            let oldAnswer: AnswerEntity;
+            let updatedAnswer: AnswerEntity;
+            this._answerRepository.findById(id).then((foundAnswer) => {
+                oldAnswer = foundAnswer;
+                if (!foundAnswer) throw new AppError('AppError', 'Answer not found.', 404);
+                //TODO yetkisi var mı diye kontrol et
+                updatedAnswer = Object.assign(oldAnswer, model);
+                return this._answerRepository.update(id, updatedAnswer);
+            }).then(() => {
+                resolve(updatedAnswer);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+    delete(id: number, requestorId: number) {
+        return new Promise<any>((resolve, reject) => {
+            this._answerRepository.findById(id).then((foundAnswer) => {
+                if (!foundAnswer) throw new AppError('AppError', 'Answer not found.', 404);
+                //TODO yetkisi var mı diye kontrol et
+                return this._answerRepository.delete(id);
+            }).then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
+
+    //TODO Auth fonksiyonu yaz
 
 }
