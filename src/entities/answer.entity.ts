@@ -10,11 +10,6 @@ export class AnswerEntity {
     @Column({
         length: 100
     })
-    title: string;
-
-    @Column({
-        length: 100
-    })
     content: string;
 
     @Column("int")

@@ -9,11 +9,6 @@ export class CommentEntity {
     id: number;
 
     @Column({
-        length: 100
-    })
-    title: string;
-
-    @Column({
         length: 400
     })
     content: string;

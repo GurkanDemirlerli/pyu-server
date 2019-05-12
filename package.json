@@ -2,16 +2,13 @@
   "name": "pyu-server",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./dist/app.bundle.js",
   "scripts": {
-    "watch": "nodemon -e ts -w ./src -x npm run watch:serve",
-    "watch:serve": "node --inspect=3000 -r ts-node/register ./src/index.ts",
     "build": "webpack",
     "start:dev": "webpack",
-    "run:dev": "nodemon && dist/index.js",
-    "build-serve": "webpack && node dist",
-    "defaultdata": "tsc && node build/seed/dropdatabase && node build/seed",
-    "defaultdata-run": "tsc && node build/seed/dropdatabase && node build/seed && node build"
+    "run:dev": "nodemon && node ./dist/app.bundle.js",
+    "removedb:dev": "./dist/dropdb.bundle.js",
+    "seed:dev": "node ./dist/dropdb.bundle.js && node ./dist/seed.bundle.js"
   },
   "author": "",
   "license": "ISC",

@@ -1,22 +1,20 @@
 import { ProjectEntity } from './../entities/project.entity';
 import { CompanyEntity } from './../entities/company.entity';
-import { CompanyCreateDto } from './../_models/dtos/company/company-create.dto';
 import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
 import * as appConfig from "./../common/app-config";
-import { InjectTypes } from './../ioc/inject-types';
-import { ITaskRepository, IUserRepository, ICommentRepository, ICompanyRepository, IStatusRepository, IProjectRepository } from "./../@repository/abstract";
+import { IUserRepository, ICompanyRepository, IStatusRepository, IProjectRepository } from "./../@repository/abstract";
 import * as faker from 'faker';
 import { RegisterDto } from "./../_models/dtos";
 import { UserEntity } from "./../entities/user.entity";
 import { StatusEntity } from '../entities/status.entity';
 import { BaseStatus } from '../enums/base-status.enum';
 
+import { InjectTypes } from './inject-types';
+
 @injectable()
 export class SeedDatabase {
     constructor(
-        @inject(InjectTypes.Repository.COMMENT) private readonly _commentRepository: ICommentRepository,
-        @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
         @inject(InjectTypes.Repository.USER) private readonly _userRepository: IUserRepository,
         @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
         @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository,
