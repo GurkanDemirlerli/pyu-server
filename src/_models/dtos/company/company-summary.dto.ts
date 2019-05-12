@@ -1,8 +1,8 @@
 import { UserSummaryDto } from "..";
 
-export class IssueSummaryDto {
+export class CompanySummaryDto {
     id: number;
-    title: string;
+    name: string;
     description: string;
-    creator: UserSummaryDto;
+    owner: UserSummaryDto;
 }

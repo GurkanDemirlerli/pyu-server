@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class QuestionCreateDto {
 

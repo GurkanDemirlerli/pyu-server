@@ -46,7 +46,7 @@ export class TaskService implements ITaskService {
         return new Promise<any>((resolve, reject) => {
             let taskDtos: TaskListDto[] = [];
             this.validateAuthority(filters.projectId, requestorId).then(() => {
-                return this._taskRepository.find(filters);
+                return this._taskRepository.listByFilters(filters);
             }).then((tasks) => {
                 tasks.map((tsk) => {
                     let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })

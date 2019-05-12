@@ -1,9 +1,11 @@
-import { CompanyCreateDto } from './../../_models/dtos/company/company-create.dto';
-import { CompanyFilter } from './../../_models/filters/company-filter';
+import { CompanyCreateDto, CompanyUpdateDto, CompanyDetailDto } from "@models/dtos";
+import { CompanyFilter } from "@models/filters";
+import { CompanyEntity } from "@entities/company.entity";
+
 export interface ICompanyService {
-    add(model: CompanyCreateDto);
-    list(filters: CompanyFilter);
-    find(id: number);
-    update(model);
-    delete(id:number);
+    add(model: CompanyCreateDto): Promise<number>;
+    list(filters: CompanyFilter, requestorId: number);
+    find(id: number, requestorId: number): Promise<CompanyDetailDto>;
+    update(id: number, model: CompanyUpdateDto, requestorId: number);
+    delete(id: number, requestorId: number);
 }

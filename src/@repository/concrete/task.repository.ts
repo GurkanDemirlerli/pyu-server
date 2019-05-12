@@ -13,7 +13,7 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
         );
     }
 
-    find(filters: TaskFilter): Promise<TaskEntity[]> {
+    listByFilters(filters: TaskFilter): Promise<TaskEntity[]> {
         let query = getManager().createQueryBuilder(TaskEntity, "task")
             .leftJoinAndSelect("task.assignees", "assignee");
 

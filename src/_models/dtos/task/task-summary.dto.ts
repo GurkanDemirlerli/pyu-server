@@ -1,14 +1,12 @@
-import { UserSummaryDto, CommentSummaryDto, ProjectSummaryDto, StatusSummaryDto, IssueSummaryDto } from "@models/dtos";
+import { UserSummaryDto, ProjectSummaryDto, StatusSummaryDto } from "@models/dtos";
 
-export class TaskDetailDto {
+export class TaskSummaryDto {
     id: number;
     title: string;
     description: string;
     creator: UserSummaryDto;
-    comments: CommentSummaryDto[] = [];
     project: ProjectSummaryDto;
     status: StatusSummaryDto;
-    fromIssue: IssueSummaryDto;
     assignees: UserSummaryDto[] = [];
     comentCount: number = 0;
 }
