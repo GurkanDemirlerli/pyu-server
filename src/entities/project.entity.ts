@@ -1,6 +1,5 @@
 import { IssueEntity } from './issue.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
-import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
 import { TaskEntity } from "./task.entity";
 import { CompanyEntity } from "./company.entity";
@@ -45,5 +44,11 @@ export class ProjectEntity {
     @ManyToMany(type => UserEntity, user => user.projects)
     @JoinTable()
     users: UserEntity[];
+
+    @Column("int", { nullable: true })
+    managerId: number;
+    @ManyToOne(type => UserEntity, user => user.managedProjects)
+    @JoinColumn({ name: "managerId" })
+    manager: UserEntity;
 
 }

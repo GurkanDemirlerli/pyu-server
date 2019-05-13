@@ -5,6 +5,7 @@ import { ITaskService } from "@services/abstract";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ErrorHandler } from "@errors/error-handler";
 import { InjectTypes } from "@ioc/inject-types";
+import { AppError } from "@errors/app-error";
 
 @injectable()
 export class TaskController {
@@ -84,4 +85,9 @@ export class TaskController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'TaskController');
         });
     }
+
+    updateStatus(req: Request, res: Response, next: NextFunction) {
+        return ErrorHandler.handleErrorResponses(new AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'ProjectController');
+    }
+
 }

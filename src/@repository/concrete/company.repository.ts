@@ -39,4 +39,16 @@ export class CompanyRepository extends RepositoryBase<CompanyEntity> implements 
 
         return query.getOne();
     }
+
+    insertMembershipRequest(companyId: number, userId: number): Promise<void> {
+        let query = getManager().createQueryBuilder().relation(CompanyEntity, "requestedUsers").of(companyId).add(userId);
+
+        return query;
+    }
+
+    insertMember(companyId: number, userId: number): Promise<void> {
+        let query = getManager().createQueryBuilder().relation(CompanyEntity, "users").of(companyId).add(userId);
+
+        return query;
+    }
 }

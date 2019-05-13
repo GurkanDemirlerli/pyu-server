@@ -1,6 +1,6 @@
 import * as express from 'express';
 import 'reflect-metadata';
-import { ProjectUpdateDto, ProjectCreateDto } from '@models/dtos';
+import { ProjectUpdateDto, ProjectCreateDto, ProjectAssignManagerDto } from '@models/dtos';
 import { validationMiddleware } from '@middlewares';
 import { authorize } from '@middlewares';
 import { IOC } from '@ioc';
@@ -25,6 +25,15 @@ export class ProjectRoutes {
 
         app.route(root + '/:id')
             .delete(authorize, (req, res, next) => ctrl.delete(req, res, next));
+
+        app.route(root + '/:id/assignProjectManager')
+            .put(validationMiddleware(ProjectAssignManagerDto), authorize, (req, res, next) => ctrl.assignProjectManager(req, res, next));
+
+        app.route(root + '/:id/start')
+            .get(authorize, (req, res, next) => ctrl.start(req, res, next));
+
+        app.route(root + '/:id/pause')
+            .get(authorize, (req, res, next) => ctrl.pause(req, res, next));
 
     }
 }

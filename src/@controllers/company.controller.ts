@@ -4,7 +4,7 @@ import { ErrorHandler } from "@errors/error-handler";
 import { InjectTypes } from "@ioc/inject-types";
 import { CompanyFilter } from "@models/filters";
 import { ICompanyService } from "@services/abstract";
-import { CompanyCreateDto, CompanyUpdateDto } from "@models/dtos";
+import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto } from "@models/dtos";
 
 @injectable()
 export class CompanyController {
@@ -79,4 +79,29 @@ export class CompanyController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'CompanyController');
         });
     }
+
+    requestMembership(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        const curDto: CompanyUserRegisterDto = Object.assign(new CompanyUserRegisterDto(), req.body);
+        this._companyService.requestMembership(id, curDto, req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'requestMembership', 'CompanyController');
+        });
+    }
+
+    acceptMembership(req: Request, res: Response, next: NextFunction) {
+        const id: number = +req.params.id;
+        this._companyService.acceptMembership(id,req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'acceptMembership', 'CompanyController');
+        });
+    }
+
+
 }

@@ -5,6 +5,7 @@ import { IProjectService } from "@services/abstract";
 import { ProjectFilter } from "@models/filters/project-filter";
 import { ErrorHandler } from "@errors/error-handler";
 import { InjectTypes } from "@ioc/inject-types";
+import { AppError } from "@errors/app-error";
 
 @injectable()
 export class ProjectController {
@@ -77,5 +78,17 @@ export class ProjectController {
         }).catch((error: Error) => {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'ProjectController');
         });
+    }
+
+    assignProjectManager(req: Request, res: Response, next: NextFunction) {
+        return ErrorHandler.handleErrorResponses(new AppError('AppError', 'Method Not Implemented', 501), res, 'assignProjectManager', 'ProjectController');
+    }
+
+    start(req: Request, res: Response, next: NextFunction) {
+        return ErrorHandler.handleErrorResponses(new AppError('AppError', 'Method Not Implemented', 501), res, 'start', 'ProjectController');
+    }
+
+    pause(req: Request, res: Response, next: NextFunction) {
+        return ErrorHandler.handleErrorResponses(new AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'ProjectController');
     }
 }

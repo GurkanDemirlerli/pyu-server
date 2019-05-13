@@ -48,6 +48,9 @@ export class UserEntity {
     @OneToMany(type => ProjectEntity, project => project.creator)
     createdProjects: ProjectEntity[];
 
+    @OneToMany(type => ProjectEntity, project => project.manager)
+    managedProjects: ProjectEntity[];
+
     @OneToMany(type => CompanyEntity, company => company.owner)
     ownedCompanies: CompanyEntity[];
 
@@ -62,7 +65,7 @@ export class UserEntity {
 
     @OneToMany(type => IssueEntity, issue => issue.creator)
     createdIssues: IssueEntity[];
-    
+
     @OneToMany(type => StatusEntity, status => status.creator)
     createdStatuses: StatusEntity[];
 
@@ -74,4 +77,7 @@ export class UserEntity {
 
     @ManyToMany(type => TaskEntity, task => task.assignees)
     assignedTasks: TaskEntity[];
+
+    @ManyToMany(type => CompanyEntity, company => company.requestedUsers)
+    requestedCompanies: CompanyEntity[];
 }

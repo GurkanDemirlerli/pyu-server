@@ -30,4 +30,8 @@ export class CompanyEntity {
     @JoinTable()
     users: UserEntity[];
 
+    @ManyToMany(type => UserEntity, user => user.requestedCompanies)
+    @JoinTable()
+    requestedUsers: UserEntity[];
+
 }

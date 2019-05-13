@@ -3,7 +3,9 @@ import * as appConfig from "./../common/app-config";
 
 console.log("Veritabanı sil Çalıştırıldı.");
 
-createConnection(appConfig.dbOptions).then(async connection => {
+const config = Object.assign(appConfig.dbOptions, { synchronize: undefined });
+
+createConnection(config).then(async connection => {
     connection.dropDatabase().then(() => {
         console.log("Veritabanı silindi.");
         process.exit(0);
@@ -12,4 +14,3 @@ createConnection(appConfig.dbOptions).then(async connection => {
     console.log("TypeORM connection error: ", error)
     process.exit(1);
 });
-

@@ -1,4 +1,4 @@
-import { CompanyCreateDto, CompanyUpdateDto, CompanyDetailDto, CompanyListDto } from "@models/dtos";
+import { CompanyCreateDto, CompanyUpdateDto, CompanyDetailDto, CompanyListDto, CompanyUserRegisterDto } from "@models/dtos";
 import { CompanyFilter } from "@models/filters";
 import { CompanyEntity } from "@entities/company.entity";
 
@@ -8,4 +8,7 @@ export interface ICompanyService {
     find(id: number, requestorId: number): Promise<CompanyDetailDto>;
     update(id: number, model: CompanyUpdateDto, requestorId: number): Promise<CompanyEntity>;
     delete(id: number, requestorId: number): Promise<void>;
+    requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void>;
+    acceptMembership(id: number, requestorId: number): Promise<void>;
+
 }

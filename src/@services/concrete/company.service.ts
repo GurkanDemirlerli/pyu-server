@@ -2,7 +2,7 @@ import { ICompanyService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
 import { ICompanyRepository } from "@repositories/abstract";
-import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto } from "@models/dtos";
+import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, CompanyUserRegisterDto } from "@models/dtos";
 import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
@@ -89,6 +89,54 @@ export class CompanyService implements ICompanyService {
                 reject(err);
             });
         });
+    }
+
+    acceptMembership(id: number, requestorId: number): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this._companyRepository.findOne(id, { relations: ["requestedUsers", "users", "owner"] }).then((foundCompany) => {
+                if (!foundCompany) throw new AppError('AppError', 'Company not found.', 404);
+                //TODO yetki kontrol
+
+                //TODO istek varmı diye kontrol et
+                console.log(requestorId);
+                console.log(foundCompany);
+                if (foundCompany.requestedUsers.filter(x => x.id === requestorId).length < 1)
+                    throw new AppError('AppError', 'There is not any membership request for you from this company.', 401);
+
+                if (foundCompany.users.filter(x => x.id == requestorId).length > 0 || foundCompany.owner.id === requestorId)
+                    throw new AppError('AppError', 'You Are Already a Member of this company.', 409);
+
+                return this._companyRepository.insertMember(id, requestorId);
+                //TODO üye eklendiğinde kabul edilen istedği sil
+            }).then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
+        });
+
+    }
+
+    requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void> {
+        return new Promise<void>((resolve, reject) => {
+            this._companyRepository.findOne(id, { relations: ["requestedUsers", "users", "owner"] }).then((foundCompany) => {
+                if (!foundCompany) throw new AppError('AppError', 'Company not found.', 404);
+                //TODO yetki kontrol
+
+                if (foundCompany.users.filter(x => x.id === model.userId).length > 0 || foundCompany.owner.id === model.userId)
+                    throw new AppError('AppError', 'User Is Already a Member of this company.', 409);
+
+                if (foundCompany.requestedUsers.filter(x => x.id === model.userId).length > 0)
+                    throw new AppError('AppError', 'Your Company already sent a membership request to this user.', 409);
+
+                return this._companyRepository.insertMembershipRequest(id, model.userId);
+            }).then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            })
+        });
+
     }
 
 
