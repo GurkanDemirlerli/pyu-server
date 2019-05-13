@@ -3,7 +3,7 @@ import { CompanyEntity } from './../entities/company.entity';
 import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
 import * as appConfig from "./../common/app-config";
-import { IUserRepository, ICompanyRepository, IStatusRepository, IProjectRepository } from "./../@repository/abstract";
+import { IUserRepository, ICompanyRepository, IStatusRepository, IProjectRepository, ITaskRepository } from "./../@repository/abstract";
 import * as faker from 'faker';
 import { RegisterDto } from "./../_models/dtos";
 import { UserEntity } from "./../entities/user.entity";
@@ -11,6 +11,7 @@ import { StatusEntity } from '../entities/status.entity';
 import { BaseStatus } from '../enums/base-status.enum';
 
 import { InjectTypes } from './inject-types';
+import { TaskEntity } from "./../entities/task.entity";
 
 @injectable()
 export class SeedDatabase {
@@ -19,6 +20,7 @@ export class SeedDatabase {
         @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
         @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository,
         @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
+        @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
 
     ) { }
 
@@ -34,14 +36,17 @@ export class SeedDatabase {
         const USERCOUNT = 50;
         const COMPANYCOUNT = 10;
         const PROJECTCOUNT = 25;
+        const TASKCOUNT = 500;
         let users: UserEntity[] = [];
         let companies: CompanyEntity[] = [];
         let projects: ProjectEntity[] = [];
+        let tasks: TaskEntity[] = [];
 
         let userPromises = [];
         let companyPromises = [];
         let projectPromises = [];
         let statusPromises = [];
+        let taskPromises = [];
         let grkn: UserEntity;
 
         for (let i = 0; i < USERCOUNT; i++) {
@@ -72,8 +77,10 @@ export class SeedDatabase {
 
         Promise.all(userPromises).then((createdUsers) => {
             console.log('Kullanicilar Eklendi');
-            console.log(createdUsers);
             users = createdUsers;
+
+            grkn = createdUsers.find(x => x.name === "gurkan");
+
             for (let i = 0; i < COMPANYCOUNT; i++) {
                 let ind = Math.floor(Math.random() * (USERCOUNT));
                 let cmp: CompanyEntity = Object.assign(new CompanyEntity(), {
@@ -100,9 +107,10 @@ export class SeedDatabase {
             return Promise.all(companyPromises);
         }).then((createdCompanies) => {
             console.log('Sirketler Eklendi');
-            console.log(createdCompanies);
 
             companies = createdCompanies;
+            grkn.companies = companies.filter(x => x.ownerId === grkn.id);
+
             for (let i = 0; i < PROJECTCOUNT; i++) {
                 let ind = Math.floor(Math.random() * (COMPANYCOUNT));
                 let prj: ProjectEntity = Object.assign(new ProjectEntity(), {
@@ -113,10 +121,34 @@ export class SeedDatabase {
                 });
                 projectPromises.push(this._projectRepository.insert(prj));
             }
+
+            let p1: ProjectEntity = Object.assign(new ProjectEntity(), {
+                userId: grkn.id,
+                title: faker.name.jobTitle(),
+                description: faker.lorem.words(4),
+                companyId: grkn.companies[0]
+            });
+            projectPromises.push(this._projectRepository.insert(p1));
+
+            let p2: ProjectEntity = Object.assign(new ProjectEntity(), {
+                userId: grkn.id,
+                title: faker.name.jobTitle(),
+                description: faker.lorem.words(4),
+                companyId: grkn.companies[0].id
+            });
+            projectPromises.push(this._projectRepository.insert(p2));
+
+            let p3: ProjectEntity = Object.assign(new ProjectEntity(), {
+                userId: grkn.id,
+                title: faker.name.jobTitle(),
+                description: faker.lorem.words(4),
+                companyId: grkn.companies[1].id
+            });
+            projectPromises.push(this._projectRepository.insert(p3));
+
             return Promise.all(projectPromises);
         }).then((createdProjects) => {
             console.log('Projeler Eklendi');
-            // console.log(createdProjects);
 
             projects = createdProjects;
 
@@ -173,9 +205,45 @@ export class SeedDatabase {
                 })
             }
             console.log("Projeler tamamen eklendi");
-            console.log(projects);
-            process.exit(0);
 
+            grkn.companies.map((cmp) => {
+                cmp.projects = projects.filter(prj => prj.companyId === cmp.id);
+            });
+
+            for (let i = 0; i < TASKCOUNT; i++) {
+                let ind = Math.floor(Math.random() * (PROJECTCOUNT));
+                let stind = Math.floor(Math.random() * (3));
+                let tsk: TaskEntity = Object.assign(new TaskEntity(), {
+                    creatorId: projects[ind].userId,
+                    title: faker.name.jobTitle(),
+                    description: faker.lorem.words(4),
+                    projectId: projects[ind].id,
+                    statusId: projects[ind].statuses[stind]
+                });
+                taskPromises.push(this._taskRepository.insert(tsk));
+            }
+
+            grkn.companies.map((cmp) => {
+                cmp.projects.map((prj) => {
+                    for (let i = 0; i < 5; i++) {
+                        let stind = Math.floor(Math.random() * (3));
+                        let tsk: TaskEntity = Object.assign(new TaskEntity(), {
+                            creatorId: grkn.id,
+                            title: faker.name.jobTitle(),
+                            description: faker.lorem.words(4),
+                            projectId: prj.id,
+                            statusId: prj.statuses[stind]
+                        });
+                        taskPromises.push(this._taskRepository.insert(tsk));
+                    }
+                });
+            });
+
+            return Promise.all(taskPromises);
+        }).then((createdTasks) => {
+            console.log('Tasklar Eklendi');
+            tasks = createdTasks;
+            process.exit(0);
         }).catch((err) => {
             console.log(err);
         })

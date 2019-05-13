@@ -32,13 +32,16 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
     }
 
     findForDetails(id: number): Promise<TaskEntity> {
-        let query = getManager().createQueryBuilder(TaskEntity, "task").select("task")
+        let query = getManager().createQueryBuilder(TaskEntity, "task").select(["task.id", "task.title", "task.description"])
             .where("task.id =:id", { id: id })
             .innerJoin("task.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
             .leftJoin("task.assignees", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
-            .leftJoin("task.comments", "comment").addSelect(["comment.id", "comment.title", "comment.content", "comment.taskId"])
+            .leftJoin("task.comments", "comment").addSelect(["comment.id", "comment.content", "comment.taskId"])
             .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
             .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
+            .leftJoin("task.project", "project").addSelect(["project.id", "project.title", "project.description"])
+            .leftJoin("project.creator", "projectCreator").addSelect(["projectCreator.id", "projectCreator.name", "projectCreator.surname", "projectCreator.username"])
+            .leftJoin("task.status", "status").addSelect(["status.id", "status.title", "status.description"])
 
         return query.getOne();
     }

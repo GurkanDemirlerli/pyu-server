@@ -66,7 +66,7 @@ export class TaskService implements ITaskService {
             this._taskRepository.findForDetails(id).then((foundTask) => {
                 if (!foundTask) throw new AppError('AppError', 'Task not found.', 404);
                 taskEntity = foundTask;
-                return this.validateAuthority(foundTask.projectId, requestorId);
+                return this.validateAuthority(foundTask.project.id, requestorId);
             }).then(() => {
                 let taskDto: TaskDetailDto = Object.assign(new TaskDetailDto(), taskEntity);
                 resolve(taskDto);
