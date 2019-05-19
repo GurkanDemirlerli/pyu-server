@@ -1,29 +1,49 @@
 import { IProjectService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
-import { IProjectRepository } from "@repositories/abstract";
+import { IProjectRepository, IStatusRepository } from "@repositories/abstract";
 import { ProjectCreateDto, ProjectListDto, ProjectDetailDto, ProjectUpdateDto } from "@models/dtos";
 import { ProjectEntity } from "@entities/project.entity";
 import { ProjectFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
+import { getManager, getConnection } from "typeorm";
+import { StatusEntity } from "@entities/status.entity";
+import { BaseStatus } from "@enums";
+import { Uow } from "@repositories/uow";
 
 @injectable()
 export class ProjectService implements IProjectService {
 
     constructor(
-        @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository
+        @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
+        @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository
+
     ) { }
 
-    add(model: ProjectCreateDto): Promise<number> {
-        return new Promise<any>((resolve, reject) => {
-            //TODO yetkisi var mı diye kontrol et
-            let projectEn: ProjectEntity = Object.assign(new ProjectEntity(), model);
-            this._projectRepository.insert(projectEn).then((res) => {
-                resolve(res.id);
-            }).catch((err) => {
-                reject(err);
+    async add(model: ProjectCreateDto): Promise<number> {
+        //TODO yetkisi var mı diye kontrol et
+        let projectEn: ProjectEntity = Object.assign(new ProjectEntity(), model);
+        let uow = new Uow();
+        await uow.start();
+        try {
+            projectEn = await this._projectRepository.insert(projectEn, uow.getManager());
+            let status: StatusEntity = Object.assign(new StatusEntity(), {
+                title: 'In Progress',
+                description: 'Atomic Gorev',
+                baseStatus: BaseStatus.IN_PROGRESS,
+                order: 0,
+                creatorId: model.userId,
+                projectId: projectEn.id
             });
-        });
+            await this._statusRepository.insert(status, uow.getManager());
+            await uow.commit();
+        } catch (err) {
+            await uow.rollback();
+            throw err;
+        } finally {
+            await uow.release();
+        }
+        return Promise.resolve(projectEn.id);
     }
 
     list(filters: ProjectFilter, requestorId: number): Promise<ProjectListDto[]> {

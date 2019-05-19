@@ -33,7 +33,7 @@ export class ProjectController {
         let prjDto: ProjectCreateDto = Object.assign(new ProjectCreateDto(), req.body);
         prjDto.userId = req.decoded.id;
         this._projectService.add(prjDto).then((createdId) => {
-            return this._projectService.find(createdId, req.decoded.id);
+            // return this._projectService.find(createdId, req.decoded.id);
         }).then((result) => {
             return res.status(201).json({
                 success: true,

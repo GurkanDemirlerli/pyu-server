@@ -27,6 +27,7 @@ export class TaskService implements ITaskService {
                 if (!res) throw new AppError('AppError', 'Böyle bir proje yok.', 404);
                 let prjct = res;
                 let plannings = prjct.statuses.filter((sts) => sts.baseStatus === BaseStatus.PLANNINING);
+                //TODO task eklenirken statusId de alınsın
                 firstStatus = plannings[0];
                 for (let i = 0; i < plannings.length; i++) {
                     if (plannings[i].order < firstStatus.order)
@@ -42,22 +43,16 @@ export class TaskService implements ITaskService {
         });
     }
 
-    list(filters: TaskFilter, requestorId: number) {
-        return new Promise<any>((resolve, reject) => {
-            let taskDtos: TaskListDto[] = [];
-            this.validateAuthority(filters.projectId, requestorId).then(() => {
-                return this._taskRepository.listByFilters(filters);
-            }).then((tasks) => {
-                tasks.map((tsk) => {
-                    let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })
-                    taskDto.commentCount = tsk.comments.length;
-                    taskDtos.push(taskDto);
-                });
-                resolve(taskDtos);
-            }).catch((err) => {
-                reject(err);
-            })
+    async list(filters: TaskFilter, requestorId: number) {
+        let taskDtos: TaskListDto[] = [];
+        await this.validateAuthority(filters.projectId, requestorId);
+        let tasks = await this._taskRepository.listByFilters(filters);
+        tasks.map((tsk) => {
+            let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })
+            taskDto.commentCount = tsk.comments.length;
+            taskDtos.push(taskDto);
         });
+        return Promise.resolve(taskDtos);
     }
 
     find(id: number, requestorId: number): Promise<TaskDetailDto> {

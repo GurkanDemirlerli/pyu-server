@@ -6,6 +6,7 @@ import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, C
 import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
+import { CompanyRoles } from "@enums";
 
 @injectable()
 export class CompanyService implements ICompanyService {
@@ -134,27 +135,21 @@ export class CompanyService implements ICompanyService {
                 resolve();
             }).catch((err) => {
                 reject(err);
-            })
+            });
         });
-
     }
 
-
-    //TODO Auth fonksiyonu yaz
-
-    // private validateAuthority(projectId: number, userId: number): Promise<void> {
-    //     return new Promise<any>((resolve, reject) => {
-    //         this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
-    //             let prjct = res;
-    //             if (prjct.users.filter(x => x.id === userId).length < 1 && prjct.creator.id !== userId)
-    //                 throw new AppError('AppError', 'Bu projede yetkiniz yoktur.', 403);
-    //             resolve();
-    //         }).catch((err) => {
-    //             reject(err);
-    //         });
-    //     });
-    // }
-
-
+    private validateAuthority(companyId: number, userId: number, role: CompanyRoles) {
+        return new Promise<any>((resolve, reject) => {
+            this._companyRepository.findOne(companyId, { relations: ["users", "creator"] }).then((foundCompany) => {
+                let cmp: CompanyEntity = foundCompany;
+                if (cmp.users.filter(x => x.id === userId).length < 1 && cmp.owner.id !== userId)
+                    throw new AppError('AppError', 'You Are Not A Member of This Company', 403);
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
 
 }

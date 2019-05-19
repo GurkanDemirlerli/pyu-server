@@ -31,6 +31,9 @@
       "@enums/*":[
         "./src/enums/*",
       ],
+      "@enums":[
+        "./src/enums/index",
+      ],
       "@common/*":[
         "./src/common/*",
       ],

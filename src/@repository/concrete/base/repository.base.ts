@@ -1,5 +1,5 @@
 import { IRepositoryBase } from './../../abstract/base/i-repository.base';
-import { getManager, FindManyOptions, FindOneOptions } from 'typeorm';
+import { getManager, FindManyOptions, FindOneOptions, EntityManager } from 'typeorm';
 import { unmanaged, injectable } from 'inversify';
 
 export type ObjectType<T> = { new(): T } | Function;
@@ -21,15 +21,15 @@ export class RepositoryBase<T> implements IRepositoryBase<T> {
         return getManager().getRepository(this.type).findOne(id, options);
     }
 
-    insert(model: T): Promise<T> {
-        return getManager().getRepository(this.type).save(model);
+    insert(model: T, manager: EntityManager = getManager()): Promise<T> {
+        return manager.getRepository(this.type).save(model);
     }
 
-    update(id: number, model: T): Promise<any> {
-        return getManager().getRepository(this.type).update(id, model);
+    update(id: number, model: T, manager: EntityManager = getManager()): Promise<any> {
+        return manager.getRepository(this.type).update(id, model);
 
     }
-    delete(id: number): Promise<any> {
-        return getManager().getRepository(this.type).delete(id);
+    delete(id: number, manager: EntityManager = getManager()): Promise<any> {
+        return manager.getRepository(this.type).delete(id);
     }
 }
