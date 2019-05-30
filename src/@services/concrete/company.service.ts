@@ -1,20 +1,20 @@
 import { ICompanyService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
-import { ICompanyRepository, ICompanyMemberRepository } from "@repositories/abstract";
+import { ICompanyRepository, ICompanyMembershipRepository } from "@repositories/abstract";
 import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, CompanyUserRegisterDto } from "@models/dtos";
 import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
 import { CompanyRoles } from "@enums";
-import { CompanyMemberEntity } from "@entities/company-member.entity";
+import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 
 @injectable()
 export class CompanyService implements ICompanyService {
 
     constructor(
         @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
-        @inject(InjectTypes.Repository.COMPANY_MEMBER) private readonly _companyMemberRepository: ICompanyMemberRepository
+        @inject(InjectTypes.Repository.COMPANY_MEMBERSHIP) private readonly _companyMemberRepository: ICompanyMembershipRepository
 
     ) { }
 
@@ -104,12 +104,12 @@ export class CompanyService implements ICompanyService {
                 //TODO istek varmı diye kontrol et
                 console.log(requestorId);
                 console.log(foundCompany);
-                if (foundCompany.requestedUsers.filter(x => x.id === requestorId).length < 1)
+                if (foundCompany.requestsSent.filter(x => x.userId === requestorId).length < 1)
                     throw new AppError('AppError', 'There is not any membership request for you from this company.', 401);
 
                 if (foundCompany.members.filter(x => x.userId == requestorId).length > 0 || foundCompany.owner.id === requestorId)
                     throw new AppError('AppError', 'You Are Already a Member of this company.', 409);
-                let cMemEn: CompanyMemberEntity = new CompanyMemberEntity();
+                let cMemEn: CompanyMembershipEntity = new CompanyMembershipEntity();
                 cMemEn.userId = requestorId;
                 cMemEn.companyId = id;
                 cMemEn.joiningDate = new Date();
@@ -134,7 +134,7 @@ export class CompanyService implements ICompanyService {
                 if (foundCompany.members.filter(x => x.userId === model.userId).length > 0 || foundCompany.owner.id === model.userId)
                     throw new AppError('AppError', 'User Is Already a Member of this company.', 409);
 
-                if (foundCompany.requestedUsers.filter(x => x.id === model.userId).length > 0)
+                if (foundCompany.requestsSent.filter(x => x.userId === model.userId).length > 0)
                     throw new AppError('AppError', 'Your Company already sent a membership request to this user.', 409);
 
                 return this._companyRepository.insertMembershipRequest(id, model.userId);

@@ -4,16 +4,20 @@ import { AnswerEntity } from './../entities/answer.entity';
 import { QuestionEntity } from './../entities/question.entity';
 import { CompanyEntity } from './../entities/company.entity';
 import { ProjectEntity } from './../entities/project.entity';
-import { CompanyMemberEntity } from '@entities/company-member.entity';
+import { CompanyMembershipEntity } from '@entities/company-membership.entity';
+import { MembershipRequestEntity } from '@entities/membership-request.entity';
+import { ProjectManagerEntity } from '@entities/project-manager.entity';
+import { ProjectMembershipEntity } from '@entities/project-membership.entity';
+import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import {
     CommentEntity,
     TaskEntity,
     UserEntity
 
 } from './../entities';
-
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
+
 export let dbOptions: ConnectionOptions = {
     type: "mysql",
     host: "localhost",
@@ -31,7 +35,11 @@ export let dbOptions: ConnectionOptions = {
         AnswerEntity,
         IssueEntity,
         StatusEntity,
-        CompanyMemberEntity
+        CompanyMembershipEntity,
+        MembershipRequestEntity,
+        ProjectManagerEntity,
+        ProjectMembershipEntity,
+        TaskAssignmentEntity
     ],
     synchronize: true,
 }

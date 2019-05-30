@@ -4,6 +4,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColum
 import { CommentEntity } from './comment.entity';
 import { UserEntity } from './user.entity';
 import { StatusEntity } from './status.entity';
+import { TaskAssignmentEntity } from './task-assignment.entity';
 @Entity("task")
 export class TaskEntity {
 
@@ -47,8 +48,11 @@ export class TaskEntity {
     @JoinColumn({ name: "fromIssueId" })
     fromIssue: IssueEntity;
 
-    @ManyToMany(type => UserEntity, user => user.assignedTasks)
-    @JoinTable()
-    assignees: UserEntity[];
+    @OneToMany(type => TaskAssignmentEntity, tsa => tsa.task)
+    assignees: TaskAssignmentEntity[];
+
+    // @ManyToMany(type => UserEntity, user => user.assignedTasks)
+    // @JoinTable()
+    // assignees: UserEntity[];
 
 }

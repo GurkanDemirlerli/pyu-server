@@ -2,8 +2,8 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "t
 import { UserEntity } from './user.entity';
 import { CompanyEntity } from "./company.entity";
 
-@Entity("company_member")
-export class CompanyMemberEntity {
+@Entity("company_membership")
+export class CompanyMembershipEntity {
 
     @PrimaryGeneratedColumn()
     id: number;

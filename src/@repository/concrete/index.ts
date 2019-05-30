@@ -7,4 +7,4 @@ export { CompanyRepository } from './company.repository';
 export { UserRepository } from './user.repository';
 export { CommentRepository } from './comment.repository';
 export { TaskRepository } from './task.repository';
-export { CompanyMemberRepository } from './company-member.repository';
+export { CompanyMembershipRepository } from './company-membership.repository';

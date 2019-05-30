@@ -1,7 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { UserEntity } from './user.entity';
 import { ProjectEntity } from "./project.entity";
-import { CompanyMemberEntity } from "./company-member.entity";
+import { CompanyMembershipEntity } from "./company-membership.entity";
+import { MembershipRequestEntity } from "./membership-request.entity";
 @Entity("company")
 export class CompanyEntity {
 
@@ -21,17 +22,16 @@ export class CompanyEntity {
     @OneToMany(type => ProjectEntity, project => project.company)
     projects: ProjectEntity[];
 
-    @OneToMany(type => CompanyMemberEntity, cmem => cmem.company)
-    members: CompanyMemberEntity[];
+    @OneToMany(type => CompanyMembershipEntity, cmem => cmem.company)
+    members: CompanyMembershipEntity[];
+
+    @OneToMany(type => MembershipRequestEntity, msr => msr.company)
+    requestsSent: MembershipRequestEntity[];
 
     @Column("int")
     ownerId: number;
     @ManyToOne(type => UserEntity, user => user.ownedCompanies)
     @JoinColumn({ name: "ownerId" })
     owner: UserEntity;
-
-    @ManyToMany(type => UserEntity, user => user.requestedCompanies)
-    @JoinTable()
-    requestedUsers: UserEntity[];
 
 }

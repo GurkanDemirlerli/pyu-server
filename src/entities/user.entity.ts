@@ -7,7 +7,11 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMan
 import { ProjectEntity } from './project.entity';
 import { AnswerEntity } from './answer.entity';
 import { StatusEntity } from './status.entity';
-import { CompanyMemberEntity } from './company-member.entity';
+import { ProjectManagerEntity } from './project-manager.entity';
+import { MembershipRequestEntity } from './membership-request.entity';
+import { ProjectMembershipEntity } from './project-membership.entity';
+import { TaskAssignmentEntity } from './task-assignment.entity';
+import { CompanyMembershipEntity } from './company-membership.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -49,9 +53,6 @@ export class UserEntity {
     @OneToMany(type => ProjectEntity, project => project.creator)
     createdProjects: ProjectEntity[];
 
-    @OneToMany(type => CompanyMemberEntity, cmem => cmem.user)
-    memberships: CompanyMemberEntity[];
-
     @OneToMany(type => CompanyEntity, company => company.owner)
     ownedCompanies: CompanyEntity[];
 
@@ -70,16 +71,19 @@ export class UserEntity {
     @OneToMany(type => StatusEntity, status => status.creator)
     createdStatuses: StatusEntity[];
 
-    @ManyToMany(type => ProjectEntity, project => project.users)
-    projects: ProjectEntity[];
+    @OneToMany(type => CompanyMembershipEntity, cmem => cmem.user)
+    memberships: CompanyMembershipEntity[];
 
+    @OneToMany(type => MembershipRequestEntity, msr => msr.user)
+    companyRequests: MembershipRequestEntity[];
 
-    @ManyToMany(type => TaskEntity, task => task.assignees)
-    assignedTasks: TaskEntity[];
+    @OneToMany(type => ProjectMembershipEntity, pms => pms.user)
+    projects: ProjectMembershipEntity[];
 
-    @ManyToMany(type => CompanyEntity, company => company.requestedUsers)
-    requestedCompanies: CompanyEntity[];
+    @OneToMany(type => ProjectManagerEntity, pmn => pmn.user)
+    managedProjects: ProjectManagerEntity[];
 
-    @ManyToMany(type => ProjectEntity, project => project.managers)
-    managedProjects: ProjectEntity[];
+    @OneToMany(type => TaskAssignmentEntity, tsa => tsa.user)
+    taskAssignments: TaskAssignmentEntity[];
+
 }

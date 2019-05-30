@@ -17,7 +17,7 @@ import {
     IStatusRepository,
     ITaskRepository,
     IUserRepository,
-    ICompanyMemberRepository,
+    ICompanyMembershipRepository,
 
 } from './../@repository/abstract';
 
@@ -31,7 +31,7 @@ import {
     StatusRepository,
     TaskRepository,
     UserRepository,
-    CompanyMemberRepository,
+    CompanyMembershipRepository,
 } from './../@repository/concrete';
 
 import {
@@ -118,8 +118,8 @@ export module IOC {
             .to(CompanyRepository);
 
         container
-            .bind<ICompanyMemberRepository>(InjectTypes.Repository.COMPANY_MEMBER)
-            .to(CompanyMemberRepository);
+            .bind<ICompanyMembershipRepository>(InjectTypes.Repository.COMPANY_MEMBERSHIP)
+            .to(CompanyMembershipRepository);
 
         container
             .bind<IIssueRepository>(InjectTypes.Repository.ISSUE)

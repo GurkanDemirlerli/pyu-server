@@ -4,6 +4,8 @@ import { UserEntity } from './user.entity';
 import { TaskEntity } from "./task.entity";
 import { CompanyEntity } from "./company.entity";
 import { StatusEntity } from "./status.entity";
+import { ProjectManagerEntity } from './project-manager.entity';
+import { ProjectMembershipEntity } from './project-membership.entity';
 @Entity("project")
 export class ProjectEntity {
 
@@ -41,11 +43,13 @@ export class ProjectEntity {
     @JoinColumn({ name: "userId" })
     creator: UserEntity;
 
-    @ManyToMany(type => UserEntity, user => user.projects)
-    @JoinTable()
-    users: UserEntity[];
+    // @ManyToMany(type => UserEntity, user => user.projects)
+    // @JoinTable()
+    // users: UserEntity[];
 
-    @ManyToMany(type => UserEntity, user => user.managedProjects)
-    @JoinTable()
-    managers: UserEntity[];
+    @OneToMany(type => ProjectMembershipEntity, pms => pms.project)
+    members: ProjectMembershipEntity[];
+
+    @OneToMany(type => ProjectManagerEntity, prm => prm.project)
+    managers: ProjectManagerEntity[];
 }

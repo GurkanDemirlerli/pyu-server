@@ -9,7 +9,7 @@ export module InjectTypes {
         STATUS = 'StatusRepository',
         TASK = 'TaskRepository',
         USER = 'UserRepository',
-        COMPANY_MEMBER = 'CompanyMemberRepository'
+        COMPANY_MEMBERSHIP = 'CompanyMembershipRepository'
     }
 
     export enum Service {
