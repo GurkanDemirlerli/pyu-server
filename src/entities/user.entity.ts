@@ -7,6 +7,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMan
 import { ProjectEntity } from './project.entity';
 import { AnswerEntity } from './answer.entity';
 import { StatusEntity } from './status.entity';
+import { CompanyMemberEntity } from './company-member.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -48,8 +49,8 @@ export class UserEntity {
     @OneToMany(type => ProjectEntity, project => project.creator)
     createdProjects: ProjectEntity[];
 
-    @OneToMany(type => ProjectEntity, project => project.manager)
-    managedProjects: ProjectEntity[];
+    @OneToMany(type => CompanyMemberEntity, cmem => cmem.user)
+    memberships: CompanyMemberEntity[];
 
     @OneToMany(type => CompanyEntity, company => company.owner)
     ownedCompanies: CompanyEntity[];
@@ -72,12 +73,13 @@ export class UserEntity {
     @ManyToMany(type => ProjectEntity, project => project.users)
     projects: ProjectEntity[];
 
-    @ManyToMany(type => CompanyEntity, company => company.users)
-    companies: CompanyEntity[];
 
     @ManyToMany(type => TaskEntity, task => task.assignees)
     assignedTasks: TaskEntity[];
 
     @ManyToMany(type => CompanyEntity, company => company.requestedUsers)
     requestedCompanies: CompanyEntity[];
+
+    @ManyToMany(type => ProjectEntity, project => project.managers)
+    managedProjects: ProjectEntity[];
 }

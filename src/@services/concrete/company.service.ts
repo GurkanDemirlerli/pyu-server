@@ -1,18 +1,21 @@
 import { ICompanyService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
-import { ICompanyRepository } from "@repositories/abstract";
+import { ICompanyRepository, ICompanyMemberRepository } from "@repositories/abstract";
 import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, CompanyUserRegisterDto } from "@models/dtos";
 import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
 import { CompanyRoles } from "@enums";
+import { CompanyMemberEntity } from "@entities/company-member.entity";
 
 @injectable()
 export class CompanyService implements ICompanyService {
 
     constructor(
-        @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository
+        @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
+        @inject(InjectTypes.Repository.COMPANY_MEMBER) private readonly _companyMemberRepository: ICompanyMemberRepository
+
     ) { }
 
     add(model: CompanyCreateDto): Promise<number> {
@@ -33,7 +36,7 @@ export class CompanyService implements ICompanyService {
                 companies.map((cmp) => {
                     let companyDto: CompanyListDto = Object.assign(new CompanyListDto(), cmp, { projects: undefined, users: undefined })
                     companyDto.projectCount = cmp.projects.length;
-                    companyDto.userCount = cmp.users.length;
+                    companyDto.userCount = cmp.members.length;
                     companyDtos.push(companyDto);
                 });
                 resolve(companyDtos);
@@ -52,7 +55,7 @@ export class CompanyService implements ICompanyService {
                 //TODO bu companyiye üye mi diyo kontrol et
                 let companyDto: CompanyDetailDto = Object.assign(new CompanyDetailDto(), companyEntity, { projects: undefined, users: undefined });
                 companyDto.projectCount = companyEntity.projects.length;
-                companyDto.userCount = companyEntity.users.length;
+                companyDto.userCount = companyEntity.members.length;
                 resolve(companyDto);
             }).catch((err) => {
                 reject(err);
@@ -94,7 +97,7 @@ export class CompanyService implements ICompanyService {
 
     acceptMembership(id: number, requestorId: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            this._companyRepository.findOne(id, { relations: ["requestedUsers", "users", "owner"] }).then((foundCompany) => {
+            this._companyRepository.findOne(id, { relations: ["requestedUsers", "members", "members.user", "owner"] }).then((foundCompany) => {
                 if (!foundCompany) throw new AppError('AppError', 'Company not found.', 404);
                 //TODO yetki kontrol
 
@@ -104,10 +107,14 @@ export class CompanyService implements ICompanyService {
                 if (foundCompany.requestedUsers.filter(x => x.id === requestorId).length < 1)
                     throw new AppError('AppError', 'There is not any membership request for you from this company.', 401);
 
-                if (foundCompany.users.filter(x => x.id == requestorId).length > 0 || foundCompany.owner.id === requestorId)
+                if (foundCompany.members.filter(x => x.userId == requestorId).length > 0 || foundCompany.owner.id === requestorId)
                     throw new AppError('AppError', 'You Are Already a Member of this company.', 409);
-
-                return this._companyRepository.insertMember(id, requestorId);
+                let cMemEn: CompanyMemberEntity = new CompanyMemberEntity();
+                cMemEn.userId = requestorId;
+                cMemEn.companyId = id;
+                cMemEn.joiningDate = new Date();
+                cMemEn.status = 1;
+                return this._companyMemberRepository.insert(cMemEn);
                 //TODO üye eklendiğinde kabul edilen istedği sil
             }).then(() => {
                 resolve();
@@ -120,11 +127,11 @@ export class CompanyService implements ICompanyService {
 
     requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void> {
         return new Promise<void>((resolve, reject) => {
-            this._companyRepository.findOne(id, { relations: ["requestedUsers", "users", "owner"] }).then((foundCompany) => {
+            this._companyRepository.findOne(id, { relations: ["requestedUsers", "members", "members.user", "owner"] }).then((foundCompany) => {
                 if (!foundCompany) throw new AppError('AppError', 'Company not found.', 404);
                 //TODO yetki kontrol
 
-                if (foundCompany.users.filter(x => x.id === model.userId).length > 0 || foundCompany.owner.id === model.userId)
+                if (foundCompany.members.filter(x => x.userId === model.userId).length > 0 || foundCompany.owner.id === model.userId)
                     throw new AppError('AppError', 'User Is Already a Member of this company.', 409);
 
                 if (foundCompany.requestedUsers.filter(x => x.id === model.userId).length > 0)
@@ -143,7 +150,7 @@ export class CompanyService implements ICompanyService {
         return new Promise<any>((resolve, reject) => {
             this._companyRepository.findOne(companyId, { relations: ["users", "creator"] }).then((foundCompany) => {
                 let cmp: CompanyEntity = foundCompany;
-                if (cmp.users.filter(x => x.id === userId).length < 1 && cmp.owner.id !== userId)
+                if (cmp.members.filter(x => x.userId === userId).length < 1 && cmp.owner.id !== userId)
                     throw new AppError('AppError', 'You Are Not A Member of This Company', 403);
                 resolve();
             }).catch((err) => {

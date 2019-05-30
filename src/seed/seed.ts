@@ -109,7 +109,7 @@ export class SeedDatabase {
             console.log('Sirketler Eklendi');
 
             companies = createdCompanies;
-            grkn.companies = companies.filter(x => x.ownerId === grkn.id);
+            grkn.ownedCompanies = companies.filter(x => x.ownerId === grkn.id);
 
             for (let i = 0; i < PROJECTCOUNT; i++) {
                 let ind = Math.floor(Math.random() * (COMPANYCOUNT));
@@ -126,7 +126,7 @@ export class SeedDatabase {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.companies[0]
+                companyId: grkn.ownedCompanies[0]
             });
             projectPromises.push(this._projectRepository.insert(p1));
 
@@ -134,7 +134,7 @@ export class SeedDatabase {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.companies[0].id
+                companyId: grkn.ownedCompanies[0].id
             });
             projectPromises.push(this._projectRepository.insert(p2));
 
@@ -142,7 +142,7 @@ export class SeedDatabase {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.companies[1].id
+                companyId: grkn.ownedCompanies[1].id
             });
             projectPromises.push(this._projectRepository.insert(p3));
 
@@ -206,7 +206,7 @@ export class SeedDatabase {
             }
             console.log("Projeler tamamen eklendi");
 
-            grkn.companies.map((cmp) => {
+            grkn.ownedCompanies.map((cmp) => {
                 cmp.projects = projects.filter(prj => prj.companyId === cmp.id);
             });
 
@@ -223,7 +223,7 @@ export class SeedDatabase {
                 taskPromises.push(this._taskRepository.insert(tsk));
             }
 
-            grkn.companies.map((cmp) => {
+            grkn.ownedCompanies.map((cmp) => {
                 cmp.projects.map((prj) => {
                     for (let i = 0; i < 5; i++) {
                         let stind = Math.floor(Math.random() * (3));

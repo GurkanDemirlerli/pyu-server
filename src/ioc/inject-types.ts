@@ -8,7 +8,8 @@ export module InjectTypes {
         QUESTION = 'QuestionRepository',
         STATUS = 'StatusRepository',
         TASK = 'TaskRepository',
-        USER = 'UserRepository'
+        USER = 'UserRepository',
+        COMPANY_MEMBER = 'CompanyMemberRepository'
     }
 
     export enum Service {

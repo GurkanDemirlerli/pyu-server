@@ -17,7 +17,8 @@ export class CompanyRepository extends RepositoryBase<CompanyEntity> implements 
         let query = getManager().createQueryBuilder(CompanyEntity, "company").select("company")
             .leftJoin("company.owner", "owner").addSelect(["owner.id", "owner.name", "owner.surname", "owner.username"])
             .where("owner.id =:userId", { userId: userId })
-            .leftJoin("company.users", "user").addSelect(["user.id"])
+            .leftJoinAndSelect("company.members", "member")
+            .leftJoin("member.user", "user").addSelect(["user.id", "user.name", "user.surname", "user.username"])
             .leftJoin("company.projects", "project").addSelect(["project.id"]);
         if (filters.owner === undefined) query = query.orWhere("user.id =:userId", { userId: userId });
 
@@ -26,7 +27,6 @@ export class CompanyRepository extends RepositoryBase<CompanyEntity> implements 
             query = query.take(filters.take);
             if (filters.skip !== undefined) query = query.skip(filters.skip);
         }
-
         return query.getMany();
     }
 

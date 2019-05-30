@@ -14,11 +14,13 @@ export class ProjectController {
         @inject(InjectTypes.Service.PROJECT) private readonly _projectService: IProjectService
     ) { }
 
-    list(req: Request, res: Response, next: NextFunction) {
-
+    listByCompany(req: Request, res: Response, next: NextFunction) {
+        const companyId: number = req.params.companyId;
         let filters: ProjectFilter = {};
+        if (req.query.hasOwnProperty("skip")) filters.skip = +req.query.skip;
+        if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
 
-        this._projectService.list(filters, req.decoded.id).then((result) => {
+        this._projectService.listByCompany(filters, req.decoded.id, companyId).then((result) => {
             return res.status(200).json({
                 success: true,
                 data: result

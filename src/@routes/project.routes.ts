@@ -11,8 +11,8 @@ export class ProjectRoutes {
         const root = "/api/projects";
         const ctrl = IOC.container.get(ProjectController);
 
-        app.route(root + '/')
-            .get(authorize, (req, res, next) => ctrl.list(req, res, next));
+        app.route(root + '/company/:companyId')
+            .get(authorize, (req, res, next) => ctrl.listByCompany(req, res, next));
 
         app.route(root + '/:id')
             .get(authorize, (req, res, next) => ctrl.find(req, res, next));

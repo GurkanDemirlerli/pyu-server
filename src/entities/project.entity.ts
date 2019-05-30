@@ -45,10 +45,7 @@ export class ProjectEntity {
     @JoinTable()
     users: UserEntity[];
 
-    @Column("int", { nullable: true })
-    managerId: number;
-    @ManyToOne(type => UserEntity, user => user.managedProjects)
-    @JoinColumn({ name: "managerId" })
-    manager: UserEntity;
-
+    @ManyToMany(type => UserEntity, user => user.managedProjects)
+    @JoinTable()
+    managers: UserEntity[];
 }
