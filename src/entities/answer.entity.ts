@@ -23,4 +23,10 @@ export class AnswerEntity {
     @ManyToOne(type => QuestionEntity, question => question.answers)
     @JoinColumn({ name: "questionId" })
     question: QuestionEntity;
+
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 }

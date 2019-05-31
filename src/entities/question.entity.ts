@@ -32,4 +32,10 @@ export class QuestionEntity {
     @ManyToOne(type => ProjectEntity, project => project.tasks)
     @JoinColumn({ name: "projectId" })
     project: ProjectEntity;
+
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 }

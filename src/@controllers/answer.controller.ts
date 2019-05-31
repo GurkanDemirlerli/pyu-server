@@ -12,7 +12,6 @@ export class AnswerController {
     constructor(
         @inject(InjectTypes.Service.ANSWER) private readonly _answerService: IAnswerService
     ) { }
-
     list(req: Request, res: Response, next: NextFunction) {
 
         let filters: AnswerFilter = {};

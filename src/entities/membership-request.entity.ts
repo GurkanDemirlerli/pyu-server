@@ -20,7 +20,7 @@ export class MembershipRequestEntity {
     @JoinColumn({ name: "companyId" })
     company: CompanyEntity;
 
-    @Column("datetime")
+    @Column()
     createdAt: Date;
 
 }

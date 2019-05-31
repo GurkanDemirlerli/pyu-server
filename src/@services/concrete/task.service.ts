@@ -110,7 +110,7 @@ export class TaskService implements ITaskService {
         return new Promise<any>((resolve, reject) => {
             this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
                 let prjct = res;
-                if (prjct.users.filter(x => x.id === userId).length < 1 && prjct.creator.id !== userId)
+                if (prjct.members.filter(x => x.userId === userId).length < 1 && prjct.creator.id !== userId)
                     throw new AppError('AppError', 'Bu projede yetkiniz yoktur.', 403);
                 resolve();
             }).catch((err) => {

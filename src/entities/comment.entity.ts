@@ -24,4 +24,10 @@ export class CommentEntity {
     @ManyToOne(type => UserEntity, user => user.comments)
     @JoinColumn({ name: "userId" })
     creator: UserEntity;
+
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 }

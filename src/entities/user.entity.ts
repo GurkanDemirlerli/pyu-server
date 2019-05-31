@@ -3,7 +3,7 @@ import { CommentEntity } from './comment.entity';
 import { QuestionEntity } from './question.entity';
 import { CompanyEntity } from './company.entity';
 import { TaskEntity } from './task.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, OneToMany, ManyToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { ProjectEntity } from './project.entity';
 import { AnswerEntity } from './answer.entity';
 import { StatusEntity } from './status.entity';
@@ -46,6 +46,9 @@ export class UserEntity {
 
     @Column()
     createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 
     @OneToMany(type => TaskEntity, task => task.creator)
     createdTasks: TaskEntity[];

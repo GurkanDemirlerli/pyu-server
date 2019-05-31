@@ -34,4 +34,9 @@ export class CompanyEntity {
     @JoinColumn({ name: "ownerId" })
     owner: UserEntity;
 
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 }

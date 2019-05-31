@@ -51,6 +51,12 @@ export class TaskEntity {
     @OneToMany(type => TaskAssignmentEntity, tsa => tsa.task)
     assignees: TaskAssignmentEntity[];
 
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
+
     // @ManyToMany(type => UserEntity, user => user.assignedTasks)
     // @JoinTable()
     // assignees: UserEntity[];

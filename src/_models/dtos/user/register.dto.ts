@@ -17,5 +17,4 @@ export class RegisterDto {
     @IsString()
     public password: string;
 
-    public createdAt: Date;
 }

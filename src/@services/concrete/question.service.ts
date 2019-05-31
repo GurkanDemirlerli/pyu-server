@@ -13,7 +13,6 @@ export class QuestionService implements IQuestionService {
     constructor(
         @inject(InjectTypes.Repository.QUESTION) private readonly _questionRepository: IQuestionRepository
     ) { }
-
     add(model: QuestionCreateDto): Promise<number> {
         return new Promise<any>((resolve, reject) => {
             //TODO yetkisi var mı diye kontrol et

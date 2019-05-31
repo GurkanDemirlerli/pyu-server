@@ -43,6 +43,12 @@ export class ProjectEntity {
     @JoinColumn({ name: "userId" })
     creator: UserEntity;
 
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
+
     // @ManyToMany(type => UserEntity, user => user.projects)
     // @JoinTable()
     // users: UserEntity[];

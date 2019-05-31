@@ -12,6 +12,7 @@ import { BaseStatus } from '../enums/base-status.enum';
 
 import { InjectTypes } from './inject-types';
 import { TaskEntity } from "./../entities/task.entity";
+import 'module-alias/register';
 
 @injectable()
 export class SeedDatabase {

@@ -38,4 +38,10 @@ export class StatusEntity {
     @ManyToOne(type => ProjectEntity, project => project.statuses)
     @JoinColumn({ name: "projectId" })
     project: ProjectEntity;
+
+    @Column()
+    createdAt: Date;
+
+    @Column()
+    lastUpdated: Date;
 }

@@ -20,7 +20,7 @@ export class TaskAssignmentEntity {
     @JoinColumn({ name: "taskId" })
     task: TaskEntity;
 
-    @Column("datetime")
+    @Column()
     createdAt: Date;
 
 }

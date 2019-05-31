@@ -20,7 +20,7 @@ export class ProjectMembershipEntity {
     @JoinColumn({ name: "projectId" })
     project: ProjectEntity;
 
-    @Column("datetime")
+    @Column()
     createdAt: Date;
 
 }

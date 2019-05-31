@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var user_service_1 = require("./user.service");
+exports.UserService = user_service_1.UserService;
+var question_service_1 = require("./question.service");
+exports.QuestionService = question_service_1.QuestionService;
+var issue_service_1 = require("./issue.service");
+exports.IssueService = issue_service_1.IssueService;
+var comment_service_1 = require("./comment.service");
+exports.CommentService = comment_service_1.CommentService;
+var answer_service_1 = require("./answer.service");
+exports.AnswerService = answer_service_1.AnswerService;
+var project_service_1 = require("./project.service");
+exports.ProjectService = project_service_1.ProjectService;
+var task_service_1 = require("./task.service");
+exports.TaskService = task_service_1.TaskService;
+var company_service_1 = require("./company.service");
+exports.CompanyService = company_service_1.CompanyService;
