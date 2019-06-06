@@ -8,3 +8,4 @@ export { IUserRepository } from './i-user.repository';
 export { ICommentRepository } from './i-comment.repository';
 export { ITaskRepository } from './i-task.repository';
 export { ICompanyMembershipRepository } from './i-company-membership.repository';
+export { IMembershipRequestRepository } from './i-membership-request.repository';

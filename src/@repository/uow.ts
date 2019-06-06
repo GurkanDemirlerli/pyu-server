@@ -1,4 +1,4 @@
-import { EntityManager, QueryRunner, getConnection } from "typeorm";
+import { QueryRunner, getConnection } from "typeorm";
 
 export class Uow {
     qr: QueryRunner;

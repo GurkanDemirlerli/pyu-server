@@ -22,6 +22,9 @@
       "@routes/*":[
         "./src/@routes/*"
       ],
+      "@routes":[
+        "./src/@routes/index"
+      ],
       "@services/*":[
         "./src/@services/*"
       ],
@@ -62,14 +65,17 @@
     "experimentalDecorators": true,
     "allowJs": true,
     "resolveJsonModule": true,
+  "sourceMap":true
   },
 
   "include": [
     "*.ts",
+    "./typings/**/*",
     "./src/**/*"
   ],
   "exclude": [
     "node_modules",
+    "dist"
   ],
 
   "formatCodeOptions": {

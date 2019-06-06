@@ -4,7 +4,7 @@ import { TaskCreateDto, TaskUpdateDto } from "@models/dtos";
 import { ITaskService } from "@services/abstract";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
+import { InjectTypes } from "@ioc";
 import { AppError } from "@errors/app-error";
 
 @injectable()

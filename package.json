@@ -4,9 +4,12 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts",
-    "watch": "npm run build && nodemon && node ./dist/index.js",
-    "build": "tsc"
+    "start": "npm run build-watch",
+    "test": "ts-node --files src/index.ts",
+    "watch": "nodemon src/index.ts",
+    "build-watch": "npm run build && nodemon src/index.ts",
+    "build": "tsc",
+    "debug": "tsc && node --inspect=1923 ./dist/index.js"
   },
   "_moduleAliases": {
     "@models":"dist/_models",

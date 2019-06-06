@@ -1,7 +1,7 @@
-import { ProjectEntity } from './project.entity';
+import { ProjectEntity } from '@entities/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
-import { UserEntity } from './user.entity';
-import { AnswerEntity } from './answer.entity';
+import { UserEntity } from '@entities/user.entity';
+import { AnswerEntity } from '@entities/answer.entity';
 @Entity("question")
 export class QuestionEntity {
 

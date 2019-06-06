@@ -1,12 +1,13 @@
-import { AnswerController } from '../@controllers/answer.controller';
-import { CommentController } from '../@controllers/comment.controller';
-import { CompanyController } from '../@controllers/company.controller';
-import { IssueController } from '../@controllers/issue.controller';
-import { ProjectController } from '../@controllers/project.controller';
-import { QuestionController } from '../@controllers/question.controller';
-import { TaskController } from '../@controllers/task.controller';
-import { UserController } from '../@controllers/user.controller';
+import 'module-alias/register';
 
+import { AnswerController } from '@controllers/answer.controller';
+import { CommentController } from '@controllers/comment.controller';
+import { CompanyController } from '@controllers/company.controller';
+import { IssueController } from '@controllers/issue.controller';
+import { ProjectController } from '@controllers/project.controller';
+import { QuestionController } from '@controllers/question.controller';
+import { TaskController } from '@controllers/task.controller';
+import { UserController } from '@controllers/user.controller';
 import {
     IAnswerRepository,
     ICommentRepository,
@@ -18,8 +19,9 @@ import {
     ITaskRepository,
     IUserRepository,
     ICompanyMembershipRepository,
+    IMembershipRequestRepository
 
-} from './../@repository/abstract';
+} from '@repositories/abstract';
 
 import {
     AnswerRepository,
@@ -32,7 +34,8 @@ import {
     TaskRepository,
     UserRepository,
     CompanyMembershipRepository,
-} from './../@repository/concrete';
+    MembershipRequestRepository
+} from '@repositories/concrete';
 
 import {
     AnswerService,
@@ -43,7 +46,7 @@ import {
     QuestionService,
     TaskService,
     UserService,
-} from './../@services/concrete';
+} from '@services/concrete';
 
 import {
     IAnswerService,
@@ -54,14 +57,12 @@ import {
     IQuestionService,
     ITaskService,
     IUserService,
-} from './../@services/abstract';
-
-
+} from '@services/abstract';
 
 import { Container } from 'inversify';
 
 import 'reflect-metadata';
-import { InjectTypes } from './inject-types';
+import { InjectTypes } from '@ioc';
 
 export module IOC {
     export const container = new Container();
@@ -120,6 +121,10 @@ export module IOC {
         container
             .bind<ICompanyMembershipRepository>(InjectTypes.Repository.COMPANY_MEMBERSHIP)
             .to(CompanyMembershipRepository);
+
+        container
+            .bind<IMembershipRequestRepository>(InjectTypes.Repository.MEMBERSHIP_REQUEST)
+            .to(MembershipRequestRepository);
 
         container
             .bind<IIssueRepository>(InjectTypes.Repository.ISSUE)

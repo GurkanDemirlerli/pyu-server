@@ -1,20 +1,18 @@
-import { StatusEntity } from './../entities/status.entity';
-import { IssueEntity } from './../entities/issue.entity';
-import { AnswerEntity } from './../entities/answer.entity';
-import { QuestionEntity } from './../entities/question.entity';
-import { CompanyEntity } from './../entities/company.entity';
-import { ProjectEntity } from './../entities/project.entity';
+import { StatusEntity } from '@entities/status.entity';
+import { IssueEntity } from '@entities/issue.entity';
+import { AnswerEntity } from '@entities/answer.entity';
+import { QuestionEntity } from '@entities/question.entity';
+import { CompanyEntity } from '@entities/company.entity';
+import { ProjectEntity } from '@entities/project.entity';
 import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 import { MembershipRequestEntity } from '@entities/membership-request.entity';
 import { ProjectManagerEntity } from '@entities/project-manager.entity';
 import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
-import {
-    CommentEntity,
-    TaskEntity,
-    UserEntity
+import { TaskEntity } from '@entities/task.entity';
+import { CommentEntity } from '@entities/comment.entity';
+import { UserEntity } from '@entities/user.entity';
 
-} from './../entities';
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
 

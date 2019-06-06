@@ -49,8 +49,9 @@ module.exports = {
     },
     plugins: [
       new WebpackShellPlugin({
-        onBuildEnd: ['npm run run:dev']
+        onBuildEnd: ['npm run watch']
       })
     ],
-    externals: [nodeExternals()]
+    externals: [nodeExternals()],
+    devtool: "source-map"
 }

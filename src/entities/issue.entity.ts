@@ -1,8 +1,7 @@
-import { ProjectEntity } from './project.entity';
+import { ProjectEntity } from '@entities/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
-import { CommentEntity } from './comment.entity';
-import { UserEntity } from './user.entity';
-import { TaskEntity } from './task.entity';
+import { UserEntity } from '@entities/user.entity';
+import { TaskEntity } from '@entities/task.entity';
 @Entity("issue")
 export class IssueEntity {
 

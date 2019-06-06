@@ -1,7 +1,7 @@
-import { TaskEntity } from './task.entity';
-import { ProjectEntity } from './project.entity';
+import { TaskEntity } from '@entities/task.entity';
+import { ProjectEntity } from '@entities/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
-import { UserEntity } from './user.entity';
+import { UserEntity } from '@entities/user.entity';
 @Entity("status")
 export class StatusEntity {
 

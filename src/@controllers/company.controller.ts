@@ -45,6 +45,7 @@ export class CompanyController {
     }
 
     find(req: Request, res: Response, next: NextFunction) {
+      //aaaaaaaaaa
         const id: number = +req.params.id;
         this._companyService.find(id, req.decoded.id).then((result) => {
             return res.status(200).json({

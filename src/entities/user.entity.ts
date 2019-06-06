@@ -1,17 +1,17 @@
-import { IssueEntity } from './issue.entity';
-import { CommentEntity } from './comment.entity';
-import { QuestionEntity } from './question.entity';
-import { CompanyEntity } from './company.entity';
-import { TaskEntity } from './task.entity';
+import { IssueEntity } from '@entities/issue.entity';
+import { CommentEntity } from '@entities/comment.entity';
+import { QuestionEntity } from '@entities/question.entity';
+import { CompanyEntity } from '@entities/company.entity';
+import { TaskEntity } from '@entities/task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { ProjectEntity } from './project.entity';
-import { AnswerEntity } from './answer.entity';
-import { StatusEntity } from './status.entity';
-import { ProjectManagerEntity } from './project-manager.entity';
-import { MembershipRequestEntity } from './membership-request.entity';
-import { ProjectMembershipEntity } from './project-membership.entity';
-import { TaskAssignmentEntity } from './task-assignment.entity';
-import { CompanyMembershipEntity } from './company-membership.entity';
+import { ProjectEntity } from '@entities/project.entity';
+import { AnswerEntity } from '@entities/answer.entity';
+import { StatusEntity } from '@entities/status.entity';
+import { ProjectManagerEntity } from '@entities/project-manager.entity';
+import { MembershipRequestEntity } from '@entities/membership-request.entity';
+import { ProjectMembershipEntity } from '@entities/project-membership.entity';
+import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
+import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 
 @Entity("user")
 export class UserEntity {

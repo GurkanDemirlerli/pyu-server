@@ -8,3 +8,4 @@ export { UserRepository } from './user.repository';
 export { CommentRepository } from './comment.repository';
 export { TaskRepository } from './task.repository';
 export { CompanyMembershipRepository } from './company-membership.repository';
+export { MembershipRequestRepository } from './membership-request.repository';

@@ -1,4 +1,4 @@
-import { DecodedTokenModel } from './src/_models/decoded-token.model';
+import { DecodedTokenModel } from '../src/_models/decoded-token.model';
 declare global {
     namespace Express {
       interface Request {

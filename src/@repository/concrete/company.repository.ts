@@ -34,7 +34,8 @@ export class CompanyRepository extends RepositoryBase<CompanyEntity> implements 
         let query = getManager().createQueryBuilder(CompanyEntity, "company").select("company")
             .where("company.id =:id", { id: id })
             .leftJoin("company.owner", "owner").addSelect(["owner.id", "owner.name", "owner.surname", "owner.username"])
-            .leftJoin("company.users", "user").addSelect(["user.id"])
+            .leftJoinAndSelect("company.members", "member")
+            .leftJoin("member.user", "user").addSelect(["user.id", "user.name", "user.surname", "user.username"])
             .leftJoin("company.projects", "project").addSelect(["project.id"]);
 
         return query.getOne();

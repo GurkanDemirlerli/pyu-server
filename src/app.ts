@@ -10,9 +10,9 @@ import * as methodOverride from 'method-override';
 import * as morgan from 'morgan';
 import * as path from 'path';
 import { createConnection } from "typeorm";
-import { RouteBinder } from './@routes'
-import { IOC } from './ioc';
-import * as appConfig from "./common/app-config";
+import { RouteBinder } from '@routes'
+import { IOC } from '@ioc';
+import * as appConfig from "@common/app-config";
 // import { logger } from './services';
 import 'reflect-metadata';
 /**
@@ -40,6 +40,7 @@ export class Server {
      * @constructor
      */
     constructor() {
+
         IOC.configureContainer();
 
         // create expressjs application
@@ -95,7 +96,6 @@ export class Server {
         this.app.use(errorHandler());
 
         createConnection(appConfig.dbOptions).then(async connection => {
-            console.log(__dirname);
             console.log("SERVER STARTED")
 
 

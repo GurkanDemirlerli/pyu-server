@@ -1,11 +1,11 @@
-import { IssueEntity } from './issue.entity';
+import { IssueEntity } from '@entities/issue.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
-import { UserEntity } from './user.entity';
-import { TaskEntity } from "./task.entity";
-import { CompanyEntity } from "./company.entity";
-import { StatusEntity } from "./status.entity";
-import { ProjectManagerEntity } from './project-manager.entity';
-import { ProjectMembershipEntity } from './project-membership.entity';
+import { UserEntity } from '@entities/user.entity';
+import { TaskEntity } from "@entities/task.entity";
+import { CompanyEntity } from "@entities/company.entity";
+import { StatusEntity } from "@entities/status.entity";
+import { ProjectManagerEntity } from '@entities/project-manager.entity';
+import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 @Entity("project")
 export class ProjectEntity {
 

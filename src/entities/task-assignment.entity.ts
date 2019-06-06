@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { UserEntity } from './user.entity';
-import { TaskEntity } from "./task.entity";
+import { UserEntity } from '@entities/user.entity';
+import { TaskEntity } from "@entities/task.entity";
 
 @Entity("task_assignment")
 export class TaskAssignmentEntity {
