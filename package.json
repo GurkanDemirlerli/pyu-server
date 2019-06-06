@@ -4,29 +4,13 @@
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "start": "npm run build-watch",
+    "start": "webpack",
     "test": "ts-node --files src/index.ts",
-    "watch": "nodemon src/index.ts",
+    "watch": "nodemon  --inspect=1923 && node ./dist/index.js",
     "build-watch": "npm run build && nodemon src/index.ts",
     "build": "tsc",
     "debug": "tsc && node --inspect=1923 ./dist/index.js"
   },
-  "_moduleAliases": {
-    "@models":"dist/_models",
-    "@middlewares":"dist/middlewares",
-    "@controllers":"dist/@controllers",
-    "@repositories":"dist/@repository",
-    "@routes":"dist/@routes",
-    "@services":"dist/@services",
-    "@entities":"dist/entities",
-    "@common":"dist/common",
-    "@errors":"dist/errors",
-    "@ioc":"dist/ioc",
-    "@seed":"dist/seed",
-    "@helpers":"dist/helpers",
-    "@exceptions":"dist/exceptions",
-    "@enums":"dist/enums"
-},
   "author": "",
   "license": "ISC",
   "dependencies": {

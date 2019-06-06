@@ -1,4 +1,3 @@
-import 'module-alias/register';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as cors from 'cors';

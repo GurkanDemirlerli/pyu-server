@@ -52,13 +52,11 @@ export class CompanyService implements ICompanyService {
 
     //Yalnızca kurucu işlem yapabilir
     async update(id: number, model: CompanyUpdateDto, requestorId: number) {
-      console.log("BBBBBBBBBBBBBBBBB");
-
         let updatedCompany: CompanyEntity;
         let oldCompany: CompanyEntity = await this._companyRepository.findById(id);
         if (!oldCompany) throw new AppError('AppError', 'Company not found.', 404);
-        // if (oldCompany.ownerId !== requestorId)
-        //     throw new AppError('AppError', 'Your are not the owner of this company.', 401);
+        if (oldCompany.ownerId !== requestorId)
+            throw new AppError('AppError', 'Your are not the owner of this company.', 401);
         updatedCompany = Object.assign(oldCompany, model);
         await this._companyRepository.update(id, updatedCompany);
         return Promise.resolve(updatedCompany);

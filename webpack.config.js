@@ -10,7 +10,7 @@ module.exports = {
     mode: config.mode,
     target: "node",
     entry: {
-        app: './src/index.ts',
+        index: './src/index.ts',
         seed: './src/seed/index.ts',
         dropdb: './src/seed/dropDatabase.ts',
     },
@@ -45,7 +45,7 @@ module.exports = {
     },
     output: {
         path: path.resolve(__dirname, "dist/"),
-        filename: "[name].bundle.js"
+        filename: "[name].js"
     },
     plugins: [
       new WebpackShellPlugin({

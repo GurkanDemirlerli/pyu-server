@@ -1,5 +1,4 @@
 console.log("Starting...")
-import 'module-alias/register';
 import 'reflect-metadata';
 import * as config from 'config';
 
