@@ -18,7 +18,10 @@ export class RepositoryBase<T> implements IRepositoryBase<T> {
     }
 
     findOne(id: number, options: FindOneOptions<T>): Promise<T> {
-        return getManager().getRepository(this.type).findOne(id, options);
+        if (id !== null)
+            return getManager().getRepository(this.type).findOne(id, options);
+        else
+            return getManager().getRepository(this.type).findOne(options);
     }
 
     insert(model: T, manager: EntityManager = getManager()): Promise<T> {

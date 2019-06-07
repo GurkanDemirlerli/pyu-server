@@ -158,7 +158,10 @@ let RepositoryBase = class RepositoryBase {
         return typeorm_1.getManager().getRepository(this.type).findOne(id);
     }
     findOne(id, options) {
-        return typeorm_1.getManager().getRepository(this.type).findOne(id, options);
+        if (id !== null)
+            return typeorm_1.getManager().getRepository(this.type).findOne(id, options);
+        else
+            return typeorm_1.getManager().getRepository(this.type).findOne(options);
     }
     insert(model, manager = typeorm_1.getManager()) {
         return manager.getRepository(this.type).save(model);

@@ -26,6 +26,7 @@ export class CompanyRoutes {
         app.route(root + '/:id')
             .delete(authorize, (req, res, next) => ctrl.delete(req, res, next));
 
+            //TODO asagidaki 2 fonksiyon duzenlenecek baska controllere eklenecek
         app.route(root + '/:id/requestMembership')
             .post(validationMiddleware(CompanyUserRegisterDto), authorize, (req, res, next) => ctrl.requestMembership(req, res, next));
 

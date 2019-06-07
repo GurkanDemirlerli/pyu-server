@@ -376,9 +376,9 @@ let CompanyController = class CompanyController {
         });
     }
     requestMembership(req, res, next) {
-        const id = +req.params.id;
+        const memRequestId = +req.params.id;
         const curDto = Object.assign(new dtos_1.CompanyUserRegisterDto(), req.body);
-        this._companyService.requestMembership(id, curDto, req.decoded.id).then(() => {
+        this._companyService.requestMembership(memRequestId, curDto, req.decoded.id).then(() => {
             return res.status(200).json({
                 success: true
             });
@@ -557,7 +557,7 @@ let ProjectController = class ProjectController {
         let prjDto = Object.assign(new dtos_1.ProjectCreateDto(), req.body);
         prjDto.userId = req.decoded.id;
         this._projectService.add(prjDto).then((createdId) => {
-            // return this._projectService.find(createdId, req.decoded.id);
+            return this._projectService.find(createdId, req.decoded.id);
         }).then((result) => {
             return res.status(201).json({
                 success: true,
@@ -981,7 +981,10 @@ let RepositoryBase = class RepositoryBase {
         return typeorm_1.getManager().getRepository(this.type).findOne(id);
     }
     findOne(id, options) {
-        return typeorm_1.getManager().getRepository(this.type).findOne(id, options);
+        if (id !== null)
+            return typeorm_1.getManager().getRepository(this.type).findOne(id, options);
+        else
+            return typeorm_1.getManager().getRepository(this.type).findOne(options);
     }
     insert(model, manager = typeorm_1.getManager()) {
         return manager.getRepository(this.type).save(model);
@@ -1659,6 +1662,7 @@ class CompanyRoutes {
             .put(_middlewares_1.validationMiddleware(dtos_1.CompanyUpdateDto), _middlewares_2.authorize, (req, res, next) => ctrl.update(req, res, next));
         app.route(root + '/:id')
             .delete(_middlewares_2.authorize, (req, res, next) => ctrl.delete(req, res, next));
+        //TODO asagidaki 2 fonksiyon duzenlenecek baska controllere eklenecek
         app.route(root + '/:id/requestMembership')
             .post(_middlewares_1.validationMiddleware(dtos_1.CompanyUserRegisterDto), _middlewares_2.authorize, (req, res, next) => ctrl.requestMembership(req, res, next));
         app.route(root + '/:id/acceptMembership')
@@ -1763,6 +1767,7 @@ class ProjectRoutes {
     static configureRoutes(app) {
         const root = "/api/projects";
         const ctrl = _ioc_1.IOC.container.get(project_controller_1.ProjectController);
+        //verilen companyId'ye gore projeleri getirir
         app.route(root + '/company/:companyId')
             .get(_middlewares_2.authorize, (req, res, next) => ctrl.listByCompany(req, res, next));
         app.route(root + '/:id')
@@ -2108,6 +2113,7 @@ const company_entity_1 = __webpack_require__(/*! @entities/company.entity */ "./
 const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
 const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
 const membership_request_entity_1 = __webpack_require__(/*! @entities/membership-request.entity */ "./src/entities/membership-request.entity.ts");
+const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 let CompanyService = class CompanyService {
     constructor(_companyRepository, _companyMembershipRepository, _membershipRequestRepository) {
         this._companyRepository = _companyRepository;
@@ -2124,7 +2130,7 @@ let CompanyService = class CompanyService {
             return Promise.resolve(inserted.id);
         });
     }
-    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek
+    //Yalnızca kullanıcının üyesi veya kurucusu olduğu topluluklar gelecek
     list(filters, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let companyDtos = [];
@@ -2138,7 +2144,7 @@ let CompanyService = class CompanyService {
             return Promise.resolve(companyDtos);
         });
     }
-    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek aksi halde unauthorized
+    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek aksi halde unauthorized, diger kullanıcılar için daha az veri getiren başka metot olacak
     find(id, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let companyEn = yield this._companyRepository.findForDetails(id);
@@ -2170,27 +2176,41 @@ let CompanyService = class CompanyService {
             let companyEn = yield this._companyRepository.findById(id);
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
-            //yetki kontrol
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'Your are not the owner of this company.', 401);
             yield this._companyRepository.delete(id);
             return Promise.resolve();
         });
     }
     //Yalnızca isteği alan kişi işlem yapabilir.
-    acceptMembership(id, requestorId) {
+    acceptMembership(msrId, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let companyEn = yield this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
-            if (!companyEn)
-                throw new app_error_1.AppError('AppError', 'Company not found.', 404);
-            if (companyEn.requestsSent.filter(x => x.userId === requestorId).length < 1)
-                throw new app_error_1.AppError('AppError', 'There is not any membership request for you from this company.', 401);
-            if (companyEn.members.filter(x => x.userId == requestorId).length > 0 || companyEn.owner.id === requestorId)
-                throw new app_error_1.AppError('AppError', 'You Are Already a Member of this company.', 409);
+            let msReEn = yield this._membershipRequestRepository.findOne(msrId, { relations: ["user", "company", "company.members"] });
+            if (!msReEn)
+                throw new app_error_1.AppError('AppError', 'Membership request not found.', 404);
+            if (msReEn.userId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You cant accept requests which are not for you', 401);
+            if (msReEn.company.members.filter(x => x.userId === msReEn.userId).length > 0 || msReEn.company.ownerId === msReEn.userId)
+                throw new app_error_1.AppError('AppError', 'You are Already a Member of this company.', 409);
             let cMemEn = new company_membership_entity_1.CompanyMembershipEntity();
-            cMemEn.userId = requestorId;
-            cMemEn.companyId = id;
+            cMemEn.userId = msReEn.userId;
+            cMemEn.companyId = msReEn.companyId;
             cMemEn.joiningDate = new Date();
             cMemEn.status = 1; // enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
-            yield this._companyMembershipRepository.insert(cMemEn);
+            let uow = new uow_1.Uow();
+            yield uow.start();
+            try {
+                cMemEn = yield this._companyMembershipRepository.insert(cMemEn, uow.getManager());
+                yield this._membershipRequestRepository.delete(msrId, uow.getManager());
+                yield uow.commit();
+            }
+            catch (err) {
+                yield uow.rollback();
+                throw err;
+            }
+            finally {
+                yield uow.release();
+            }
             return Promise.resolve();
         });
     }
@@ -2198,11 +2218,14 @@ let CompanyService = class CompanyService {
     requestMembership(id, model, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let companyEn = yield this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You must be the owner of this company for this operation', 401);
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
             if (companyEn.members.filter(x => x.userId === model.userId).length > 0 || companyEn.owner.id === model.userId)
                 throw new app_error_1.AppError('AppError', 'User Is Already a Member of this company.', 409);
-            if (companyEn.requestsSent.filter(x => x.userId === model.userId).length > 0)
+            let duplicated = yield this._membershipRequestRepository.findOne(null, { where: { userId: model.userId, companyId: id } });
+            if (duplicated)
                 throw new app_error_1.AppError('AppError', 'Your Company already sent a membership request to this user.', 409);
             let msReEn = new membership_request_entity_1.MembershipRequestEntity();
             msReEn.userId = model.userId;
@@ -2384,15 +2407,23 @@ const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./sr
 const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 let ProjectService = class ProjectService {
-    constructor(_projectRepository, _statusRepository, _companyRepository) {
+    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository) {
         this._projectRepository = _projectRepository;
         this._statusRepository = _statusRepository;
         this._companyRepository = _companyRepository;
+        this._companyMembershipRepository = _companyMembershipRepository;
     }
+    //Yalnızca sahibi ekleyebilir
     add(model) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.validateAuthority(model.companyId, model.userId);
+            let companyEn = yield this._companyRepository.findOne(model.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            if (companyEn.ownerId !== model.userId)
+                throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 401);
             let projectEn = Object.assign(new project_entity_1.ProjectEntity(), model);
+            projectEn.createdAt = new Date();
+            projectEn.lastUpdated = new Date();
             let uow = new uow_1.Uow();
             yield uow.start();
             try {
@@ -2403,7 +2434,9 @@ let ProjectService = class ProjectService {
                     baseStatus: _enums_1.BaseStatus.PLANNINING,
                     order: 0,
                     creatorId: model.userId,
-                    projectId: projectEn.id
+                    projectId: projectEn.id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status1 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'To do',
@@ -2411,7 +2444,9 @@ let ProjectService = class ProjectService {
                     baseStatus: _enums_1.BaseStatus.NOT_STARTED,
                     order: 0,
                     creatorId: model.userId,
-                    projectId: projectEn.id
+                    projectId: projectEn.id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status2 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'In Progress',
@@ -2419,7 +2454,9 @@ let ProjectService = class ProjectService {
                     baseStatus: _enums_1.BaseStatus.IN_PROGRESS,
                     order: 0,
                     creatorId: model.userId,
-                    projectId: projectEn.id
+                    projectId: projectEn.id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status3 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'Done',
@@ -2427,7 +2464,9 @@ let ProjectService = class ProjectService {
                     baseStatus: _enums_1.BaseStatus.FINISHED,
                     order: 0,
                     creatorId: model.userId,
-                    projectId: projectEn.id
+                    projectId: projectEn.id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 yield this._statusRepository.insert(status0, uow.getManager());
                 yield this._statusRepository.insert(status1, uow.getManager());
@@ -2445,11 +2484,13 @@ let ProjectService = class ProjectService {
             return Promise.resolve(projectEn.id);
         });
     }
-    //TODO sadece yetkisi olanlar gelsin
+    //sadece ayni sirkettekiler erisebilir
     listByCompany(filters, requestorId, companyId) {
         return __awaiter(this, void 0, void 0, function* () {
             let projectDtos = [];
-            yield this.validateAuthority(companyId, requestorId);
+            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
+            if (!memberEn)
+                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
             let projects = yield this._projectRepository.listByFiltersByCompany(filters, companyId);
             projects.map((prj) => {
                 let projectDto = Object.assign(new dtos_1.ProjectListDto(), prj);
@@ -2458,77 +2499,48 @@ let ProjectService = class ProjectService {
             return Promise.resolve(projectDtos);
         });
     }
+    //sadece ayni sirkettekiler erisebilir
     find(id, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let projectEntity = yield this._projectRepository.findForDetails(id);
             if (!projectEntity)
                 throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            yield this.validateAuthority(projectEntity.company.id, requestorId);
+            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: projectEntity.company.id } });
+            if (!memberEn && projectEntity.company.owner.id !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
             let prjDto = Object.assign(new dtos_1.ProjectDetailDto(), projectEntity);
             return Promise.resolve(prjDto);
         });
     }
+    //yalnızca sirket sahibi izinlidir
     update(id, model, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let updatedProject;
             let oldProject = yield this._projectRepository.findById(id);
             if (!oldProject)
                 throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            yield this.validateAuthority(oldProject.companyId, requestorId);
+            const companyEn = yield this._companyRepository.findOne(oldProject.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You can not update this project', 403);
             updatedProject = Object.assign(oldProject, model);
             yield this._projectRepository.update(id, updatedProject);
             return Promise.resolve(updatedProject);
         });
     }
+    //yalnızca sirket sahibi izinlidir
     delete(id, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let projectEntity = yield this._projectRepository.findById(id);
             if (!projectEntity)
                 throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            yield this.validateAuthority(projectEntity.companyId, requestorId);
+            const companyEn = yield this._companyRepository.findOne(projectEntity.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You can not delete this project', 403);
             yield this._projectRepository.delete(id);
-            return Promise.resolve();
-        });
-    }
-    // private async validateAuthority(type: ProjectAuthTypes, userId: number, companyId: number, projectId?: number): Promise<void> {
-    //     let cmpEn: CompanyEntity;
-    //     if (companyId !== null) cmpEn = await this._companyRepository.findOne(companyId, { relations: ["users", "owner"] });
-    //
-    //     //TODO company kurucusunun admin olması daha sonra değişirse burası da değişir.
-    //     if (type === ProjectAuthTypes.ADMIN) {
-    //         if (!cmpEn) throw new AppError('AppError', 'Internal Error.', 500);
-    //         if (cmpEn.owner.id !== userId)
-    //             throw new AppError('AppError', 'Yetkiniz yoktur.', 403);
-    //         return Promise.resolve();
-    //     }
-    //
-    //     let prjEn: ProjectEntity;
-    //     if (projectId !== null) prjEn = await this._projectRepository.findForDetails(projectId);
-    //
-    //     if (type === ProjectAuthTypes.USER) {
-    //         if (!prjEn) throw new AppError('AppError', 'Internal Error.', 500);
-    //         if (prjEn.users.filter(x => x.id === userId).length < 1 && cmpEn.owner.id !== userId)
-    //             throw new AppError('AppError', 'Bu topluluğun üyesi değilsiniz.', 403);
-    //         return Promise.resolve();
-    //     }
-    //
-    //     if (type === ProjectAuthTypes.MANAGER) {
-    //         if (!prjEn) throw new AppError('AppError', 'Internal Error.', 500);
-    //         if (prjEn.managers.filter(x => x.id === userId).length < 1 && cmpEn.owner.id !== userId)
-    //             throw new AppError('AppError', 'Yetkiniz yoktur.', 403);
-    //         return Promise.resolve();
-    //     }
-    //
-    //     throw new AppError('AppError', 'Internal Error.', 500);
-    //     //TODO Internal errorları düzelt.
-    //
-    // }
-    validateAuthority(companyId, userId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let cmpEn = yield this._companyRepository.findOne(companyId, { relations: ["users", "owner"] });
-            console.log("cmpEn : ", cmpEn);
-            if (cmpEn.members.filter(x => x.userId === userId).length < 1 && cmpEn.owner.id !== userId)
-                throw new app_error_1.AppError('AppError', 'Bu topluluğun üyesi değilsiniz.', 403);
             return Promise.resolve();
         });
     }
@@ -2538,7 +2550,8 @@ ProjectService = __decorate([
     __param(0, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT)),
     __param(1, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS)),
     __param(2, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY)),
-    __metadata("design:paramtypes", [Object, Object, Object])
+    __param(3, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], ProjectService);
 exports.ProjectService = ProjectService;
 

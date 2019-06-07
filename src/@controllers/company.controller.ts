@@ -82,9 +82,9 @@ export class CompanyController {
     }
 
     requestMembership(req: Request, res: Response, next: NextFunction) {
-        const id: number = +req.params.id;
+        const memRequestId: number = +req.params.id;
         const curDto: CompanyUserRegisterDto = Object.assign(new CompanyUserRegisterDto(), req.body);
-        this._companyService.requestMembership(id, curDto, req.decoded.id).then(() => {
+        this._companyService.requestMembership(memRequestId, curDto, req.decoded.id).then(() => {
             return res.status(200).json({
                 success: true
             });

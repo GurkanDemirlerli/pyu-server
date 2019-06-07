@@ -5,11 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "webpack",
-    "test": "ts-node --files src/index.ts",
-    "watch": "nodemon  --inspect=1923 && node ./dist/index.js",
-    "build-watch": "npm run build && nodemon src/index.ts",
-    "build": "tsc",
-    "debug": "tsc && node --inspect=1923 ./dist/index.js"
+    "watch": "nodemon  --inspect=1923 && node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",

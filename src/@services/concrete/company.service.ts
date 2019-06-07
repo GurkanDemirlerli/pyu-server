@@ -8,6 +8,7 @@ import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
 import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 import { MembershipRequestEntity } from "@entities/membership-request.entity";
+import { Uow } from "@repositories/uow";
 
 @injectable()
 export class CompanyService implements ICompanyService {
@@ -27,7 +28,7 @@ export class CompanyService implements ICompanyService {
         return Promise.resolve(inserted.id);
     }
 
-    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek
+    //Yalnızca kullanıcının üyesi veya kurucusu olduğu topluluklar gelecek
     async list(filters: CompanyFilter, requestorId: number) {
         let companyDtos: CompanyListDto[] = [];
         let companyEns: CompanyEntity[] = await this._companyRepository.listByFiltersAndUser(filters, requestorId);
@@ -40,7 +41,7 @@ export class CompanyService implements ICompanyService {
         return Promise.resolve(companyDtos);
     }
 
-    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek aksi halde unauthorized
+    //Yalnızca kullanıcının üyesi olduğu topluluklar gelecek aksi halde unauthorized, diger kullanıcılar için daha az veri getiren başka metot olacak
     async find(id: number, requestorId: number): Promise<CompanyDetailDto> {
         let companyEn: CompanyEntity = await this._companyRepository.findForDetails(id);
         if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
@@ -66,36 +67,50 @@ export class CompanyService implements ICompanyService {
     async delete(id: number, requestorId: number) {
         let companyEn: CompanyEntity = await this._companyRepository.findById(id);
         if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
-        //yetki kontrol
+        if (companyEn.ownerId !== requestorId)
+            throw new AppError('AppError', 'Your are not the owner of this company.', 401);
         await this._companyRepository.delete(id);
         return Promise.resolve();
     }
 
     //Yalnızca isteği alan kişi işlem yapabilir.
-    async acceptMembership(id: number, requestorId: number): Promise<void> {
-        let companyEn: CompanyEntity = await this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
-        if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
-        if (companyEn.requestsSent.filter(x => x.userId === requestorId).length < 1)
-            throw new AppError('AppError', 'There is not any membership request for you from this company.', 401);
-        if (companyEn.members.filter(x => x.userId == requestorId).length > 0 || companyEn.owner.id === requestorId)
-            throw new AppError('AppError', 'You Are Already a Member of this company.', 409);
+    async acceptMembership(msrId: number, requestorId: number): Promise<void> {
+        let msReEn: MembershipRequestEntity = await this._membershipRequestRepository.findOne(msrId, { relations: ["user", "company", "company.members"] });
+        if (!msReEn)
+            throw new AppError('AppError', 'Membership request not found.', 404);
+        if (msReEn.userId !== requestorId)
+            throw new AppError('AppError', 'You cant accept requests which are not for you', 401);
+        if (msReEn.company.members.filter(x => x.userId === msReEn.userId).length > 0 || msReEn.company.ownerId === msReEn.userId)
+            throw new AppError('AppError', 'You are Already a Member of this company.', 409);
         let cMemEn: CompanyMembershipEntity = new CompanyMembershipEntity();
-        cMemEn.userId = requestorId;
-        cMemEn.companyId = id;
+        cMemEn.userId = msReEn.userId;
+        cMemEn.companyId = msReEn.companyId;
         cMemEn.joiningDate = new Date();
         cMemEn.status = 1; // enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
-        await this._companyMembershipRepository.insert(cMemEn);
+
+        let uow = new Uow();
+        await uow.start();
+        try {
+            cMemEn = await this._companyMembershipRepository.insert(cMemEn, uow.getManager());
+            await this._membershipRequestRepository.delete(msrId, uow.getManager());
+            await uow.commit();
+        } catch (err) { await uow.rollback(); throw err; } finally { await uow.release(); }
         return Promise.resolve();
     }
 
     //Yalnızca kurucu istek gönderebilir.
     async requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void> {
         let companyEn: CompanyEntity = await this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
-        if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
+        if (companyEn.ownerId !== requestorId)
+            throw new AppError('AppError', 'You must be the owner of this company for this operation', 401);
+        if (!companyEn)
+            throw new AppError('AppError', 'Company not found.', 404);
         if (companyEn.members.filter(x => x.userId === model.userId).length > 0 || companyEn.owner.id === model.userId)
             throw new AppError('AppError', 'User Is Already a Member of this company.', 409);
-        if (companyEn.requestsSent.filter(x => x.userId === model.userId).length > 0)
+        let duplicated = await this._membershipRequestRepository.findOne(null, { where: { userId: model.userId, companyId: id } });
+        if (duplicated)
             throw new AppError('AppError', 'Your Company already sent a membership request to this user.', 409);
+
         let msReEn: MembershipRequestEntity = new MembershipRequestEntity();
         msReEn.userId = model.userId;
         msReEn.companyId = id;
@@ -103,18 +118,5 @@ export class CompanyService implements ICompanyService {
         await this._membershipRequestRepository.insert(msReEn);
         return Promise.resolve();
     }
-
-    // private validateAuthority(companyId: number, userId: number, role: CompanyRoles) {
-    //     return new Promise<any>((resolve, reject) => {
-    //         this._companyRepository.findOne(companyId, { relations: ["users", "creator"] }).then((foundCompany) => {
-    //             let cmp: CompanyEntity = foundCompany;
-    //             if (cmp.members.filter(x => x.userId === userId).length < 1 && cmp.owner.id !== userId)
-    //                 throw new AppError('AppError', 'You Are Not A Member of This Company', 403);
-    //             resolve();
-    //         }).catch((err) => {
-    //             reject(err);
-    //         });
-    //     });
-    // }
-
+    
 }

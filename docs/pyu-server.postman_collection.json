@@ -27,7 +27,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{domain}}/api/tasks?projectId=27&take=10",
+							"raw": "{{domain}}/api/tasks?projectId=27",
 							"host": [
 								"{{domain}}"
 							],
@@ -37,12 +37,23 @@
 							],
 							"query": [
 								{
-									"key": "projectId",
-									"value": "27"
+									"key": "take",
+									"value": "10",
+									"disabled": true
 								},
 								{
-									"key": "take",
-									"value": "10"
+									"key": "skip",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "projectId",
+									"value": "27"
 								}
 							]
 						}
@@ -518,7 +529,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\" : \"Bonita95@yahoo.com\",\n\t\"password\": \"Password123.\"\n}"
+							"raw": "{\n\t\"email\" : \"Breanaa9@gmail.com\",\n\t\"password\": \"Password123.\"\n}\t"
 						},
 						"url": {
 							"raw": "{{domain}}/api/users/login",
@@ -550,7 +561,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"email\" : \"admin@example.com\",\n\t\"password\": \"Password123.\",\n\t\"name\": \"ad\",\n\t\"surname\": \"min\",\n\t\"username\": \"admin\"\n}"
+							"raw": "{\n\t\"email\" : \"yeni@example.com\",\n\t\"password\": \"Password123.\",\n\t\"name\": \"yeni\",\n\t\"surname\": \"yeni\",\n\t\"username\": \"yeni\"\n}"
 						},
 						"url": {
 							"raw": "{{domain}}/api/users/register",
@@ -810,119 +821,10 @@
 									"disabled": true
 								}
 							]
-						}
+						},
+						"description": "Gets Companies Which is related to user"
 					},
-					"response": [
-						{
-							"name": "/tasks",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									},
-									{
-										"key": "Authorization",
-										"value": "{{token}}",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "{{domain}}/api/tasks?projectId=27&status=105&createdBy=51",
-									"host": [
-										"{{domain}}"
-									],
-									"path": [
-										"api",
-										"tasks"
-									],
-									"query": [
-										{
-											"key": "projectId",
-											"value": "27"
-										},
-										{
-											"key": "status",
-											"value": "105"
-										},
-										{
-											"key": "createdBy",
-											"value": "51"
-										}
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "X-DNS-Prefetch-Control",
-									"value": "off"
-								},
-								{
-									"key": "X-Frame-Options",
-									"value": "SAMEORIGIN"
-								},
-								{
-									"key": "Strict-Transport-Security",
-									"value": "max-age=15552000; includeSubDomains"
-								},
-								{
-									"key": "X-Download-Options",
-									"value": "noopen"
-								},
-								{
-									"key": "X-Content-Type-Options",
-									"value": "nosniff"
-								},
-								{
-									"key": "X-XSS-Protection",
-									"value": "1; mode=block"
-								},
-								{
-									"key": "Access-Control-Allow-Origin",
-									"value": "*"
-								},
-								{
-									"key": "Content-Type",
-									"value": "application/json; charset=utf-8"
-								},
-								{
-									"key": "ETag",
-									"value": "W/\"60e-zrJOf8N7ixTYr/bi3D1QEakbVJs\""
-								},
-								{
-									"key": "Vary",
-									"value": "Accept-Encoding"
-								},
-								{
-									"key": "Content-Encoding",
-									"value": "gzip"
-								},
-								{
-									"key": "Date",
-									"value": "Fri, 10 May 2019 22:37:23 GMT"
-								},
-								{
-									"key": "Connection",
-									"value": "keep-alive"
-								},
-								{
-									"key": "Transfer-Encoding",
-									"value": "chunked"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": []\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Postman Task2\",\n            \"description\": \"desc postman task2\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 20,\n                    \"name\": \"Elisha\",\n                    \"surname\": \"O'Hara\",\n                    \"username\": \"Maverick.Bradtke\",\n                    \"email\": \"Jalen.Rippin@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 5,\n                    \"name\": \"Rosa\",\n                    \"surname\": \"Blanda\",\n                    \"username\": \"Quincy80\",\n                    \"email\": \"Melvin28@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 6,\n                    \"name\": \"Nigel\",\n                    \"surname\": \"Rohan\",\n                    \"username\": \"America27\",\n                    \"email\": \"Morgan26@gmail.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        }\n    ]\n}"
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "/companies/:id",
@@ -943,14 +845,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{domain}}/api/companies/4",
+							"raw": "{{domain}}/api/companies/13",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"api",
 								"companies",
-								"4"
+								"13"
 							]
 						}
 					},
@@ -1107,17 +1009,17 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\" : \"Postman Company Update\",\n\t\"description\": \"desc postman company updated\"\n}"
+							"raw": "{\n\t\"name\" : \"Postman Company Update2\",\n\t\"description\": \"desc postman company updated\"\n}"
 						},
 						"url": {
-							"raw": "{{domain}}/api/companies/3",
+							"raw": "{{domain}}/api/companies/13",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"api",
 								"companies",
-								"3"
+								"13"
 							]
 						}
 					},
@@ -1275,7 +1177,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\" : 23\n}"
+							"raw": "{\n\t\"userId\" : 52\n}"
 						},
 						"url": {
 							"raw": "{{domain}}/api/companies/3/requestMembership",
@@ -1328,6 +1230,303 @@
 			"name": "projects",
 			"item": [
 				{
+					"name": "/projects/company/:companyId",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/api/projects/company/3?",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"company",
+								"3"
+							],
+							"query": [
+								{
+									"key": "take",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "skip",
+									"value": "4",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "/tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{domain}}/api/tasks?projectId=27&status=105&createdBy=51",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"api",
+										"tasks"
+									],
+									"query": [
+										{
+											"key": "projectId",
+											"value": "27"
+										},
+										{
+											"key": "status",
+											"value": "105"
+										},
+										{
+											"key": "createdBy",
+											"value": "51"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=15552000; includeSubDomains"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"60e-zrJOf8N7ixTYr/bi3D1QEakbVJs\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 May 2019 22:37:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": []\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Postman Task2\",\n            \"description\": \"desc postman task2\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 20,\n                    \"name\": \"Elisha\",\n                    \"surname\": \"O'Hara\",\n                    \"username\": \"Maverick.Bradtke\",\n                    \"email\": \"Jalen.Rippin@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 5,\n                    \"name\": \"Rosa\",\n                    \"surname\": \"Blanda\",\n                    \"username\": \"Quincy80\",\n                    \"email\": \"Melvin28@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 6,\n                    \"name\": \"Nigel\",\n                    \"surname\": \"Rohan\",\n                    \"username\": \"America27\",\n                    \"email\": \"Morgan26@gmail.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "/projects/:id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{domain}}/api/projects/48",
+							"host": [
+								"{{domain}}"
+							],
+							"path": [
+								"api",
+								"projects",
+								"48"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "/tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{domain}}/api/tasks?projectId=27&status=105&createdBy=51",
+									"host": [
+										"{{domain}}"
+									],
+									"path": [
+										"api",
+										"tasks"
+									],
+									"query": [
+										{
+											"key": "projectId",
+											"value": "27"
+										},
+										{
+											"key": "status",
+											"value": "105"
+										},
+										{
+											"key": "createdBy",
+											"value": "51"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=15552000; includeSubDomains"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "1; mode=block"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"60e-zrJOf8N7ixTYr/bi3D1QEakbVJs\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 10 May 2019 22:37:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": []\n        },\n        {\n            \"id\": 2,\n            \"title\": \"Postman Task2\",\n            \"description\": \"desc postman task2\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 20,\n                    \"name\": \"Elisha\",\n                    \"surname\": \"O'Hara\",\n                    \"username\": \"Maverick.Bradtke\",\n                    \"email\": \"Jalen.Rippin@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 4,\n            \"title\": \"Postman Task\",\n            \"description\": \"desc postman task\",\n            \"creatorId\": 51,\n            \"projectId\": 27,\n            \"statusId\": 105,\n            \"fromIssueId\": null,\n            \"assignees\": [\n                {\n                    \"id\": 1,\n                    \"name\": \"Sim\",\n                    \"surname\": \"Fay\",\n                    \"username\": \"Alysa95\",\n                    \"email\": \"Layne46@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 5,\n                    \"name\": \"Rosa\",\n                    \"surname\": \"Blanda\",\n                    \"username\": \"Quincy80\",\n                    \"email\": \"Melvin28@yahoo.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                },\n                {\n                    \"id\": 6,\n                    \"name\": \"Nigel\",\n                    \"surname\": \"Rohan\",\n                    \"username\": \"America27\",\n                    \"email\": \"Morgan26@gmail.com\",\n                    \"password\": \"Password123.\",\n                    \"createdAt\": \"2019-05-10T15:00:39.000Z\"\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
 					"name": "/projects",
 					"request": {
 						"method": "POST",
@@ -1340,7 +1539,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\" : \"PostmanProject2\",\n\t\"description\": \"desc postman project2\",\n\t\"companyId\": 13\n}"
+							"raw": "{\n\t\"title\" : \"PostmanProject3\",\n\t\"description\": \"desc postman project3\",\n\t\"companyId\": 12\n}"
 						},
 						"url": {
 							"raw": "{{domain}}/api/projects",
@@ -1371,14 +1570,14 @@
 							"raw": "{\n\t\"title\" : \"Postman Project Update\",\n\t\"description\": \"desc postman project updated\"\n}"
 						},
 						"url": {
-							"raw": "{{domain}}/api/projects/3",
+							"raw": "{{domain}}/api/projects/48",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"api",
 								"projects",
-								"3"
+								"48"
 							]
 						}
 					},
@@ -1400,14 +1599,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{domain}}/api/projects/5",
+							"raw": "{{domain}}/api/projects/48",
 							"host": [
 								"{{domain}}"
 							],
 							"path": [
 								"api",
 								"projects",
-								"5"
+								"48"
 							]
 						}
 					},
@@ -1536,7 +1735,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\n\t\"userId\": 23\n}"
 						},
 						"url": {
 							"raw": "{{domain}}/api/projects/3/assignProjectManager",
@@ -2164,7 +2363,7 @@
 		"apikey": [
 			{
 				"key": "value",
-				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiQW50d2FuLkRhcmUiLCJlbWFpbCI6IkJvbml0YTk1QHlhaG9vLmNvbSIsIm5hbWUiOiJDZWNpbGlhIiwic3VybmFtZSI6IkRpYmJlcnQiLCJpYXQiOjE1NTc3ODIxODEsImV4cCI6MTY0NDE4MjE4MX0.jnansdepLVMyvHSMLmWxT_KK-WAOD8UWiNC_TyP2VI4",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTEsInVzZXJuYW1lIjoiZ3Vya2FuMzAiLCJlbWFpbCI6Imd1cmthbkBleGFtcGxlLmNvbSIsIm5hbWUiOiJndXJrYW4iLCJzdXJuYW1lIjoiZGVtaXJsZXJsaSIsImlhdCI6MTU1OTkwOTU3NywiZXhwIjoxNjQ2MzA5NTc3fQ.ALQYYt1KQk-QQ93ZBvp1yvm5n6XMZVDEA1l8-1mrAxA",
 				"type": "string"
 			},
 			{
@@ -2203,13 +2402,13 @@
 	],
 	"variable": [
 		{
-			"id": "878e7f0e-de5a-4899-adc0-77acc1ae2ff5",
+			"id": "02959f6c-1fc6-4722-8b06-71a19353c7f4",
 			"key": "domain",
 			"value": "localhost:3000",
 			"type": "string"
 		},
 		{
-			"id": "5a82908e-80b8-4b7c-889c-fb4162781386",
+			"id": "e4f559e6-36ab-4169-86dc-1bb0df04051a",
 			"key": "token",
 			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMsInVzZXJuYW1lIjoiQW50d2FuLkRhcmUiLCJlbWFpbCI6IkJvbml0YTk1QHlhaG9vLmNvbSIsIm5hbWUiOiJDZWNpbGlhIiwic3VybmFtZSI6IkRpYmJlcnQiLCJpYXQiOjE1NTc3ODE4NjQsImV4cCI6MTY0NDE4MTg2NH0.FxJUnhiD2leqC7n9065AWMM1Gi6JooZt4T4MFJhMc8U",
 			"type": "string"
