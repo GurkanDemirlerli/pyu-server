@@ -28,7 +28,7 @@ export class ProjectService implements IProjectService {
         if (!companyEn)
             throw new AppError('AppError', 'Company Not Found', 404);
         if (companyEn.ownerId !== model.userId)
-            throw new AppError('AppError', 'You can not add a new project to company which is not yours', 401);
+            throw new AppError('AppError', 'You can not add a new project to company which is not yours', 403);
         let projectEn: ProjectEntity = Object.assign(new ProjectEntity(), model);
         projectEn.createdAt = new Date();
         projectEn.lastUpdated = new Date();

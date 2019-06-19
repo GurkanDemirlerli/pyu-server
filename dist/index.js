@@ -1307,7 +1307,8 @@ let ProjectRepository = class ProjectRepository extends repository_base_1.Reposi
             .where("project.id =:id", { id: id })
             .leftJoin("project.company", "company").addSelect(["company.id", "company.name", "company.description"])
             .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
-            .leftJoin("project.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"]);
+            .leftJoin("project.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
+            .leftJoinAndSelect("project.statuses", "status");
         return query.getOne();
     }
 };
@@ -1446,7 +1447,8 @@ let TaskRepository = class TaskRepository extends repository_base_1.RepositoryBa
         let query = typeorm_1.getManager().createQueryBuilder(task_entity_1.TaskEntity, "task").select(["task.id", "task.title", "task.description"])
             .where("task.id =:id", { id: id })
             .innerJoin("task.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
-            .leftJoin("task.assignees", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
+            .leftJoinAndSelect("task.assignees", "assignment")
+            .leftJoin("assignment.user", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
             .leftJoin("task.comments", "comment").addSelect(["comment.id", "comment.content", "comment.taskId"])
             .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
             .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
@@ -2164,7 +2166,7 @@ let CompanyService = class CompanyService {
             if (!oldCompany)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
             if (oldCompany.ownerId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'Your are not the owner of this company.', 401);
+                throw new app_error_1.AppError('AppError', 'Your are not the owner of this company.', 403);
             updatedCompany = Object.assign(oldCompany, model);
             yield this._companyRepository.update(id, updatedCompany);
             return Promise.resolve(updatedCompany);
@@ -2177,7 +2179,7 @@ let CompanyService = class CompanyService {
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
             if (companyEn.ownerId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'Your are not the owner of this company.', 401);
+                throw new app_error_1.AppError('AppError', 'Your are not the owner of this company.', 403);
             yield this._companyRepository.delete(id);
             return Promise.resolve();
         });
@@ -2189,7 +2191,7 @@ let CompanyService = class CompanyService {
             if (!msReEn)
                 throw new app_error_1.AppError('AppError', 'Membership request not found.', 404);
             if (msReEn.userId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'You cant accept requests which are not for you', 401);
+                throw new app_error_1.AppError('AppError', 'You cant accept requests which are not for you', 403);
             if (msReEn.company.members.filter(x => x.userId === msReEn.userId).length > 0 || msReEn.company.ownerId === msReEn.userId)
                 throw new app_error_1.AppError('AppError', 'You are Already a Member of this company.', 409);
             let cMemEn = new company_membership_entity_1.CompanyMembershipEntity();
@@ -2218,10 +2220,10 @@ let CompanyService = class CompanyService {
     requestMembership(id, model, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let companyEn = yield this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
-            if (companyEn.ownerId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'You must be the owner of this company for this operation', 401);
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You must be the owner of this company for this operation', 403);
             if (companyEn.members.filter(x => x.userId === model.userId).length > 0 || companyEn.owner.id === model.userId)
                 throw new app_error_1.AppError('AppError', 'User Is Already a Member of this company.', 409);
             let duplicated = yield this._membershipRequestRepository.findOne(null, { where: { userId: model.userId, companyId: id } });
@@ -2420,7 +2422,7 @@ let ProjectService = class ProjectService {
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
             if (companyEn.ownerId !== model.userId)
-                throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 401);
+                throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 403);
             let projectEn = Object.assign(new project_entity_1.ProjectEntity(), model);
             projectEn.createdAt = new Date();
             projectEn.lastUpdated = new Date();
@@ -2682,7 +2684,6 @@ const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
 const ioc_1 = __webpack_require__(/*! ../../ioc */ "./src/ioc/index.ts");
 const app_error_1 = __webpack_require__(/*! ../../errors/app-error */ "./src/errors/app-error.ts");
 const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
-const base_status_enum_1 = __webpack_require__(/*! @enums/base-status.enum */ "./src/enums/base-status.enum.ts");
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
 let TaskService = class TaskService {
     constructor(_taskRepository, _projectRepository) {
@@ -2690,34 +2691,24 @@ let TaskService = class TaskService {
         this._projectRepository = _projectRepository;
     }
     add(model) {
-        return new Promise((resolve, reject) => {
-            let firstStatus;
-            this.validateAuthority(model.projectId, model.creatorId).then(() => {
-                return this._projectRepository.findOne(model.projectId, { relations: ["statuses"] });
-            }).then((res) => {
-                if (!res)
-                    throw new app_error_1.AppError('AppError', 'Böyle bir proje yok.', 404);
-                let prjct = res;
-                let plannings = prjct.statuses.filter((sts) => sts.baseStatus === base_status_enum_1.BaseStatus.PLANNINING);
-                //TODO task eklenirken statusId de alınsın
-                firstStatus = plannings[0];
-                for (let i = 0; i < plannings.length; i++) {
-                    if (plannings[i].order < firstStatus.order)
-                        firstStatus = plannings[i];
-                }
-                let task = Object.assign(new task_entity_1.TaskEntity(), model, { statusId: firstStatus.id });
-                return this._taskRepository.insert(task);
-            }).then((res) => {
-                resolve(res.id);
-            }).catch((err) => {
-                reject(err);
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            let prjEn = yield this._projectRepository.findOne(model.projectId, { relations: ["statuses"] });
+            if (!prjEn)
+                throw new app_error_1.AppError('AppError', 'Böyle bir proje yok.', 404);
+            if (prjEn.statuses.filter(x => x.id === model.statusId).length < 1) {
+                throw new app_error_1.AppError('AppError', 'Bilinmeyen aşama.', 404);
+            }
+            let taskEn = Object.assign(new task_entity_1.TaskEntity(), model);
+            taskEn.createdAt = new Date();
+            taskEn.lastUpdated = new Date();
+            let inserted = yield this._taskRepository.insert(taskEn);
+            return Promise.resolve(inserted.id);
         });
     }
     list(filters, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let taskDtos = [];
-            yield this.validateAuthority(filters.projectId, requestorId);
+            // await this.validateAuthority(filters.projectId, requestorId);
             let tasks = yield this._taskRepository.listByFilters(filters);
             tasks.map((tsk) => {
                 let taskDto = Object.assign(new dtos_1.TaskListDto(), tsk, { comments: undefined });
@@ -2728,19 +2719,12 @@ let TaskService = class TaskService {
         });
     }
     find(id, requestorId) {
-        return new Promise((resolve, reject) => {
-            let taskEntity;
-            this._taskRepository.findForDetails(id).then((foundTask) => {
-                if (!foundTask)
-                    throw new app_error_1.AppError('AppError', 'Task not found.', 404);
-                taskEntity = foundTask;
-                return this.validateAuthority(foundTask.project.id, requestorId);
-            }).then(() => {
-                let taskDto = Object.assign(new dtos_1.TaskDetailDto(), taskEntity);
-                resolve(taskDto);
-            }).catch((err) => {
-                reject(err);
-            });
+        return __awaiter(this, void 0, void 0, function* () {
+            let taskEn = yield this._taskRepository.findForDetails(id);
+            if (!taskEn)
+                throw new app_error_1.AppError('AppError', 'Task not found.', 404);
+            let taskDto = Object.assign(new dtos_1.TaskDetailDto(), taskEn, { projects: undefined, users: undefined });
+            return Promise.resolve(taskDto);
         });
     }
     //TODO update entity donmemeli
@@ -3870,6 +3854,10 @@ __decorate([
     __metadata("design:type", Number)
 ], TaskCreateDto.prototype, "projectId", void 0);
 __decorate([
+    class_validator_1.IsNotEmpty(),
+    __metadata("design:type", Number)
+], TaskCreateDto.prototype, "statusId", void 0);
+__decorate([
     class_validator_1.IsNumber(),
     class_validator_1.IsOptional(),
     __metadata("design:type", Number)
@@ -3893,7 +3881,7 @@ class TaskDetailDto {
     constructor() {
         this.comments = [];
         this.assignees = [];
-        this.comentCount = 0;
+        this.commentCount = 0;
     }
 }
 exports.TaskDetailDto = TaskDetailDto;

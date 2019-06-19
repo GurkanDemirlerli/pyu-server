@@ -11,6 +11,9 @@ export class TaskCreateDto {
   @IsNotEmpty()
   public projectId: number;
 
+  @IsNotEmpty()
+  public statusId: number;
+
   @IsNumber()
   @IsOptional()
   public fromIssueId: number;

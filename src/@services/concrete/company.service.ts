@@ -57,7 +57,7 @@ export class CompanyService implements ICompanyService {
         let oldCompany: CompanyEntity = await this._companyRepository.findById(id);
         if (!oldCompany) throw new AppError('AppError', 'Company not found.', 404);
         if (oldCompany.ownerId !== requestorId)
-            throw new AppError('AppError', 'Your are not the owner of this company.', 401);
+            throw new AppError('AppError', 'Your are not the owner of this company.', 403);
         updatedCompany = Object.assign(oldCompany, model);
         await this._companyRepository.update(id, updatedCompany);
         return Promise.resolve(updatedCompany);
@@ -68,7 +68,7 @@ export class CompanyService implements ICompanyService {
         let companyEn: CompanyEntity = await this._companyRepository.findById(id);
         if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
         if (companyEn.ownerId !== requestorId)
-            throw new AppError('AppError', 'Your are not the owner of this company.', 401);
+            throw new AppError('AppError', 'Your are not the owner of this company.', 403);
         await this._companyRepository.delete(id);
         return Promise.resolve();
     }
@@ -79,7 +79,7 @@ export class CompanyService implements ICompanyService {
         if (!msReEn)
             throw new AppError('AppError', 'Membership request not found.', 404);
         if (msReEn.userId !== requestorId)
-            throw new AppError('AppError', 'You cant accept requests which are not for you', 401);
+            throw new AppError('AppError', 'You cant accept requests which are not for you', 403);
         if (msReEn.company.members.filter(x => x.userId === msReEn.userId).length > 0 || msReEn.company.ownerId === msReEn.userId)
             throw new AppError('AppError', 'You are Already a Member of this company.', 409);
         let cMemEn: CompanyMembershipEntity = new CompanyMembershipEntity();
@@ -101,10 +101,10 @@ export class CompanyService implements ICompanyService {
     //Yalnızca kurucu istek gönderebilir.
     async requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void> {
         let companyEn: CompanyEntity = await this._companyRepository.findOne(id, { relations: ["requestsSent", "members", "members.user", "owner"] });
-        if (companyEn.ownerId !== requestorId)
-            throw new AppError('AppError', 'You must be the owner of this company for this operation', 401);
         if (!companyEn)
             throw new AppError('AppError', 'Company not found.', 404);
+        if (companyEn.ownerId !== requestorId)
+            throw new AppError('AppError', 'You must be the owner of this company for this operation', 403);
         if (companyEn.members.filter(x => x.userId === model.userId).length > 0 || companyEn.owner.id === model.userId)
             throw new AppError('AppError', 'User Is Already a Member of this company.', 409);
         let duplicated = await this._membershipRequestRepository.findOne(null, { where: { userId: model.userId, companyId: id } });
@@ -118,5 +118,5 @@ export class CompanyService implements ICompanyService {
         await this._membershipRequestRepository.insert(msReEn);
         return Promise.resolve();
     }
-    
+
 }

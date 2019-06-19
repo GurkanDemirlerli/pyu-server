@@ -49,10 +49,6 @@ export class ProjectEntity {
     @Column()
     lastUpdated: Date;
 
-    // @ManyToMany(type => UserEntity, user => user.projects)
-    // @JoinTable()
-    // users: UserEntity[];
-
     @OneToMany(type => ProjectMembershipEntity, pms => pms.project)
     members: ProjectMembershipEntity[];
 

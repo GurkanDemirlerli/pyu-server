@@ -484,7 +484,8 @@ let ProjectRepository = class ProjectRepository extends repository_base_1.Reposi
             .where("project.id =:id", { id: id })
             .leftJoin("project.company", "company").addSelect(["company.id", "company.name", "company.description"])
             .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
-            .leftJoin("project.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"]);
+            .leftJoin("project.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
+            .leftJoinAndSelect("project.statuses", "status");
         return query.getOne();
     }
 };
@@ -623,7 +624,8 @@ let TaskRepository = class TaskRepository extends repository_base_1.RepositoryBa
         let query = typeorm_1.getManager().createQueryBuilder(task_entity_1.TaskEntity, "task").select(["task.id", "task.title", "task.description"])
             .where("task.id =:id", { id: id })
             .innerJoin("task.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
-            .leftJoin("task.assignees", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
+            .leftJoinAndSelect("task.assignees", "assignment")
+            .leftJoin("assignment.user", "assignee").addSelect(["assignee.id", "assignee.name", "assignee.surname", "assignee.username"])
             .leftJoin("task.comments", "comment").addSelect(["comment.id", "comment.content", "comment.taskId"])
             .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
             .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
@@ -1635,6 +1637,10 @@ __decorate([
     __metadata("design:type", Number)
 ], TaskCreateDto.prototype, "projectId", void 0);
 __decorate([
+    class_validator_1.IsNotEmpty(),
+    __metadata("design:type", Number)
+], TaskCreateDto.prototype, "statusId", void 0);
+__decorate([
     class_validator_1.IsNumber(),
     class_validator_1.IsOptional(),
     __metadata("design:type", Number)
@@ -1658,7 +1664,7 @@ class TaskDetailDto {
     constructor() {
         this.comments = [];
         this.assignees = [];
-        this.comentCount = 0;
+        this.commentCount = 0;
     }
 }
 exports.TaskDetailDto = TaskDetailDto;

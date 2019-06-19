@@ -31,6 +31,7 @@ export class ProjectRepository extends RepositoryBase<ProjectEntity> implements 
             .leftJoin("project.company", "company").addSelect(["company.id", "company.name", "company.description"])
             .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
             .leftJoin("project.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
+            .leftJoinAndSelect("project.statuses", "status")
         return query.getOne();
     }
 }
