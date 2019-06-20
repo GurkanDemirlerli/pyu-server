@@ -20,6 +20,7 @@ export class TaskCreateDto {
 
   public creatorId: number;
 
-  // public statusId: number;
+  public assignees: number[];
+
 
 }

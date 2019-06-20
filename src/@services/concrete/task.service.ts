@@ -1,13 +1,12 @@
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "../../ioc";
 import { AppError } from '../../errors/app-error';
-import { ITaskRepository, IProjectRepository } from "@repositories/abstract";
-import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto } from "@models/dtos";
+import { ITaskRepository, IProjectRepository, ITaskAssignmentRepository } from "@repositories/abstract";
+import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto, TaskStatusUpdateDto } from "@models/dtos";
 import { TaskFilter } from "@models/filters/task-filter";
 import { ITaskService } from "@services/abstract/i-task.service";
-import { BaseStatus } from "@enums/base-status.enum";
 import { TaskEntity } from "@entities/task.entity";
-import { StatusEntity } from "@entities/status.entity";
+import { TaskAssignmentEntity } from "@entities/task-assignment.entity";
 
 
 @injectable()
@@ -15,9 +14,11 @@ export class TaskService implements ITaskService {
 
   constructor(
     @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
-    @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository
+    @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
+    @inject(InjectTypes.Repository.TASK_ASSIGNMENT) private readonly _taskAssignmentRepository: ITaskAssignmentRepository
   ) { }
 
+  //TODO kullanıcıyı göreve atama işlemi transactionda olacak.
   async add(model: TaskCreateDto): Promise<number> {
     let prjEn = await this._projectRepository.findOne(model.projectId, { relations: ["statuses"] });
     if (!prjEn)
@@ -29,7 +30,21 @@ export class TaskService implements ITaskService {
     taskEn.createdAt = new Date();
     taskEn.lastUpdated = new Date();
     let inserted: TaskEntity = await this._taskRepository.insert(taskEn);
+    console.log(inserted);
+    await this.assignMembers(inserted.id,model.assignees);
     return Promise.resolve(inserted.id);
+  }
+
+  //TODO bu idye sahip kişiler gerçenten taskın ait olduğu projenin üyesi mi kontrol et
+  async assignMembers(taskId: number, members: number[]) {
+    for (let i = 0; i < members.length; i++) {
+        let tskAsgEn: TaskAssignmentEntity = new TaskAssignmentEntity();
+        tskAsgEn.taskId = taskId;
+        tskAsgEn.userId = members[i];
+        tskAsgEn.createdAt = new Date();
+        await this._taskAssignmentRepository.insert(tskAsgEn);
+    }
+    return Promise.resolve();
   }
 
   async list(filters: TaskFilter, requestorId: number) {
@@ -85,6 +100,17 @@ export class TaskService implements ITaskService {
       });
     });
   }
+
+  async changeStatus(id: number, model: TaskStatusUpdateDto): Promise<void> {
+    let updatedTask: TaskEntity;
+    let oldTask: TaskEntity = await this._taskRepository.findById(id);
+    if (!oldTask) throw new AppError('AppError', 'Task not found.', 404);
+    updatedTask = Object.assign(oldTask, model);
+    updatedTask.lastUpdated = new Date();
+    await this._taskRepository.update(id, updatedTask);
+    return Promise.resolve();
+  }
+
 
   private validateAuthority(projectId: number, userId: number): Promise<void> {
     return new Promise<any>((resolve, reject) => {

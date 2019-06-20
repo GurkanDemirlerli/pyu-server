@@ -609,6 +609,29 @@ let ProjectController = class ProjectController {
     pause(req, res, next) {
         return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'ProjectController');
     }
+    getMembers(req, res, next) {
+        const id = +req.params.id;
+        this._projectService.getMembers(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'getMembers', 'ProjectController');
+        });
+    }
+    addMember(req, res, next) {
+        const id = +req.params.id;
+        let prjRgDto = Object.assign(new dtos_1.ProjectUserRegisterDto(), req.body);
+        this._projectService.addMember(id, prjRgDto).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'addMember', 'ProjectController');
+        });
+    }
 };
 ProjectController = __decorate([
     inversify_1.injectable(),
@@ -745,7 +768,6 @@ const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
 const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
 const error_handler_1 = __webpack_require__(/*! @errors/error-handler */ "./src/errors/error-handler.ts");
 const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
 let TaskController = class TaskController {
     constructor(_taskService) {
         this._taskService = _taskService;
@@ -820,8 +842,17 @@ let TaskController = class TaskController {
             return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'delete', 'TaskController');
         });
     }
+    //TODO guncellenen status projede var mı diye kontrol et
     updateStatus(req, res, next) {
-        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'ProjectController');
+        const id = +req.params.id;
+        let tStatusUpDto = Object.assign(new dtos_1.TaskStatusUpdateDto(), req.body);
+        this._taskService.changeStatus(id, tStatusUpDto).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'updateStatus', 'TaskController');
+        });
     }
 };
 TaskController = __decorate([
@@ -1178,12 +1209,16 @@ var user_repository_1 = __webpack_require__(/*! ./user.repository */ "./src/@rep
 exports.UserRepository = user_repository_1.UserRepository;
 var comment_repository_1 = __webpack_require__(/*! ./comment.repository */ "./src/@repository/concrete/comment.repository.ts");
 exports.CommentRepository = comment_repository_1.CommentRepository;
+var task_assignment_repository_1 = __webpack_require__(/*! ./task-assignment.repository */ "./src/@repository/concrete/task-assignment.repository.ts");
+exports.TaskAssignmentRepository = task_assignment_repository_1.TaskAssignmentRepository;
 var task_repository_1 = __webpack_require__(/*! ./task.repository */ "./src/@repository/concrete/task.repository.ts");
 exports.TaskRepository = task_repository_1.TaskRepository;
 var company_membership_repository_1 = __webpack_require__(/*! ./company-membership.repository */ "./src/@repository/concrete/company-membership.repository.ts");
 exports.CompanyMembershipRepository = company_membership_repository_1.CompanyMembershipRepository;
 var membership_request_repository_1 = __webpack_require__(/*! ./membership-request.repository */ "./src/@repository/concrete/membership-request.repository.ts");
 exports.MembershipRequestRepository = membership_request_repository_1.MembershipRequestRepository;
+var project_membership_repository_1 = __webpack_require__(/*! ./project-membership.repository */ "./src/@repository/concrete/project-membership.repository.ts");
+exports.ProjectMembershipRepository = project_membership_repository_1.ProjectMembershipRepository;
 
 
 /***/ }),
@@ -1258,6 +1293,43 @@ MembershipRequestRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], MembershipRequestRepository);
 exports.MembershipRequestRepository = MembershipRequestRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/project-membership.repository.ts":
+/*!*******************************************************************!*\
+  !*** ./src/@repository/concrete/project-membership.repository.ts ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const project_membership_entity_1 = __webpack_require__(/*! ./../../entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let ProjectMembershipRepository = class ProjectMembershipRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(project_membership_entity_1.ProjectMembershipEntity);
+    }
+};
+ProjectMembershipRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], ProjectMembershipRepository);
+exports.ProjectMembershipRepository = ProjectMembershipRepository;
 
 
 /***/ }),
@@ -1391,6 +1463,43 @@ StatusRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], StatusRepository);
 exports.StatusRepository = StatusRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/task-assignment.repository.ts":
+/*!****************************************************************!*\
+  !*** ./src/@repository/concrete/task-assignment.repository.ts ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const task_assignment_entity_1 = __webpack_require__(/*! ./../../entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let TaskAssignmentRepository = class TaskAssignmentRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(task_assignment_entity_1.TaskAssignmentEntity);
+    }
+};
+TaskAssignmentRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], TaskAssignmentRepository);
+exports.TaskAssignmentRepository = TaskAssignmentRepository;
 
 
 /***/ }),
@@ -1782,6 +1891,10 @@ class ProjectRoutes {
             .delete(_middlewares_2.authorize, (req, res, next) => ctrl.delete(req, res, next));
         app.route(root + '/:id/assignProjectManager')
             .put(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.assignProjectManager(req, res, next));
+        app.route(root + '/:id/addMember')
+            .post(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.addMember(req, res, next));
+        app.route(root + '/:id/members')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.getMembers(req, res, next));
         app.route(root + '/:id/start')
             .get(_middlewares_2.authorize, (req, res, next) => ctrl.start(req, res, next));
         app.route(root + '/:id/pause')
@@ -2408,12 +2521,14 @@ const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/a
 const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
 const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
+const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
 let ProjectService = class ProjectService {
-    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository) {
+    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository) {
         this._projectRepository = _projectRepository;
         this._statusRepository = _statusRepository;
         this._companyRepository = _companyRepository;
         this._companyMembershipRepository = _companyMembershipRepository;
+        this._projectMembershipRepository = _projectMembershipRepository;
     }
     //Yalnızca sahibi ekleyebilir
     add(model) {
@@ -2546,6 +2661,32 @@ let ProjectService = class ProjectService {
             return Promise.resolve();
         });
     }
+    getMembers(id, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userDtos = [];
+            let projectMbshipEns;
+            projectMbshipEns = yield this._projectMembershipRepository.list({ where: { projectId: id }, relations: ["user"] });
+            for (let i = 0; i < projectMbshipEns.length; i++) {
+                let userDto = new dtos_1.UserSummaryDto();
+                userDto.id = projectMbshipEns[i].user.id;
+                userDto.name = projectMbshipEns[i].user.name;
+                userDto.surname = projectMbshipEns[i].user.surname;
+                userDtos.push(userDto);
+            }
+            return Promise.resolve(userDtos);
+        });
+    }
+    //Todo projenin bolunduğu şirketin üyesi mi diye kontrol edilecek. Yetkli kontrolü yapılacak
+    addMember(id, model) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let prjMbshipEn = new project_membership_entity_1.ProjectMembershipEntity();
+            prjMbshipEn.userId = model.userId;
+            prjMbshipEn.projectId = id;
+            prjMbshipEn.createdAt = new Date();
+            yield this._projectMembershipRepository.insert(prjMbshipEn);
+            return Promise.resolve();
+        });
+    }
 };
 ProjectService = __decorate([
     inversify_1.injectable(),
@@ -2553,7 +2694,8 @@ ProjectService = __decorate([
     __param(1, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS)),
     __param(2, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY)),
     __param(3, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object])
+    __param(4, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
 ], ProjectService);
 exports.ProjectService = ProjectService;
 
@@ -2685,11 +2827,14 @@ const ioc_1 = __webpack_require__(/*! ../../ioc */ "./src/ioc/index.ts");
 const app_error_1 = __webpack_require__(/*! ../../errors/app-error */ "./src/errors/app-error.ts");
 const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
+const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
 let TaskService = class TaskService {
-    constructor(_taskRepository, _projectRepository) {
+    constructor(_taskRepository, _projectRepository, _taskAssignmentRepository) {
         this._taskRepository = _taskRepository;
         this._projectRepository = _projectRepository;
+        this._taskAssignmentRepository = _taskAssignmentRepository;
     }
+    //TODO kullanıcıyı göreve atama işlemi transactionda olacak.
     add(model) {
         return __awaiter(this, void 0, void 0, function* () {
             let prjEn = yield this._projectRepository.findOne(model.projectId, { relations: ["statuses"] });
@@ -2702,7 +2847,22 @@ let TaskService = class TaskService {
             taskEn.createdAt = new Date();
             taskEn.lastUpdated = new Date();
             let inserted = yield this._taskRepository.insert(taskEn);
+            console.log(inserted);
+            yield this.assignMembers(inserted.id, model.assignees);
             return Promise.resolve(inserted.id);
+        });
+    }
+    //TODO bu idye sahip kişiler gerçenten taskın ait olduğu projenin üyesi mi kontrol et
+    assignMembers(taskId, members) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < members.length; i++) {
+                let tskAsgEn = new task_assignment_entity_1.TaskAssignmentEntity();
+                tskAsgEn.taskId = taskId;
+                tskAsgEn.userId = members[i];
+                tskAsgEn.createdAt = new Date();
+                yield this._taskAssignmentRepository.insert(tskAsgEn);
+            }
+            return Promise.resolve();
         });
     }
     list(filters, requestorId) {
@@ -2762,6 +2922,18 @@ let TaskService = class TaskService {
             });
         });
     }
+    changeStatus(id, model) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let updatedTask;
+            let oldTask = yield this._taskRepository.findById(id);
+            if (!oldTask)
+                throw new app_error_1.AppError('AppError', 'Task not found.', 404);
+            updatedTask = Object.assign(oldTask, model);
+            updatedTask.lastUpdated = new Date();
+            yield this._taskRepository.update(id, updatedTask);
+            return Promise.resolve();
+        });
+    }
     validateAuthority(projectId, userId) {
         return new Promise((resolve, reject) => {
             this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
@@ -2779,7 +2951,8 @@ TaskService = __decorate([
     inversify_1.injectable(),
     __param(0, inversify_1.inject(ioc_1.InjectTypes.Repository.TASK)),
     __param(1, inversify_1.inject(ioc_1.InjectTypes.Repository.PROJECT)),
-    __metadata("design:paramtypes", [Object, Object])
+    __param(2, inversify_1.inject(ioc_1.InjectTypes.Repository.TASK_ASSIGNMENT)),
+    __metadata("design:paramtypes", [Object, Object, Object])
 ], TaskService);
 exports.TaskService = TaskService;
 //TODO task silme ve update işlemlerinde auth için başka kısıtlar da ekle şuanda projeye dahil olan herkes herhangi bir task üzerinde işlem yapabilir.
@@ -3371,6 +3544,8 @@ var project_summary_dto_1 = __webpack_require__(/*! ./project/project-summary.dt
 exports.ProjectSummaryDto = project_summary_dto_1.ProjectSummaryDto;
 var project_assign_manager_dto_1 = __webpack_require__(/*! ./project/project-assign-manager.dto */ "./src/_models/dtos/project/project-assign-manager.dto.ts");
 exports.ProjectAssignManagerDto = project_assign_manager_dto_1.ProjectAssignManagerDto;
+var project_user_register_dto_1 = __webpack_require__(/*! ./project/project-user-register.dto */ "./src/_models/dtos/project/project-user-register.dto.ts");
+exports.ProjectUserRegisterDto = project_user_register_dto_1.ProjectUserRegisterDto;
 var question_update_dto_1 = __webpack_require__(/*! ./question/question-update.dto */ "./src/_models/dtos/question/question-update.dto.ts");
 exports.QuestionUpdateDto = question_update_dto_1.QuestionUpdateDto;
 var question_create_dto_1 = __webpack_require__(/*! ./question/question-create.dto */ "./src/_models/dtos/question/question-create.dto.ts");
@@ -3673,6 +3848,37 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectUpdateDto.prototype, "description", void 0);
 exports.ProjectUpdateDto = ProjectUpdateDto;
+
+
+/***/ }),
+
+/***/ "./src/_models/dtos/project/project-user-register.dto.ts":
+/*!***************************************************************!*\
+  !*** ./src/_models/dtos/project/project-user-register.dto.ts ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class ProjectUserRegisterDto {
+}
+__decorate([
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], ProjectUserRegisterDto.prototype, "userId", void 0);
+exports.ProjectUserRegisterDto = ProjectUserRegisterDto;
 
 
 /***/ }),
@@ -5602,6 +5808,8 @@ var InjectTypes;
         Repository["USER"] = "UserRepository";
         Repository["COMPANY_MEMBERSHIP"] = "CompanyMembershipRepository";
         Repository["MEMBERSHIP_REQUEST"] = "MembershipRequestRepository";
+        Repository["TASK_ASSIGNMENT"] = "TaskAssignmentRepository";
+        Repository["PROJECT_MEMBERSHIP"] = "ProjectMembershipRepository";
     })(Repository = InjectTypes.Repository || (InjectTypes.Repository = {}));
     let Service;
     (function (Service) {
@@ -5692,6 +5900,9 @@ var IOC;
             .bind(_ioc_1.InjectTypes.Repository.ISSUE)
             .to(concrete_1.IssueRepository);
         IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)
+            .to(concrete_1.ProjectMembershipRepository);
+        IOC.container
             .bind(_ioc_1.InjectTypes.Repository.PROJECT)
             .to(concrete_1.ProjectRepository);
         IOC.container
@@ -5706,6 +5917,9 @@ var IOC;
         IOC.container
             .bind(_ioc_1.InjectTypes.Repository.USER)
             .to(concrete_1.UserRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.TASK_ASSIGNMENT)
+            .to(concrete_1.TaskAssignmentRepository);
         // SERVICES
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.ANSWER)

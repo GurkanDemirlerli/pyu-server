@@ -355,12 +355,16 @@ var user_repository_1 = __webpack_require__(/*! ./user.repository */ "./src/@rep
 exports.UserRepository = user_repository_1.UserRepository;
 var comment_repository_1 = __webpack_require__(/*! ./comment.repository */ "./src/@repository/concrete/comment.repository.ts");
 exports.CommentRepository = comment_repository_1.CommentRepository;
+var task_assignment_repository_1 = __webpack_require__(/*! ./task-assignment.repository */ "./src/@repository/concrete/task-assignment.repository.ts");
+exports.TaskAssignmentRepository = task_assignment_repository_1.TaskAssignmentRepository;
 var task_repository_1 = __webpack_require__(/*! ./task.repository */ "./src/@repository/concrete/task.repository.ts");
 exports.TaskRepository = task_repository_1.TaskRepository;
 var company_membership_repository_1 = __webpack_require__(/*! ./company-membership.repository */ "./src/@repository/concrete/company-membership.repository.ts");
 exports.CompanyMembershipRepository = company_membership_repository_1.CompanyMembershipRepository;
 var membership_request_repository_1 = __webpack_require__(/*! ./membership-request.repository */ "./src/@repository/concrete/membership-request.repository.ts");
 exports.MembershipRequestRepository = membership_request_repository_1.MembershipRequestRepository;
+var project_membership_repository_1 = __webpack_require__(/*! ./project-membership.repository */ "./src/@repository/concrete/project-membership.repository.ts");
+exports.ProjectMembershipRepository = project_membership_repository_1.ProjectMembershipRepository;
 
 
 /***/ }),
@@ -435,6 +439,43 @@ MembershipRequestRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], MembershipRequestRepository);
 exports.MembershipRequestRepository = MembershipRequestRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/project-membership.repository.ts":
+/*!*******************************************************************!*\
+  !*** ./src/@repository/concrete/project-membership.repository.ts ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const project_membership_entity_1 = __webpack_require__(/*! ./../../entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let ProjectMembershipRepository = class ProjectMembershipRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(project_membership_entity_1.ProjectMembershipEntity);
+    }
+};
+ProjectMembershipRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], ProjectMembershipRepository);
+exports.ProjectMembershipRepository = ProjectMembershipRepository;
 
 
 /***/ }),
@@ -568,6 +609,43 @@ StatusRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], StatusRepository);
 exports.StatusRepository = StatusRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/task-assignment.repository.ts":
+/*!****************************************************************!*\
+  !*** ./src/@repository/concrete/task-assignment.repository.ts ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const task_assignment_entity_1 = __webpack_require__(/*! ./../../entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let TaskAssignmentRepository = class TaskAssignmentRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(task_assignment_entity_1.TaskAssignmentEntity);
+    }
+};
+TaskAssignmentRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], TaskAssignmentRepository);
+exports.TaskAssignmentRepository = TaskAssignmentRepository;
 
 
 /***/ }),
@@ -1154,6 +1232,8 @@ var project_summary_dto_1 = __webpack_require__(/*! ./project/project-summary.dt
 exports.ProjectSummaryDto = project_summary_dto_1.ProjectSummaryDto;
 var project_assign_manager_dto_1 = __webpack_require__(/*! ./project/project-assign-manager.dto */ "./src/_models/dtos/project/project-assign-manager.dto.ts");
 exports.ProjectAssignManagerDto = project_assign_manager_dto_1.ProjectAssignManagerDto;
+var project_user_register_dto_1 = __webpack_require__(/*! ./project/project-user-register.dto */ "./src/_models/dtos/project/project-user-register.dto.ts");
+exports.ProjectUserRegisterDto = project_user_register_dto_1.ProjectUserRegisterDto;
 var question_update_dto_1 = __webpack_require__(/*! ./question/question-update.dto */ "./src/_models/dtos/question/question-update.dto.ts");
 exports.QuestionUpdateDto = question_update_dto_1.QuestionUpdateDto;
 var question_create_dto_1 = __webpack_require__(/*! ./question/question-create.dto */ "./src/_models/dtos/question/question-create.dto.ts");
@@ -1456,6 +1536,37 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectUpdateDto.prototype, "description", void 0);
 exports.ProjectUpdateDto = ProjectUpdateDto;
+
+
+/***/ }),
+
+/***/ "./src/_models/dtos/project/project-user-register.dto.ts":
+/*!***************************************************************!*\
+  !*** ./src/_models/dtos/project/project-user-register.dto.ts ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class ProjectUserRegisterDto {
+}
+__decorate([
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], ProjectUserRegisterDto.prototype, "userId", void 0);
+exports.ProjectUserRegisterDto = ProjectUserRegisterDto;
 
 
 /***/ }),

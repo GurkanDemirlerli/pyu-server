@@ -37,6 +37,7 @@ export { ProjectDetailDto } from './project/project-detail.dto';
 export { ProjectListDto } from './project/project-list.dto';
 export { ProjectSummaryDto} from './project/project-summary.dto';
 export { ProjectAssignManagerDto } from './project/project-assign-manager.dto';
+export { ProjectUserRegisterDto } from './project/project-user-register.dto';
 
 export { QuestionUpdateDto } from './question/question-update.dto';
 export { QuestionCreateDto } from './question/question-create.dto';

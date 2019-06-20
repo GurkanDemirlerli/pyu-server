@@ -6,6 +6,8 @@ export { ProjectRepository } from './project.repository';
 export { CompanyRepository } from './company.repository';
 export { UserRepository } from './user.repository';
 export { CommentRepository } from './comment.repository';
+export { TaskAssignmentRepository } from './task-assignment.repository';
 export { TaskRepository } from './task.repository';
 export { CompanyMembershipRepository } from './company-membership.repository';
 export { MembershipRequestRepository } from './membership-request.repository';
+export { ProjectMembershipRepository } from './project-membership.repository';

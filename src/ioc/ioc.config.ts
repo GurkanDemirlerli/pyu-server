@@ -9,54 +9,58 @@ import { QuestionController } from '@controllers/question.controller';
 import { TaskController } from '@controllers/task.controller';
 import { UserController } from '@controllers/user.controller';
 import {
-    IAnswerRepository,
-    ICommentRepository,
-    ICompanyRepository,
-    IIssueRepository,
-    IProjectRepository,
-    IQuestionRepository,
-    IStatusRepository,
-    ITaskRepository,
-    IUserRepository,
-    ICompanyMembershipRepository,
-    IMembershipRequestRepository
+  IAnswerRepository,
+  ICommentRepository,
+  ICompanyRepository,
+  IIssueRepository,
+  IProjectMembershipRepository,
+  IProjectRepository,
+  IQuestionRepository,
+  IStatusRepository,
+  ITaskAssignmentRepository,
+  ITaskRepository,
+  IUserRepository,
+  ICompanyMembershipRepository,
+  IMembershipRequestRepository
 
 } from '@repositories/abstract';
 
 import {
-    AnswerRepository,
-    CommentRepository,
-    CompanyRepository,
-    IssueRepository,
-    ProjectRepository,
-    QuestionRepository,
-    StatusRepository,
-    TaskRepository,
-    UserRepository,
-    CompanyMembershipRepository,
-    MembershipRequestRepository
+  AnswerRepository,
+  CommentRepository,
+  CompanyRepository,
+  IssueRepository,
+  ProjectMembershipRepository,
+  ProjectRepository,
+  QuestionRepository,
+  StatusRepository,
+  TaskAssignmentRepository,
+  TaskRepository,
+  UserRepository,
+  CompanyMembershipRepository,
+  MembershipRequestRepository
 } from '@repositories/concrete';
 
 import {
-    AnswerService,
-    CommentService,
-    CompanyService,
-    IssueService,
-    ProjectService,
-    QuestionService,
-    TaskService,
-    UserService,
+  AnswerService,
+  CommentService,
+  CompanyService,
+  IssueService,
+  ProjectService,
+  QuestionService,
+  TaskService,
+  UserService,
 } from '@services/concrete';
 
 import {
-    IAnswerService,
-    ICommentService,
-    ICompanyService,
-    IIssueService,
-    IProjectService,
-    IQuestionService,
-    ITaskService,
-    IUserService,
+  IAnswerService,
+  ICommentService,
+  ICompanyService,
+  IIssueService,
+  IProjectService,
+  IQuestionService,
+  ITaskService,
+  IUserService,
 } from '@services/abstract';
 
 import { Container } from 'inversify';
@@ -65,128 +69,136 @@ import 'reflect-metadata';
 import { InjectTypes } from '@ioc';
 
 export module IOC {
-    export const container = new Container();
-    export function configureContainer(): Container {
+  export const container = new Container();
+  export function configureContainer(): Container {
 
-        //CONTROLLERS
+    //CONTROLLERS
 
-        container
-            .bind<AnswerController>(AnswerController)
-            .toSelf();
+    container
+      .bind<AnswerController>(AnswerController)
+      .toSelf();
 
-        container
-            .bind<CommentController>(CommentController)
-            .toSelf();
-
-
-        container
-            .bind<CompanyController>(CompanyController)
-            .toSelf();
-
-        container
-            .bind<IssueController>(IssueController)
-            .toSelf();
-
-        container
-            .bind<ProjectController>(ProjectController)
-            .toSelf();
-
-        container
-            .bind<QuestionController>(QuestionController)
-            .toSelf();
-
-        container
-            .bind<TaskController>(TaskController)
-            .toSelf();
-
-        container
-            .bind<UserController>(UserController)
-            .toSelf();
+    container
+      .bind<CommentController>(CommentController)
+      .toSelf();
 
 
-        // REPOSITORIES
+    container
+      .bind<CompanyController>(CompanyController)
+      .toSelf();
 
-        container
-            .bind<IAnswerRepository>(InjectTypes.Repository.ANSWER)
-            .to(AnswerRepository);
+    container
+      .bind<IssueController>(IssueController)
+      .toSelf();
 
-        container
-            .bind<ICommentRepository>(InjectTypes.Repository.COMMENT)
-            .to(CommentRepository);
+    container
+      .bind<ProjectController>(ProjectController)
+      .toSelf();
 
-        container
-            .bind<ICompanyRepository>(InjectTypes.Repository.COMPANY)
-            .to(CompanyRepository);
+    container
+      .bind<QuestionController>(QuestionController)
+      .toSelf();
 
-        container
-            .bind<ICompanyMembershipRepository>(InjectTypes.Repository.COMPANY_MEMBERSHIP)
-            .to(CompanyMembershipRepository);
+    container
+      .bind<TaskController>(TaskController)
+      .toSelf();
 
-        container
-            .bind<IMembershipRequestRepository>(InjectTypes.Repository.MEMBERSHIP_REQUEST)
-            .to(MembershipRequestRepository);
-
-        container
-            .bind<IIssueRepository>(InjectTypes.Repository.ISSUE)
-            .to(IssueRepository);
-
-        container
-            .bind<IProjectRepository>(InjectTypes.Repository.PROJECT)
-            .to(ProjectRepository);
-
-        container
-            .bind<IQuestionRepository>(InjectTypes.Repository.QUESTION)
-            .to(QuestionRepository);
-
-        container
-            .bind<IStatusRepository>(InjectTypes.Repository.STATUS)
-            .to(StatusRepository);
+    container
+      .bind<UserController>(UserController)
+      .toSelf();
 
 
-        container
-            .bind<ITaskRepository>(InjectTypes.Repository.TASK)
-            .to(TaskRepository);
+    // REPOSITORIES
 
-        container
-            .bind<IUserRepository>(InjectTypes.Repository.USER)
-            .to(UserRepository);
+    container
+      .bind<IAnswerRepository>(InjectTypes.Repository.ANSWER)
+      .to(AnswerRepository);
+
+    container
+      .bind<ICommentRepository>(InjectTypes.Repository.COMMENT)
+      .to(CommentRepository);
+
+    container
+      .bind<ICompanyRepository>(InjectTypes.Repository.COMPANY)
+      .to(CompanyRepository);
+
+    container
+      .bind<ICompanyMembershipRepository>(InjectTypes.Repository.COMPANY_MEMBERSHIP)
+      .to(CompanyMembershipRepository);
+
+    container
+      .bind<IMembershipRequestRepository>(InjectTypes.Repository.MEMBERSHIP_REQUEST)
+      .to(MembershipRequestRepository);
+
+    container
+      .bind<IIssueRepository>(InjectTypes.Repository.ISSUE)
+      .to(IssueRepository);
+
+    container
+      .bind<IProjectMembershipRepository>(InjectTypes.Repository.PROJECT_MEMBERSHIP)
+      .to(ProjectMembershipRepository);
+
+    container
+      .bind<IProjectRepository>(InjectTypes.Repository.PROJECT)
+      .to(ProjectRepository);
+
+    container
+      .bind<IQuestionRepository>(InjectTypes.Repository.QUESTION)
+      .to(QuestionRepository);
+
+    container
+      .bind<IStatusRepository>(InjectTypes.Repository.STATUS)
+      .to(StatusRepository);
 
 
-        // SERVICES
+    container
+      .bind<ITaskRepository>(InjectTypes.Repository.TASK)
+      .to(TaskRepository);
+
+    container
+      .bind<IUserRepository>(InjectTypes.Repository.USER)
+      .to(UserRepository);
+
+    container
+      .bind<ITaskAssignmentRepository>(InjectTypes.Repository.TASK_ASSIGNMENT)
+      .to(TaskAssignmentRepository)
 
 
-        container
-            .bind<IAnswerService>(InjectTypes.Service.ANSWER)
-            .to(AnswerService);
+    // SERVICES
 
-        container
-            .bind<ICommentService>(InjectTypes.Service.COMMENT)
-            .to(CommentService);
 
-        container
-            .bind<ICompanyService>(InjectTypes.Service.COMPANY)
-            .to(CompanyService);
+    container
+      .bind<IAnswerService>(InjectTypes.Service.ANSWER)
+      .to(AnswerService);
 
-        container
-            .bind<IIssueService>(InjectTypes.Service.ISSUE)
-            .to(IssueService);
+    container
+      .bind<ICommentService>(InjectTypes.Service.COMMENT)
+      .to(CommentService);
 
-        container
-            .bind<IProjectService>(InjectTypes.Service.PROJECT)
-            .to(ProjectService);
+    container
+      .bind<ICompanyService>(InjectTypes.Service.COMPANY)
+      .to(CompanyService);
 
-        container
-            .bind<IQuestionService>(InjectTypes.Service.QUESTION)
-            .to(QuestionService);
+    container
+      .bind<IIssueService>(InjectTypes.Service.ISSUE)
+      .to(IssueService);
 
-        container
-            .bind<ITaskService>(InjectTypes.Service.TASK)
-            .to(TaskService);
+    container
+      .bind<IProjectService>(InjectTypes.Service.PROJECT)
+      .to(ProjectService);
 
-        container
-            .bind<IUserService>(InjectTypes.Service.USER)
-            .to(UserService);
+    container
+      .bind<IQuestionService>(InjectTypes.Service.QUESTION)
+      .to(QuestionService);
 
-        return container;
-    }
+    container
+      .bind<ITaskService>(InjectTypes.Service.TASK)
+      .to(TaskService);
+
+    container
+      .bind<IUserService>(InjectTypes.Service.USER)
+      .to(UserService);
+
+    return container;
+  }
 }

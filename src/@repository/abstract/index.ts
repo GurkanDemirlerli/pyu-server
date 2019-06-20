@@ -6,6 +6,8 @@ export { IProjectRepository } from './i-project.repository';
 export { ICompanyRepository } from './i-company.repository';
 export { IUserRepository } from './i-user.repository';
 export { ICommentRepository } from './i-comment.repository';
+export { ITaskAssignmentRepository } from './i-task-assignment.repository';
 export { ITaskRepository } from './i-task.repository';
 export { ICompanyMembershipRepository } from './i-company-membership.repository';
 export { IMembershipRequestRepository } from './i-membership-request.repository';
+export { IProjectMembershipRepository } from './i-project-membership.repository';
