@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/seed/dropDatabase.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/seed/drop.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -1104,10 +1104,6 @@ __decorate([
     typeorm_1.JoinColumn({ name: "labelId" }),
     __metadata("design:type", task_entity_1.TaskEntity)
 ], TaskLabelEntity.prototype, "label", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Date)
-], TaskLabelEntity.prototype, "createdAt", void 0);
 TaskLabelEntity = __decorate([
     typeorm_1.Entity("task_label")
 ], TaskLabelEntity);
@@ -1383,10 +1379,10 @@ exports.UserEntity = UserEntity;
 
 /***/ }),
 
-/***/ "./src/seed/dropDatabase.ts":
-/*!**********************************!*\
-  !*** ./src/seed/dropDatabase.ts ***!
-  \**********************************/
+/***/ "./src/seed/drop.ts":
+/*!**************************!*\
+  !*** ./src/seed/drop.ts ***!
+  \**************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1441,4 +1437,4 @@ module.exports = require("typeorm");
 /***/ })
 
 /******/ });
-//# sourceMappingURL=dropdb.js.map
+//# sourceMappingURL=drop.js.map

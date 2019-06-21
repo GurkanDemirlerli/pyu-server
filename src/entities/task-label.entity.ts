@@ -19,8 +19,4 @@ export class TaskLabelEntity {
     @ManyToOne(type => LabelEntity, lbl => lbl.relatedTasks)
     @JoinColumn({ name: "labelId" })
     label: TaskEntity;
-
-    @Column()
-    createdAt: Date;
-
 }

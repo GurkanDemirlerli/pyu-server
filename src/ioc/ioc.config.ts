@@ -21,8 +21,9 @@ import {
   ITaskRepository,
   IUserRepository,
   ICompanyMembershipRepository,
-  IMembershipRequestRepository
-
+  IMembershipRequestRepository,
+  ILabelRepository,
+  ITaskLabelRepository
 } from '@repositories/abstract';
 
 import {
@@ -38,7 +39,9 @@ import {
   TaskRepository,
   UserRepository,
   CompanyMembershipRepository,
-  MembershipRequestRepository
+  MembershipRequestRepository,
+  LabelRepository,
+  TaskLabelRepository
 } from '@repositories/concrete';
 
 import {
@@ -150,7 +153,6 @@ export module IOC {
       .bind<IStatusRepository>(InjectTypes.Repository.STATUS)
       .to(StatusRepository);
 
-
     container
       .bind<ITaskRepository>(InjectTypes.Repository.TASK)
       .to(TaskRepository);
@@ -162,6 +164,14 @@ export module IOC {
     container
       .bind<ITaskAssignmentRepository>(InjectTypes.Repository.TASK_ASSIGNMENT)
       .to(TaskAssignmentRepository)
+
+    container
+      .bind<ITaskLabelRepository>(InjectTypes.Repository.TASK_LABEL)
+      .to(TaskLabelRepository)
+
+    container
+      .bind<ILabelRepository>(InjectTypes.Repository.LABEL)
+      .to(LabelRepository)
 
 
     // SERVICES

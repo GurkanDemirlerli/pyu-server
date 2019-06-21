@@ -11,3 +11,5 @@ export { TaskRepository } from './task.repository';
 export { CompanyMembershipRepository } from './company-membership.repository';
 export { MembershipRequestRepository } from './membership-request.repository';
 export { ProjectMembershipRepository } from './project-membership.repository';
+export { LabelRepository } from './label.repository';
+export { TaskLabelRepository } from './task-label.repository';

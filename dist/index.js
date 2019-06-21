@@ -1219,6 +1219,10 @@ var membership_request_repository_1 = __webpack_require__(/*! ./membership-reque
 exports.MembershipRequestRepository = membership_request_repository_1.MembershipRequestRepository;
 var project_membership_repository_1 = __webpack_require__(/*! ./project-membership.repository */ "./src/@repository/concrete/project-membership.repository.ts");
 exports.ProjectMembershipRepository = project_membership_repository_1.ProjectMembershipRepository;
+var label_repository_1 = __webpack_require__(/*! ./label.repository */ "./src/@repository/concrete/label.repository.ts");
+exports.LabelRepository = label_repository_1.LabelRepository;
+var task_label_repository_1 = __webpack_require__(/*! ./task-label.repository */ "./src/@repository/concrete/task-label.repository.ts");
+exports.TaskLabelRepository = task_label_repository_1.TaskLabelRepository;
 
 
 /***/ }),
@@ -1256,6 +1260,43 @@ IssueRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], IssueRepository);
 exports.IssueRepository = IssueRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/label.repository.ts":
+/*!******************************************************!*\
+  !*** ./src/@repository/concrete/label.repository.ts ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const label_entity_1 = __webpack_require__(/*! ./../../entities/label.entity */ "./src/entities/label.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let LabelRepository = class LabelRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(label_entity_1.LabelEntity);
+    }
+};
+LabelRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], LabelRepository);
+exports.LabelRepository = LabelRepository;
 
 
 /***/ }),
@@ -1500,6 +1541,43 @@ TaskAssignmentRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], TaskAssignmentRepository);
 exports.TaskAssignmentRepository = TaskAssignmentRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/task-label.repository.ts":
+/*!***********************************************************!*\
+  !*** ./src/@repository/concrete/task-label.repository.ts ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const task_label_entity_1 = __webpack_require__(/*! ./../../entities/task-label.entity */ "./src/entities/task-label.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let TaskLabelRepository = class TaskLabelRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(task_label_entity_1.TaskLabelEntity);
+    }
+};
+TaskLabelRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], TaskLabelRepository);
+exports.TaskLabelRepository = TaskLabelRepository;
 
 
 /***/ }),
@@ -5430,10 +5508,6 @@ __decorate([
     typeorm_1.JoinColumn({ name: "labelId" }),
     __metadata("design:type", task_entity_1.TaskEntity)
 ], TaskLabelEntity.prototype, "label", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Date)
-], TaskLabelEntity.prototype, "createdAt", void 0);
 TaskLabelEntity = __decorate([
     typeorm_1.Entity("task_label")
 ], TaskLabelEntity);
@@ -5765,6 +5839,10 @@ var company_roles_enum_1 = __webpack_require__(/*! ./company-roles.enum */ "./sr
 exports.CompanyRoles = company_roles_enum_1.CompanyRoles;
 var base_status_enum_1 = __webpack_require__(/*! ./base-status.enum */ "./src/enums/base-status.enum.ts");
 exports.BaseStatus = base_status_enum_1.BaseStatus;
+var task_types_enum_1 = __webpack_require__(/*! ./task-types.enum */ "./src/enums/task-types.enum.ts");
+exports.TaskTypes = task_types_enum_1.TaskTypes;
+var task_priorities_enum_1 = __webpack_require__(/*! ./task-priorities.enum */ "./src/enums/task-priorities.enum.ts");
+exports.TaskPriorities = task_priorities_enum_1.TaskPriorities;
 
 
 /***/ }),
@@ -5785,6 +5863,51 @@ var ProjectAuthTypes;
     ProjectAuthTypes[ProjectAuthTypes["MANAGER"] = 1] = "MANAGER";
     ProjectAuthTypes[ProjectAuthTypes["USER"] = 3] = "USER";
 })(ProjectAuthTypes = exports.ProjectAuthTypes || (exports.ProjectAuthTypes = {}));
+
+
+/***/ }),
+
+/***/ "./src/enums/task-priorities.enum.ts":
+/*!*******************************************!*\
+  !*** ./src/enums/task-priorities.enum.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TaskPriorities;
+(function (TaskPriorities) {
+    TaskPriorities[TaskPriorities["EXTREMELY_LOW"] = 0] = "EXTREMELY_LOW";
+    TaskPriorities[TaskPriorities["ULTRA_LOW"] = 1] = "ULTRA_LOW";
+    TaskPriorities[TaskPriorities["VERY_LOW"] = 2] = "VERY_LOW";
+    TaskPriorities[TaskPriorities["LOW"] = 3] = "LOW";
+    TaskPriorities[TaskPriorities["MEDIUM"] = 4] = "MEDIUM";
+    TaskPriorities[TaskPriorities["HIGH"] = 5] = "HIGH";
+    TaskPriorities[TaskPriorities["VERY_HIGH"] = 6] = "VERY_HIGH";
+    TaskPriorities[TaskPriorities["ULTRA_HIGH"] = 7] = "ULTRA_HIGH";
+    TaskPriorities[TaskPriorities["EXTREMELY_HIGH"] = 8] = "EXTREMELY_HIGH";
+})(TaskPriorities = exports.TaskPriorities || (exports.TaskPriorities = {}));
+
+
+/***/ }),
+
+/***/ "./src/enums/task-types.enum.ts":
+/*!**************************************!*\
+  !*** ./src/enums/task-types.enum.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TaskTypes;
+(function (TaskTypes) {
+    TaskTypes[TaskTypes["BASIC"] = 0] = "BASIC";
+    TaskTypes[TaskTypes["SUBPROJECT"] = 1] = "SUBPROJECT";
+})(TaskTypes = exports.TaskTypes || (exports.TaskTypes = {}));
 
 
 /***/ }),
@@ -5955,6 +6078,8 @@ var InjectTypes;
         Repository["MEMBERSHIP_REQUEST"] = "MembershipRequestRepository";
         Repository["TASK_ASSIGNMENT"] = "TaskAssignmentRepository";
         Repository["PROJECT_MEMBERSHIP"] = "ProjectMembershipRepository";
+        Repository["LABEL"] = "LabelRepository";
+        Repository["TASK_LABEL"] = "TaskLabelRepository";
     })(Repository = InjectTypes.Repository || (InjectTypes.Repository = {}));
     let Service;
     (function (Service) {
@@ -6065,6 +6190,12 @@ var IOC;
         IOC.container
             .bind(_ioc_1.InjectTypes.Repository.TASK_ASSIGNMENT)
             .to(concrete_1.TaskAssignmentRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.TASK_LABEL)
+            .to(concrete_1.TaskLabelRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.LABEL)
+            .to(concrete_1.LabelRepository);
         // SERVICES
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.ANSWER)

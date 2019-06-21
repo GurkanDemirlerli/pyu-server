@@ -5,7 +5,7 @@ console.log("Veritabanı sil Çalıştırıldı.");
 
 const config = Object.assign(appConfig.dbOptions, { synchronize: undefined });
 
-createConnection(config).then(async connection => {
+ createConnection(config).then(async connection => {
     connection.dropDatabase().then(() => {
         console.log("Veritabanı silindi.");
         process.exit(0);

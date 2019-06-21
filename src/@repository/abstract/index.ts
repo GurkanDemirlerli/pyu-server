@@ -11,3 +11,5 @@ export { ITaskRepository } from './i-task.repository';
 export { ICompanyMembershipRepository } from './i-company-membership.repository';
 export { IMembershipRequestRepository } from './i-membership-request.repository';
 export { IProjectMembershipRepository } from './i-project-membership.repository';
+export { ILabelRepository } from './i-label.repository';
+export { ITaskLabelRepository } from './i-task-label.repository';

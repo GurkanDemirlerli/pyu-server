@@ -1,19 +1,18 @@
-import { ProjectEntity } from './../entities/project.entity';
-import { CompanyEntity } from './../entities/company.entity';
+import 'reflect-metadata';
+import { IUserRepository, ICompanyRepository, IProjectRepository, IStatusRepository, ITaskRepository, ITaskLabelRepository, ILabelRepository, IProjectMembershipRepository } from "@repositories/abstract";
+import { InjectTypes } from "@ioc";
 import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
-import * as appConfig from "./../common/app-config";
-import { IUserRepository, ICompanyRepository, IStatusRepository, IProjectRepository, ITaskRepository } from "./../@repository/abstract";
-import * as faker from 'faker';
-import { RegisterDto } from "./../_models/dtos";
-import { UserEntity } from "./../entities/user.entity";
-import { StatusEntity } from '../entities/status.entity';
-import { BaseStatus } from '../enums/base-status.enum';
-
-import { InjectTypes } from './inject-types';
-import { TaskEntity } from "./../entities/task.entity";
-import 'module-alias/register';
-import { TaskTypes } from '@enums/task-types.enum';
+import { CompanyEntity } from "@entities/company.entity";
+import { UserEntity } from "@entities/user.entity";
+import { ProjectEntity } from "@entities/project.entity";
+import { TaskEntity } from "@entities/task.entity";
+import { RegisterDto } from "@models/dtos";
+import faker = require("faker");
+import { StatusEntity } from "@entities/status.entity";
+import { BaseStatus, TaskTypes } from "@enums";
+import * as appConfig from "@common/app-config";
+import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 
 @injectable()
 export class SeedDatabase {
@@ -23,6 +22,11 @@ export class SeedDatabase {
     @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository,
     @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
     @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
+    @inject(InjectTypes.Repository.TASK_LABEL) private readonly _taskLabelRepository: ITaskLabelRepository,
+    @inject(InjectTypes.Repository.LABEL) private readonly _labelRepository: ILabelRepository,
+    @inject(InjectTypes.Repository.PROJECT_MEMBERSHIP) private readonly _projectMembershipRepository: IProjectMembershipRepository,
+
+
 
   ) { }
 
@@ -49,6 +53,7 @@ export class SeedDatabase {
     let projectPromises = [];
     let statusPromises = [];
     let taskPromises = [];
+    let pmPromises = [];
     let grkn: UserEntity;
 
     for (let i = 0; i < USERCOUNT; i++) {
@@ -288,18 +293,28 @@ export class SeedDatabase {
         });
       });
 
-      grkn.ownedCompanies.map((cmp) => {
-        cmp.projects.map((prj) => {
-          for (let i = 0; i < 10; i++) {
-
-          }
-        })
-      })
-
       return Promise.all(taskPromises);
     }).then((createdTasks) => {
       console.log('Tasklar Eklendi');
       tasks = createdTasks;
+
+
+      grkn.ownedCompanies.map((cmp) => {
+        cmp.projects.map((prj) => {
+          for (let i = 0; i < 10; i++) {
+            let pmEn: ProjectMembershipEntity = new ProjectMembershipEntity();
+            pmEn.createdAt = new Date();
+            pmEn.projectId = prj.id;
+            pmEn.userId = users[i].id;
+            pmPromises.push(this._projectMembershipRepository.insert(pmEn));
+          }
+        });
+      });
+
+      return Promise.all(pmPromises);
+    }).then((createdprMbs) => {
+
+
       process.exit(0);
     }).catch((err) => {
       console.log(err);

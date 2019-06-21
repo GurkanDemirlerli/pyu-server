@@ -12,7 +12,7 @@ module.exports = {
     entry: {
         index: './src/index.ts',
         seed: './src/seed/index.ts',
-        dropdb: './src/seed/dropDatabase.ts',
+        drop: './src/seed/drop.ts',
     },
     watch: config.mode === 'development',
     module: {

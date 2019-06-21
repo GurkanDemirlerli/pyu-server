@@ -1,10 +1,12 @@
-import { SeedDatabase } from './seed';
 import 'reflect-metadata';
-import { DBIOC } from './container';
+import { SeedDatabase } from './seed';
+import { IOC } from '@ioc';
 
 console.log("veritabanı seedle çalıştırıldı.");
 
-DBIOC.configureContainer();
-const seedDatabase = DBIOC.container.get(SeedDatabase);
+IOC.configureContainer();
+IOC.container.bind<SeedDatabase>(SeedDatabase)
+  .toSelf();
+const seedDatabase = IOC.container.get(SeedDatabase);
 
 seedDatabase.initialize();

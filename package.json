@@ -5,7 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "start": "webpack",
-    "watch": "nodemon  --inspect=1923 && node ./dist/index.js"
+    "watch": "nodemon  --inspect=1923 && node ./dist/index.js",
+    "seed": "node ./dist/drop.js && node ./dist/seed.js"
   },
   "author": "",
   "license": "ISC",

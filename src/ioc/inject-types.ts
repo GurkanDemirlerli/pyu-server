@@ -12,7 +12,9 @@ export module InjectTypes {
     COMPANY_MEMBERSHIP = 'CompanyMembershipRepository',
     MEMBERSHIP_REQUEST = 'MembershipRequestRepository',
     TASK_ASSIGNMENT = 'TaskAssignmentRepository',
-    PROJECT_MEMBERSHIP = 'ProjectMembershipRepository'
+    PROJECT_MEMBERSHIP = 'ProjectMembershipRepository',
+    LABEL = 'LabelRepository',
+    TASK_LABEL = 'TaskLabelRepository'
   }
 
   export enum Service {
