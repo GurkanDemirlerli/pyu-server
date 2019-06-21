@@ -1,5 +1,5 @@
 import { IssueEntity } from '@entities/issue.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToOne } from "typeorm";
 import { UserEntity } from '@entities/user.entity';
 import { TaskEntity } from "@entities/task.entity";
 import { CompanyEntity } from "@entities/company.entity";
@@ -9,49 +9,55 @@ import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 @Entity("project")
 export class ProjectEntity {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-        length: 100
-    })
-    title: string;
+  @Column({
+    length: 100
+  })
+  title: string;
 
-    @Column({
-        length: 100
-    })
-    description: string;
+  @Column({
+    length: 100
+  })
+  description: string;
 
-    @OneToMany(type => TaskEntity, task => task.project)
-    tasks: TaskEntity[];
+  @Column()
+  isSubProject: boolean;
 
-    @OneToMany(type => StatusEntity, status => status.project)
-    statuses: StatusEntity[];
+  @OneToOne(type => TaskEntity, task => task.subProject)
+  assignedTask: TaskEntity;
 
-    @OneToMany(type => IssueEntity, issue => issue.project)
-    issues: IssueEntity[];
+  @OneToMany(type => TaskEntity, task => task.project)
+  tasks: TaskEntity[];
 
-    @Column("int")
-    companyId: number;
-    @ManyToOne(type => CompanyEntity, company => company.projects)
-    @JoinColumn({ name: "companyId" })
-    company: CompanyEntity;
+  @OneToMany(type => StatusEntity, status => status.project)
+  statuses: StatusEntity[];
 
-    @Column("int")
-    userId: number;
-    @ManyToOne(type => UserEntity, user => user.createdProjects)
-    @JoinColumn({ name: "userId" })
-    creator: UserEntity;
+  @OneToMany(type => IssueEntity, issue => issue.project)
+  issues: IssueEntity[];
 
-    @Column()
-    createdAt: Date;
+  @Column("int")
+  companyId: number;
+  @ManyToOne(type => CompanyEntity, company => company.projects)
+  @JoinColumn({ name: "companyId" })
+  company: CompanyEntity;
 
-    @Column()
-    lastUpdated: Date;
+  @Column("int")
+  userId: number;
+  @ManyToOne(type => UserEntity, user => user.createdProjects)
+  @JoinColumn({ name: "userId" })
+  creator: UserEntity;
 
-    @OneToMany(type => ProjectMembershipEntity, pms => pms.project)
-    members: ProjectMembershipEntity[];
+  @Column()
+  createdAt: Date;
 
-    @OneToMany(type => ProjectManagerEntity, prm => prm.project)
-    managers: ProjectManagerEntity[];
+  @Column()
+  lastUpdated: Date;
+
+  @OneToMany(type => ProjectMembershipEntity, pms => pms.project)
+  members: ProjectMembershipEntity[];
+
+  @OneToMany(type => ProjectManagerEntity, prm => prm.project)
+  managers: ProjectManagerEntity[];
 }

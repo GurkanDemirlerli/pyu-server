@@ -2013,6 +2013,8 @@ const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignme
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
 const comment_entity_1 = __webpack_require__(/*! @entities/comment.entity */ "./src/entities/comment.entity.ts");
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
+const label_entity_1 = __webpack_require__(/*! @entities/label.entity */ "./src/entities/label.entity.ts");
+const task_label_entity_1 = __webpack_require__(/*! @entities/task-label.entity */ "./src/entities/task-label.entity.ts");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
 exports.dbOptions = {
     type: "mysql",
@@ -2035,7 +2037,9 @@ exports.dbOptions = {
         membership_request_entity_1.MembershipRequestEntity,
         project_manager_entity_1.ProjectManagerEntity,
         project_membership_entity_1.ProjectMembershipEntity,
-        task_assignment_entity_1.TaskAssignmentEntity
+        task_assignment_entity_1.TaskAssignmentEntity,
+        label_entity_1.LabelEntity,
+        task_label_entity_1.TaskLabelEntity
     ],
     synchronize: true,
 };
@@ -2403,6 +2407,55 @@ exports.IssueEntity = IssueEntity;
 
 /***/ }),
 
+/***/ "./src/entities/label.entity.ts":
+/*!**************************************!*\
+  !*** ./src/entities/label.entity.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const task_label_entity_1 = __webpack_require__(/*! ./task-label.entity */ "./src/entities/task-label.entity.ts");
+let LabelEntity = class LabelEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], LabelEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column({
+        length: 15
+    }),
+    __metadata("design:type", String)
+], LabelEntity.prototype, "name", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_label_entity_1.TaskLabelEntity, tsklbl => tsklbl.label),
+    __metadata("design:type", Array)
+], LabelEntity.prototype, "relatedTasks", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], LabelEntity.prototype, "createdAt", void 0);
+LabelEntity = __decorate([
+    typeorm_1.Entity("label")
+], LabelEntity);
+exports.LabelEntity = LabelEntity;
+
+
+/***/ }),
+
 /***/ "./src/entities/membership-request.entity.ts":
 /*!***************************************************!*\
   !*** ./src/entities/membership-request.entity.ts ***!
@@ -2622,6 +2675,14 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "description", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Boolean)
+], ProjectEntity.prototype, "isSubProject", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => task_entity_1.TaskEntity, task => task.subProject),
+    __metadata("design:type", task_entity_1.TaskEntity)
+], ProjectEntity.prototype, "assignedTask", void 0);
 __decorate([
     typeorm_1.OneToMany(type => task_entity_1.TaskEntity, task => task.project),
     __metadata("design:type", Array)
@@ -2900,6 +2961,64 @@ exports.TaskAssignmentEntity = TaskAssignmentEntity;
 
 /***/ }),
 
+/***/ "./src/entities/task-label.entity.ts":
+/*!*******************************************!*\
+  !*** ./src/entities/task-label.entity.ts ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
+const label_entity_1 = __webpack_require__(/*! ./label.entity */ "./src/entities/label.entity.ts");
+let TaskLabelEntity = class TaskLabelEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], TaskLabelEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], TaskLabelEntity.prototype, "taskId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => task_entity_1.TaskEntity, task => task.relatedLabels),
+    typeorm_1.JoinColumn({ name: "taskId" }),
+    __metadata("design:type", task_entity_1.TaskEntity)
+], TaskLabelEntity.prototype, "task", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], TaskLabelEntity.prototype, "labelId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => label_entity_1.LabelEntity, lbl => lbl.relatedTasks),
+    typeorm_1.JoinColumn({ name: "labelId" }),
+    __metadata("design:type", task_entity_1.TaskEntity)
+], TaskLabelEntity.prototype, "label", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], TaskLabelEntity.prototype, "createdAt", void 0);
+TaskLabelEntity = __decorate([
+    typeorm_1.Entity("task_label")
+], TaskLabelEntity);
+exports.TaskLabelEntity = TaskLabelEntity;
+
+
+/***/ }),
+
 /***/ "./src/entities/task.entity.ts":
 /*!*************************************!*\
   !*** ./src/entities/task.entity.ts ***!
@@ -2926,6 +3045,7 @@ const comment_entity_1 = __webpack_require__(/*! @entities/comment.entity */ "./
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
 const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
+const task_label_entity_1 = __webpack_require__(/*! ./task-label.entity */ "./src/entities/task-label.entity.ts");
 let TaskEntity = class TaskEntity {
 };
 __decorate([
@@ -2944,6 +3064,27 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], TaskEntity.prototype, "description", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], TaskEntity.prototype, "type", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], TaskEntity.prototype, "code", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], TaskEntity.prototype, "priority", void 0);
+__decorate([
+    typeorm_1.Column("int", { nullable: true }),
+    __metadata("design:type", Number)
+], TaskEntity.prototype, "subProjectId", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, project => project.assignedTask),
+    typeorm_1.JoinColumn({ name: "subProjectId" }),
+    __metadata("design:type", project_entity_1.ProjectEntity)
+], TaskEntity.prototype, "subProject", void 0);
 __decorate([
     typeorm_1.OneToMany(type => comment_entity_1.CommentEntity, comment => comment.task),
     __metadata("design:type", Array)
@@ -2988,6 +3129,10 @@ __decorate([
     typeorm_1.OneToMany(type => task_assignment_entity_1.TaskAssignmentEntity, tsa => tsa.task),
     __metadata("design:type", Array)
 ], TaskEntity.prototype, "assignees", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_label_entity_1.TaskLabelEntity, tsklbl => tsklbl.task),
+    __metadata("design:type", Array)
+], TaskEntity.prototype, "relatedLabels", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", Date)
@@ -3162,6 +3307,25 @@ var BaseStatus;
 
 /***/ }),
 
+/***/ "./src/enums/task-types.enum.ts":
+/*!**************************************!*\
+  !*** ./src/enums/task-types.enum.ts ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var TaskTypes;
+(function (TaskTypes) {
+    TaskTypes[TaskTypes["BASIC"] = 0] = "BASIC";
+    TaskTypes[TaskTypes["SUBPROJECT"] = 1] = "SUBPROJECT";
+})(TaskTypes = exports.TaskTypes || (exports.TaskTypes = {}));
+
+
+/***/ }),
+
 /***/ "./src/seed/container.ts":
 /*!*******************************!*\
   !*** ./src/seed/container.ts ***!
@@ -3323,6 +3487,7 @@ const base_status_enum_1 = __webpack_require__(/*! ../enums/base-status.enum */ 
 const inject_types_1 = __webpack_require__(/*! ./inject-types */ "./src/seed/inject-types.ts");
 const task_entity_1 = __webpack_require__(/*! ./../entities/task.entity */ "./src/entities/task.entity.ts");
 __webpack_require__(/*! module-alias/register */ "module-alias/register");
+const task_types_enum_1 = __webpack_require__(/*! @enums/task-types.enum */ "./src/enums/task-types.enum.ts");
 let SeedDatabase = class SeedDatabase {
     constructor(_userRepository, _companyRepository, _statusRepository, _projectRepository, _taskRepository) {
         this._userRepository = _userRepository;
@@ -3360,7 +3525,8 @@ let SeedDatabase = class SeedDatabase {
                 username: faker.internet.userName(),
                 email: faker.internet.email(),
                 password: 'Password123.',
-                createdAt: new Date()
+                createdAt: new Date(),
+                lastUpdated: new Date()
             });
             let user = Object.assign(new user_entity_1.UserEntity(), usrDto);
             users.push(user);
@@ -3372,7 +3538,8 @@ let SeedDatabase = class SeedDatabase {
             username: 'gurkan30',
             email: 'gurkan@example.com',
             password: 'Password123.',
-            createdAt: new Date()
+            createdAt: new Date(),
+            lastUpdated: new Date()
         });
         grkn = Object.assign(new user_entity_1.UserEntity(), grknDto);
         users.push(grkn);
@@ -3386,20 +3553,26 @@ let SeedDatabase = class SeedDatabase {
                 let cmp = Object.assign(new company_entity_1.CompanyEntity(), {
                     name: faker.name.lastName(),
                     description: faker.lorem.words(4),
-                    ownerId: users[ind].id
+                    ownerId: users[ind].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 companyPromises.push(this._companyRepository.insert(cmp));
             }
             let c1 = Object.assign(new company_entity_1.CompanyEntity(), {
                 name: faker.name.lastName(),
                 description: faker.lorem.words(4),
-                ownerId: grkn.id
+                ownerId: grkn.id,
+                createdAt: new Date(),
+                lastUpdated: new Date()
             });
             companyPromises.push(this._companyRepository.insert(c1));
             let c2 = Object.assign(new company_entity_1.CompanyEntity(), {
                 name: faker.name.lastName(),
                 description: faker.lorem.words(4),
-                ownerId: grkn.id
+                ownerId: grkn.id,
+                createdAt: new Date(),
+                lastUpdated: new Date()
             });
             companyPromises.push(this._companyRepository.insert(c2));
             return Promise.all(companyPromises);
@@ -3414,6 +3587,9 @@ let SeedDatabase = class SeedDatabase {
                     title: faker.name.jobTitle(),
                     description: faker.lorem.words(4),
                     companyId: companies[ind].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date(),
+                    isSubProject: false
                 });
                 projectPromises.push(this._projectRepository.insert(prj));
             }
@@ -3421,21 +3597,30 @@ let SeedDatabase = class SeedDatabase {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.ownedCompanies[0]
+                companyId: grkn.ownedCompanies[0],
+                createdAt: new Date(),
+                lastUpdated: new Date(),
+                isSubProject: false
             });
             projectPromises.push(this._projectRepository.insert(p1));
             let p2 = Object.assign(new project_entity_1.ProjectEntity(), {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.ownedCompanies[0].id
+                companyId: grkn.ownedCompanies[0].id,
+                createdAt: new Date(),
+                lastUpdated: new Date(),
+                isSubProject: false
             });
             projectPromises.push(this._projectRepository.insert(p2));
             let p3 = Object.assign(new project_entity_1.ProjectEntity(), {
                 userId: grkn.id,
                 title: faker.name.jobTitle(),
                 description: faker.lorem.words(4),
-                companyId: grkn.ownedCompanies[1].id
+                companyId: grkn.ownedCompanies[1].id,
+                createdAt: new Date(),
+                lastUpdated: new Date(),
+                isSubProject: false
             });
             projectPromises.push(this._projectRepository.insert(p3));
             return Promise.all(projectPromises);
@@ -3450,7 +3635,9 @@ let SeedDatabase = class SeedDatabase {
                     baseStatus: base_status_enum_1.BaseStatus.PLANNINING,
                     order: 0,
                     creatorId: projects[i].userId,
-                    projectId: projects[i].id
+                    projectId: projects[i].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status1 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'To do',
@@ -3458,7 +3645,9 @@ let SeedDatabase = class SeedDatabase {
                     baseStatus: base_status_enum_1.BaseStatus.NOT_STARTED,
                     order: 0,
                     creatorId: projects[i].userId,
-                    projectId: projects[i].id
+                    projectId: projects[i].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status2 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'In Progress',
@@ -3466,7 +3655,9 @@ let SeedDatabase = class SeedDatabase {
                     baseStatus: base_status_enum_1.BaseStatus.IN_PROGRESS,
                     order: 0,
                     creatorId: projects[i].userId,
-                    projectId: projects[i].id
+                    projectId: projects[i].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 let status3 = Object.assign(new status_entity_1.StatusEntity(), {
                     title: 'Done',
@@ -3474,7 +3665,9 @@ let SeedDatabase = class SeedDatabase {
                     baseStatus: base_status_enum_1.BaseStatus.FINISHED,
                     order: 0,
                     creatorId: projects[i].userId,
-                    projectId: projects[i].id
+                    projectId: projects[i].id,
+                    createdAt: new Date(),
+                    lastUpdated: new Date()
                 });
                 statusPromises.push(this._statusRepository.insert(status0));
                 statusPromises.push(this._statusRepository.insert(status1));
@@ -3496,30 +3689,52 @@ let SeedDatabase = class SeedDatabase {
             grkn.ownedCompanies.map((cmp) => {
                 cmp.projects = projects.filter(prj => prj.companyId === cmp.id);
             });
+            let code = 1;
             for (let i = 0; i < TASKCOUNT; i++) {
                 let ind = Math.floor(Math.random() * (PROJECTCOUNT));
+                let prio = Math.floor(Math.random() * 9);
                 let stind = Math.floor(Math.random() * (3));
                 let tsk = Object.assign(new task_entity_1.TaskEntity(), {
                     creatorId: projects[ind].userId,
                     title: faker.name.jobTitle(),
                     description: faker.lorem.words(4),
                     projectId: projects[ind].id,
-                    statusId: projects[ind].statuses[stind]
+                    statusId: projects[ind].statuses[stind],
+                    createdAt: new Date(),
+                    lastUpdated: new Date(),
+                    code: code,
+                    type: task_types_enum_1.TaskTypes.BASIC,
+                    priority: prio
                 });
+                code++;
                 taskPromises.push(this._taskRepository.insert(tsk));
             }
             grkn.ownedCompanies.map((cmp) => {
                 cmp.projects.map((prj) => {
+                    let code = 1;
                     for (let i = 0; i < 5; i++) {
+                        let prio = Math.floor(Math.random() * 9);
                         let stind = Math.floor(Math.random() * (3));
                         let tsk = Object.assign(new task_entity_1.TaskEntity(), {
                             creatorId: grkn.id,
                             title: faker.name.jobTitle(),
                             description: faker.lorem.words(4),
                             projectId: prj.id,
-                            statusId: prj.statuses[stind]
+                            statusId: prj.statuses[stind],
+                            createdAt: new Date(),
+                            lastUpdated: new Date(),
+                            code: code,
+                            type: task_types_enum_1.TaskTypes.BASIC,
+                            priority: prio
                         });
+                        code++;
                         taskPromises.push(this._taskRepository.insert(tsk));
+                    }
+                });
+            });
+            grkn.ownedCompanies.map((cmp) => {
+                cmp.projects.map((prj) => {
+                    for (let i = 0; i < 10; i++) {
                     }
                 });
             });

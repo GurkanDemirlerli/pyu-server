@@ -12,9 +12,12 @@ import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import { TaskEntity } from '@entities/task.entity';
 import { CommentEntity } from '@entities/comment.entity';
 import { UserEntity } from '@entities/user.entity';
+import { LabelEntity } from '@entities/label.entity';
+import { TaskLabelEntity } from '@entities/task-label.entity';
 
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
+
 
 export let dbOptions: ConnectionOptions = {
     type: "mysql",
@@ -37,7 +40,9 @@ export let dbOptions: ConnectionOptions = {
         MembershipRequestEntity,
         ProjectManagerEntity,
         ProjectMembershipEntity,
-        TaskAssignmentEntity
+        TaskAssignmentEntity,
+        LabelEntity,
+        TaskLabelEntity
     ],
     synchronize: true,
 }
