@@ -86,7 +86,7 @@ export class CompanyService implements ICompanyService {
         cMemEn.userId = msReEn.userId;
         cMemEn.companyId = msReEn.companyId;
         cMemEn.joiningDate = new Date();
-        cMemEn.status = 1; // enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
+        cMemEn.status = 1; //TODO enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
 
         let uow = new Uow();
         await uow.start();

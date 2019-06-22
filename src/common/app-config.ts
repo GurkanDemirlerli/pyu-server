@@ -14,9 +14,13 @@ import { CommentEntity } from '@entities/comment.entity';
 import { UserEntity } from '@entities/user.entity';
 import { LabelEntity } from '@entities/label.entity';
 import { TaskLabelEntity } from '@entities/task-label.entity';
+import { StatusTemplateEntity } from '@entities/status-template.entity';
+import { AbstractStatusEntity } from '@entities/abstract-status.entity';
 
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
+import { SubProjectEntity } from '@entities/sub-project.entity';
+
 
 
 export let dbOptions: ConnectionOptions = {
@@ -42,7 +46,11 @@ export let dbOptions: ConnectionOptions = {
         ProjectMembershipEntity,
         TaskAssignmentEntity,
         LabelEntity,
-        TaskLabelEntity
+        AbstractStatusEntity,
+        StatusTemplateEntity,
+        TaskLabelEntity,
+        SubProjectEntity
+
     ],
     synchronize: true,
 }

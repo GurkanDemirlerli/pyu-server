@@ -12,6 +12,7 @@ import { MembershipRequestEntity } from '@entities/membership-request.entity';
 import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import { CompanyMembershipEntity } from '@entities/company-membership.entity';
+import { StatusTemplateEntity } from './status-template.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -61,6 +62,9 @@ export class UserEntity {
 
     @OneToMany(type => QuestionEntity, question => question.creator)
     questions: QuestionEntity[];
+
+    @OneToMany(type => StatusTemplateEntity, stTemp => stTemp.creator)
+    createdstatusTemplates: StatusTemplateEntity[];
 
     @OneToMany(type => AnswerEntity, answer => answer.creator)
     answers: AnswerEntity[];

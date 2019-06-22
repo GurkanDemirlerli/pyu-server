@@ -1,3 +1,4 @@
+export { ProjectManagerRepository } from './project-manager.repository';
 export { QuestionRepository } from './question.repository';
 export { IssueRepository } from './issue.repository';
 export { AnswerRepository } from './answer.repository';
@@ -13,3 +14,6 @@ export { MembershipRequestRepository } from './membership-request.repository';
 export { ProjectMembershipRepository } from './project-membership.repository';
 export { LabelRepository } from './label.repository';
 export { TaskLabelRepository } from './task-label.repository';
+export { AbstractStatusRepository } from './abstract-status.repository';
+export { StatusTemplateRepository } from './status-template.repository';
+export { SubProjectRepository } from './sub-project.repository';

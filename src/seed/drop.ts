@@ -8,7 +8,9 @@ const config = Object.assign(appConfig.dbOptions, { synchronize: undefined });
  createConnection(config).then(async connection => {
     connection.dropDatabase().then(() => {
         console.log("Veritabanı silindi.");
-        process.exit(0);
+        connection.close().then(()=>{
+          process.exit(0);
+        });
     })
 }).catch((error) => {
     console.log("TypeORM connection error: ", error)

@@ -14,7 +14,11 @@ export module InjectTypes {
     TASK_ASSIGNMENT = 'TaskAssignmentRepository',
     PROJECT_MEMBERSHIP = 'ProjectMembershipRepository',
     LABEL = 'LabelRepository',
-    TASK_LABEL = 'TaskLabelRepository'
+    TASK_LABEL = 'TaskLabelRepository',
+    ABSTRACT_STATUS = 'AbstractStatusRepository',
+    STATUS_TEMPLATE = 'StatusTemplateRepository',
+    PROJECT_MANAGER = 'ProjectManagerRepository',
+    SUB_PROJECT = 'SubProjectRepository'
   }
 
   export enum Service {

@@ -940,6 +940,43 @@ exports.UserController = UserController;
 
 /***/ }),
 
+/***/ "./src/@repository/concrete/abstract-status.repository.ts":
+/*!****************************************************************!*\
+  !*** ./src/@repository/concrete/abstract-status.repository.ts ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const abstract_status_entity_1 = __webpack_require__(/*! ./../../entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let AbstractStatusRepository = class AbstractStatusRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(abstract_status_entity_1.AbstractStatusEntity);
+    }
+};
+AbstractStatusRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], AbstractStatusRepository);
+exports.AbstractStatusRepository = AbstractStatusRepository;
+
+
+/***/ }),
+
 /***/ "./src/@repository/concrete/answer.repository.ts":
 /*!*******************************************************!*\
   !*** ./src/@repository/concrete/answer.repository.ts ***!
@@ -1193,6 +1230,8 @@ exports.CompanyRepository = CompanyRepository;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var project_manager_repository_1 = __webpack_require__(/*! ./project-manager.repository */ "./src/@repository/concrete/project-manager.repository.ts");
+exports.ProjectManagerRepository = project_manager_repository_1.ProjectManagerRepository;
 var question_repository_1 = __webpack_require__(/*! ./question.repository */ "./src/@repository/concrete/question.repository.ts");
 exports.QuestionRepository = question_repository_1.QuestionRepository;
 var issue_repository_1 = __webpack_require__(/*! ./issue.repository */ "./src/@repository/concrete/issue.repository.ts");
@@ -1223,6 +1262,12 @@ var label_repository_1 = __webpack_require__(/*! ./label.repository */ "./src/@r
 exports.LabelRepository = label_repository_1.LabelRepository;
 var task_label_repository_1 = __webpack_require__(/*! ./task-label.repository */ "./src/@repository/concrete/task-label.repository.ts");
 exports.TaskLabelRepository = task_label_repository_1.TaskLabelRepository;
+var abstract_status_repository_1 = __webpack_require__(/*! ./abstract-status.repository */ "./src/@repository/concrete/abstract-status.repository.ts");
+exports.AbstractStatusRepository = abstract_status_repository_1.AbstractStatusRepository;
+var status_template_repository_1 = __webpack_require__(/*! ./status-template.repository */ "./src/@repository/concrete/status-template.repository.ts");
+exports.StatusTemplateRepository = status_template_repository_1.StatusTemplateRepository;
+var sub_project_repository_1 = __webpack_require__(/*! ./sub-project.repository */ "./src/@repository/concrete/sub-project.repository.ts");
+exports.SubProjectRepository = sub_project_repository_1.SubProjectRepository;
 
 
 /***/ }),
@@ -1334,6 +1379,43 @@ MembershipRequestRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], MembershipRequestRepository);
 exports.MembershipRequestRepository = MembershipRequestRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/project-manager.repository.ts":
+/*!****************************************************************!*\
+  !*** ./src/@repository/concrete/project-manager.repository.ts ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const project_manager_entity_1 = __webpack_require__(/*! ./../../entities/project-manager.entity */ "./src/entities/project-manager.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let ProjectManagerRepository = class ProjectManagerRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(project_manager_entity_1.ProjectManagerEntity);
+    }
+};
+ProjectManagerRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], ProjectManagerRepository);
+exports.ProjectManagerRepository = ProjectManagerRepository;
 
 
 /***/ }),
@@ -1471,6 +1553,43 @@ exports.QuestionRepository = QuestionRepository;
 
 /***/ }),
 
+/***/ "./src/@repository/concrete/status-template.repository.ts":
+/*!****************************************************************!*\
+  !*** ./src/@repository/concrete/status-template.repository.ts ***!
+  \****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const status_template_entity_1 = __webpack_require__(/*! ./../../entities/status-template.entity */ "./src/entities/status-template.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let StatusTemplateRepository = class StatusTemplateRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(status_template_entity_1.StatusTemplateEntity);
+    }
+};
+StatusTemplateRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], StatusTemplateRepository);
+exports.StatusTemplateRepository = StatusTemplateRepository;
+
+
+/***/ }),
+
 /***/ "./src/@repository/concrete/status.repository.ts":
 /*!*******************************************************!*\
   !*** ./src/@repository/concrete/status.repository.ts ***!
@@ -1504,6 +1623,43 @@ StatusRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], StatusRepository);
 exports.StatusRepository = StatusRepository;
+
+
+/***/ }),
+
+/***/ "./src/@repository/concrete/sub-project.repository.ts":
+/*!************************************************************!*\
+  !*** ./src/@repository/concrete/sub-project.repository.ts ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
+const sub_project_entity_1 = __webpack_require__(/*! ./../../entities/sub-project.entity */ "./src/entities/sub-project.entity.ts");
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+let SubProjectRepository = class SubProjectRepository extends repository_base_1.RepositoryBase {
+    constructor() {
+        super(sub_project_entity_1.SubProjectEntity);
+    }
+};
+SubProjectRepository = __decorate([
+    inversify_1.injectable(),
+    __metadata("design:paramtypes", [])
+], SubProjectRepository);
+exports.SubProjectRepository = SubProjectRepository;
 
 
 /***/ }),
@@ -2047,7 +2203,7 @@ let CompanyService = class CompanyService {
             cMemEn.userId = msReEn.userId;
             cMemEn.companyId = msReEn.companyId;
             cMemEn.joiningDate = new Date();
-            cMemEn.status = 1; // enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
+            cMemEn.status = 1; //TODO enum yapılacak kullanıcı topluluğun aktif üyesiyse 1 topluluktan atılırsa başka değer
             let uow = new uow_1.Uow();
             yield uow.start();
             try {
@@ -4063,7 +4219,10 @@ const comment_entity_1 = __webpack_require__(/*! @entities/comment.entity */ "./
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
 const label_entity_1 = __webpack_require__(/*! @entities/label.entity */ "./src/entities/label.entity.ts");
 const task_label_entity_1 = __webpack_require__(/*! @entities/task-label.entity */ "./src/entities/task-label.entity.ts");
+const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
+const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+const sub_project_entity_1 = __webpack_require__(/*! @entities/sub-project.entity */ "./src/entities/sub-project.entity.ts");
 exports.dbOptions = {
     type: "mysql",
     host: "localhost",
@@ -4087,10 +4246,81 @@ exports.dbOptions = {
         project_membership_entity_1.ProjectMembershipEntity,
         task_assignment_entity_1.TaskAssignmentEntity,
         label_entity_1.LabelEntity,
-        task_label_entity_1.TaskLabelEntity
+        abstract_status_entity_1.AbstractStatusEntity,
+        status_template_entity_1.StatusTemplateEntity,
+        task_label_entity_1.TaskLabelEntity,
+        sub_project_entity_1.SubProjectEntity
     ],
     synchronize: true,
 };
+
+
+/***/ }),
+
+/***/ "./src/entities/abstract-status.entity.ts":
+/*!************************************************!*\
+  !*** ./src/entities/abstract-status.entity.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const status_template_entity_1 = __webpack_require__(/*! ./status-template.entity */ "./src/entities/status-template.entity.ts");
+let AbstractStatusEntity = class AbstractStatusEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], AbstractStatusEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column({
+        length: 100
+    }),
+    __metadata("design:type", String)
+], AbstractStatusEntity.prototype, "title", void 0);
+__decorate([
+    typeorm_1.Column({
+        length: 100
+    }),
+    __metadata("design:type", String)
+], AbstractStatusEntity.prototype, "description", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], AbstractStatusEntity.prototype, "baseStatus", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], AbstractStatusEntity.prototype, "order", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], AbstractStatusEntity.prototype, "templateId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => status_template_entity_1.StatusTemplateEntity, stTemp => stTemp.statuses),
+    typeorm_1.JoinColumn({ name: "templateId" }),
+    __metadata("design:type", status_template_entity_1.StatusTemplateEntity)
+], AbstractStatusEntity.prototype, "template", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], AbstractStatusEntity.prototype, "createdAt", void 0);
+AbstractStatusEntity = __decorate([
+    typeorm_1.Entity("abstract_status")
+], AbstractStatusEntity);
+exports.AbstractStatusEntity = AbstractStatusEntity;
 
 
 /***/ }),
@@ -4321,6 +4551,7 @@ const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/en
 const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
 const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
 const membership_request_entity_1 = __webpack_require__(/*! @entities/membership-request.entity */ "./src/entities/membership-request.entity.ts");
+const status_template_entity_1 = __webpack_require__(/*! ./status-template.entity */ "./src/entities/status-template.entity.ts");
 let CompanyEntity = class CompanyEntity {
 };
 __decorate([
@@ -4351,6 +4582,10 @@ __decorate([
     typeorm_1.OneToMany(type => membership_request_entity_1.MembershipRequestEntity, msr => msr.company),
     __metadata("design:type", Array)
 ], CompanyEntity.prototype, "requestsSent", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => status_template_entity_1.StatusTemplateEntity, stTemp => stTemp.company),
+    __metadata("design:type", Array)
+], CompanyEntity.prototype, "statusTemplates", void 0);
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
@@ -4724,14 +4959,6 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectEntity.prototype, "description", void 0);
 __decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Boolean)
-], ProjectEntity.prototype, "isSubProject", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => task_entity_1.TaskEntity, task => task.subProject),
-    __metadata("design:type", task_entity_1.TaskEntity)
-], ProjectEntity.prototype, "assignedTask", void 0);
-__decorate([
     typeorm_1.OneToMany(type => task_entity_1.TaskEntity, task => task.project),
     __metadata("design:type", Array)
 ], ProjectEntity.prototype, "tasks", void 0);
@@ -4864,6 +5091,79 @@ exports.QuestionEntity = QuestionEntity;
 
 /***/ }),
 
+/***/ "./src/entities/status-template.entity.ts":
+/*!************************************************!*\
+  !*** ./src/entities/status-template.entity.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
+const company_entity_1 = __webpack_require__(/*! ./company.entity */ "./src/entities/company.entity.ts");
+const abstract_status_entity_1 = __webpack_require__(/*! ./abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
+let StatusTemplateEntity = class StatusTemplateEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], StatusTemplateEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column({
+        length: 100
+    }),
+    __metadata("design:type", String)
+], StatusTemplateEntity.prototype, "name", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => abstract_status_entity_1.AbstractStatusEntity, abst => abst.template),
+    __metadata("design:type", Array)
+], StatusTemplateEntity.prototype, "statuses", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], StatusTemplateEntity.prototype, "creatorId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => user_entity_1.UserEntity, user => user.createdstatusTemplates),
+    typeorm_1.JoinColumn({ name: "creatorId" }),
+    __metadata("design:type", user_entity_1.UserEntity)
+], StatusTemplateEntity.prototype, "creator", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], StatusTemplateEntity.prototype, "companyId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => company_entity_1.CompanyEntity, cmp => cmp.statusTemplates),
+    typeorm_1.JoinColumn({ name: "companyId" }),
+    __metadata("design:type", company_entity_1.CompanyEntity)
+], StatusTemplateEntity.prototype, "company", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], StatusTemplateEntity.prototype, "createdAt", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], StatusTemplateEntity.prototype, "lastUpdated", void 0);
+StatusTemplateEntity = __decorate([
+    typeorm_1.Entity("status_template")
+], StatusTemplateEntity);
+exports.StatusTemplateEntity = StatusTemplateEntity;
+
+
+/***/ }),
+
 /***/ "./src/entities/status.entity.ts":
 /*!***************************************!*\
   !*** ./src/entities/status.entity.ts ***!
@@ -4947,6 +5247,54 @@ StatusEntity = __decorate([
     typeorm_1.Entity("status")
 ], StatusEntity);
 exports.StatusEntity = StatusEntity;
+
+
+/***/ }),
+
+/***/ "./src/entities/sub-project.entity.ts":
+/*!********************************************!*\
+  !*** ./src/entities/sub-project.entity.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
+const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
+let SubProjectEntity = class SubProjectEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], SubProjectEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => task_entity_1.TaskEntity, task => task.subProject),
+    __metadata("design:type", task_entity_1.TaskEntity)
+], SubProjectEntity.prototype, "assignedTask", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_entity_1.TaskEntity, task => task.project),
+    __metadata("design:type", Array)
+], SubProjectEntity.prototype, "tasks", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => status_entity_1.StatusEntity, status => status.project),
+    __metadata("design:type", Array)
+], SubProjectEntity.prototype, "statuses", void 0);
+SubProjectEntity = __decorate([
+    typeorm_1.Entity("sub_project")
+], SubProjectEntity);
+exports.SubProjectEntity = SubProjectEntity;
 
 
 /***/ }),
@@ -5090,6 +5438,7 @@ const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/en
 const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
 const task_label_entity_1 = __webpack_require__(/*! ./task-label.entity */ "./src/entities/task-label.entity.ts");
+const sub_project_entity_1 = __webpack_require__(/*! ./sub-project.entity */ "./src/entities/sub-project.entity.ts");
 let TaskEntity = class TaskEntity {
 };
 __decorate([
@@ -5125,9 +5474,9 @@ __decorate([
     __metadata("design:type", Number)
 ], TaskEntity.prototype, "subProjectId", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, project => project.assignedTask),
+    typeorm_1.OneToOne(type => sub_project_entity_1.SubProjectEntity, project => project.assignedTask),
     typeorm_1.JoinColumn({ name: "subProjectId" }),
-    __metadata("design:type", project_entity_1.ProjectEntity)
+    __metadata("design:type", sub_project_entity_1.SubProjectEntity)
 ], TaskEntity.prototype, "subProject", void 0);
 __decorate([
     typeorm_1.OneToMany(type => comment_entity_1.CommentEntity, comment => comment.task),
@@ -5226,6 +5575,7 @@ const membership_request_entity_1 = __webpack_require__(/*! @entities/membership
 const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
 const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
+const status_template_entity_1 = __webpack_require__(/*! ./status-template.entity */ "./src/entities/status-template.entity.ts");
 let UserEntity = class UserEntity {
 };
 __decorate([
@@ -5286,6 +5636,10 @@ __decorate([
     typeorm_1.OneToMany(type => question_entity_1.QuestionEntity, question => question.creator),
     __metadata("design:type", Array)
 ], UserEntity.prototype, "questions", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => status_template_entity_1.StatusTemplateEntity, stTemp => stTemp.creator),
+    __metadata("design:type", Array)
+], UserEntity.prototype, "createdstatusTemplates", void 0);
 __decorate([
     typeorm_1.OneToMany(type => answer_entity_1.AnswerEntity, answer => answer.creator),
     __metadata("design:type", Array)
@@ -5604,6 +5958,10 @@ var InjectTypes;
         Repository["PROJECT_MEMBERSHIP"] = "ProjectMembershipRepository";
         Repository["LABEL"] = "LabelRepository";
         Repository["TASK_LABEL"] = "TaskLabelRepository";
+        Repository["ABSTRACT_STATUS"] = "AbstractStatusRepository";
+        Repository["STATUS_TEMPLATE"] = "StatusTemplateRepository";
+        Repository["PROJECT_MANAGER"] = "ProjectManagerRepository";
+        Repository["SUB_PROJECT"] = "SubProjectRepository";
     })(Repository = InjectTypes.Repository || (InjectTypes.Repository = {}));
     let Service;
     (function (Service) {
@@ -5720,6 +6078,18 @@ var IOC;
         IOC.container
             .bind(_ioc_1.InjectTypes.Repository.LABEL)
             .to(concrete_1.LabelRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.STATUS_TEMPLATE)
+            .to(concrete_1.StatusTemplateRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.ABSTRACT_STATUS)
+            .to(concrete_1.AbstractStatusRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.PROJECT_MANAGER)
+            .to(concrete_1.ProjectManagerRepository);
+        IOC.container
+            .bind(_ioc_1.InjectTypes.Repository.SUB_PROJECT)
+            .to(concrete_1.SubProjectRepository);
         // SERVICES
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.ANSWER)
@@ -5784,7 +6154,7 @@ seedDatabase.initialize();
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(__dirname) {
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -5820,8 +6190,12 @@ const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./sr
 const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
 const appConfig = __webpack_require__(/*! @common/app-config */ "./src/common/app-config.ts");
 const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
+const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
+const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
+const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
+const project_manager_entity_1 = __webpack_require__(/*! @entities/project-manager.entity */ "./src/entities/project-manager.entity.ts");
 let SeedDatabase = class SeedDatabase {
-    constructor(_userRepository, _companyRepository, _statusRepository, _projectRepository, _taskRepository, _taskLabelRepository, _labelRepository, _projectMembershipRepository) {
+    constructor(_userRepository, _companyRepository, _statusRepository, _projectRepository, _taskRepository, _taskLabelRepository, _labelRepository, _projectMembershipRepository, _projectManagerRepository, _statusTemplateRepository, _abstractStatusRepository, _companyMembershipRepository) {
         this._userRepository = _userRepository;
         this._companyRepository = _companyRepository;
         this._statusRepository = _statusRepository;
@@ -5830,13 +6204,285 @@ let SeedDatabase = class SeedDatabase {
         this._taskLabelRepository = _taskLabelRepository;
         this._labelRepository = _labelRepository;
         this._projectMembershipRepository = _projectMembershipRepository;
+        this._projectManagerRepository = _projectManagerRepository;
+        this._statusTemplateRepository = _statusTemplateRepository;
+        this._abstractStatusRepository = _abstractStatusRepository;
+        this._companyMembershipRepository = _companyMembershipRepository;
+        this.users = [];
+        this.companies = [];
+        this.projects = [];
+        this.tasks = [];
+        this.statuses = [];
+        this.taskLabels = [];
+        this.labels = [];
+        this.projectMemberships = [];
+        this.companyMemberships = [];
+        this.USERCOUNT = 10;
+        this.COMPANYCOUNT = 2;
+        this.PROJECTCOUNT = 3;
+        this.TASKCOUNT = 15;
+        this.codeSequence = 1;
     }
     initialize() {
-        typeorm_1.createConnection(appConfig.dbOptions).then((connection) => __awaiter(this, void 0, void 0, function* () {
-            console.log(__dirname);
-            console.log("Connected to DB");
-            this.seed();
-        })).catch(error => console.log("TypeORM connection error: ", error));
+        return __awaiter(this, void 0, void 0, function* () {
+            console.log("INITIALIZING...");
+            let connection = yield typeorm_1.createConnection(appConfig.dbOptions);
+            console.log("CONNECTED TO DB");
+            try {
+                yield this.addUsers();
+                yield this.addCompanies();
+                yield this.assignUsersToCompany();
+                yield this.addStatusTemplates();
+                yield this.addProjects();
+                yield this.assignUsersToProject();
+                yield this.addTasks();
+                // await this.addSubProjects();
+                // await this.addTasksToSubProjects();
+                // await this.addTaskTemplates();
+                console.log("SEED COMPLETED");
+                yield connection.close();
+            }
+            catch (e) {
+                console.log(e);
+            }
+            process.exit(0);
+        });
+    }
+    addUsers() {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < this.USERCOUNT; i++) {
+                let user = new user_entity_1.UserEntity();
+                user.name = faker.name.firstName();
+                user.surname = faker.name.lastName();
+                user.username = faker.internet.userName();
+                user.email = faker.internet.email();
+                user.password = 'Password123.';
+                user.createdAt = new Date();
+                user.lastUpdated = new Date();
+                let created = yield this._userRepository.insert(user);
+                this.users.push(created);
+            }
+            let grkn = new user_entity_1.UserEntity();
+            grkn.name = 'gurkan';
+            grkn.surname = 'demirlerli';
+            grkn.username = 'gurkan30';
+            grkn.email = 'gurkan@example.com';
+            grkn.password = 'Password123.';
+            grkn.createdAt = new Date();
+            grkn.lastUpdated = new Date();
+            this.grkn = yield this._userRepository.insert(grkn);
+        });
+    }
+    addCompanies() {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < this.COMPANYCOUNT; i++) {
+                let cmp = new company_entity_1.CompanyEntity();
+                cmp.name = faker.name.lastName();
+                cmp.description = faker.lorem.words(4);
+                cmp.ownerId = this.users[i].id;
+                cmp.createdAt = new Date();
+                cmp.lastUpdated = new Date();
+                let created = yield this._companyRepository.insert(cmp);
+                this.companies.push(created);
+                this.users[i].ownedCompanies = [];
+                this.users[i].ownedCompanies.push(created);
+            }
+            this.grkn.ownedCompanies = [];
+            for (let i = 0; i < 2; i++) {
+                let cmp = new company_entity_1.CompanyEntity();
+                cmp.name = faker.name.lastName();
+                cmp.description = faker.lorem.words(4);
+                cmp.ownerId = this.grkn.id;
+                cmp.createdAt = new Date();
+                cmp.lastUpdated = new Date();
+                let created = yield this._companyRepository.insert(cmp);
+                this.companies.push(created);
+                this.grkn.ownedCompanies.push(created);
+            }
+        });
+    }
+    assignUsersToCompany() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.grkn.ownedCompanies[0].members = [];
+            for (let i = 0; i < 6; i++) {
+                let cmpM = new company_membership_entity_1.CompanyMembershipEntity();
+                cmpM.companyId = this.grkn.ownedCompanies[0].id;
+                cmpM.joiningDate = new Date();
+                cmpM.status = 1;
+                cmpM.userId = this.users[i].id;
+                cmpM = yield this._companyMembershipRepository.insert(cmpM);
+                this.grkn.ownedCompanies[0].members.push(cmpM);
+            }
+        });
+    }
+    addStatusTemplates() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let modST = new status_template_entity_1.StatusTemplateEntity();
+            modST.companyId = this.grkn.ownedCompanies[0].id;
+            modST.createdAt = new Date();
+            modST.creatorId = this.grkn.id;
+            modST.lastUpdated = new Date();
+            modST.name = "Character Creating";
+            modST = yield this._statusTemplateRepository.insert(modST);
+            modST.statuses = [];
+            let todo = new abstract_status_entity_1.AbstractStatusEntity();
+            todo.baseStatus = _enums_1.BaseStatus.NOT_STARTED;
+            todo.title = "To Do";
+            todo.description = "desc";
+            todo.createdAt = new Date();
+            todo.order = 0;
+            todo.templateId = modST.id;
+            todo = yield this._abstractStatusRepository.insert(todo);
+            modST.statuses.push(todo);
+            let sketching = new abstract_status_entity_1.AbstractStatusEntity();
+            sketching.baseStatus = _enums_1.BaseStatus.IN_PROGRESS;
+            sketching.title = "Sketching";
+            sketching.description = "desc";
+            sketching.createdAt = new Date();
+            sketching.order = 0;
+            sketching.templateId = modST.id;
+            sketching = yield this._abstractStatusRepository.insert(sketching);
+            modST.statuses.push(sketching);
+            let modeling = new abstract_status_entity_1.AbstractStatusEntity();
+            modeling.baseStatus = _enums_1.BaseStatus.IN_PROGRESS;
+            modeling.title = "Modeling";
+            modeling.description = "desc";
+            modeling.createdAt = new Date();
+            modeling.order = 1;
+            modeling.templateId = modST.id;
+            modeling = yield this._abstractStatusRepository.insert(modeling);
+            modST.statuses.push(modeling);
+            let texturing = new abstract_status_entity_1.AbstractStatusEntity();
+            texturing.baseStatus = _enums_1.BaseStatus.IN_PROGRESS;
+            texturing.title = "Texturing";
+            texturing.description = "desc";
+            texturing.createdAt = new Date();
+            texturing.order = 2;
+            texturing.templateId = modST.id;
+            texturing = yield this._abstractStatusRepository.insert(texturing);
+            modST.statuses.push(texturing);
+            let rigging = new abstract_status_entity_1.AbstractStatusEntity();
+            rigging.baseStatus = _enums_1.BaseStatus.IN_PROGRESS;
+            rigging.title = "Rigging";
+            rigging.description = "desc";
+            rigging.createdAt = new Date();
+            rigging.order = 3;
+            rigging.templateId = modST.id;
+            rigging = yield this._abstractStatusRepository.insert(rigging);
+            modST.statuses.push(rigging);
+            let animating = new abstract_status_entity_1.AbstractStatusEntity();
+            animating.baseStatus = _enums_1.BaseStatus.IN_PROGRESS;
+            animating.title = "Animating";
+            animating.description = "desc";
+            animating.createdAt = new Date();
+            animating.order = 4;
+            animating.templateId = modST.id;
+            animating = yield this._abstractStatusRepository.insert(animating);
+            modST.statuses.push(animating);
+            let done = new abstract_status_entity_1.AbstractStatusEntity();
+            done.baseStatus = _enums_1.BaseStatus.FINISHED;
+            done.title = "Done";
+            done.description = "desc";
+            done.createdAt = new Date();
+            done.order = 0;
+            done.templateId = modST.id;
+            done = yield this._abstractStatusRepository.insert(done);
+            modST.statuses.push(done);
+            this.grkn.ownedCompanies[0].statusTemplates = [];
+            this.grkn.ownedCompanies[0].statusTemplates.push(modST);
+        });
+    }
+    addProjects() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.grkn.ownedCompanies[0].projects = [];
+            let krCP = new project_entity_1.ProjectEntity();
+            krCP.companyId = this.grkn.ownedCompanies[0].id;
+            krCP.createdAt = new Date();
+            krCP.description = "desc";
+            krCP.lastUpdated = new Date();
+            krCP.title = "Character Crating";
+            krCP.userId = this.grkn.id;
+            krCP = yield this._projectRepository.insert(krCP);
+            krCP.statuses = [];
+            for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[0].statuses.length; i++) {
+                const abs = this.grkn.ownedCompanies[0].statusTemplates[0].statuses[i];
+                let st = new status_entity_1.StatusEntity();
+                st.baseStatus = abs.baseStatus;
+                st.createdAt = new Date();
+                st.creatorId = this.grkn.id;
+                st.description = "desc";
+                st.lastUpdated = new Date();
+                st.order = abs.order;
+                st.projectId = krCP.id;
+                st.title = abs.title;
+                st = yield this._statusRepository.insert(st);
+                krCP.statuses.push(st);
+            }
+            this.grkn.ownedCompanies[0].projects.push(krCP);
+        });
+    }
+    assignUsersToProject() {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < this.grkn.ownedCompanies[0].members.length; i++) {
+                let prM = new project_membership_entity_1.ProjectMembershipEntity();
+                prM.createdAt = new Date();
+                prM.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+                prM.userId = this.grkn.ownedCompanies[0].members[i].id;
+                prM = yield this._projectMembershipRepository.insert(prM);
+                this.grkn.ownedCompanies[0].projects[0].members = [];
+                this.grkn.ownedCompanies[0].projects[0].members.push(prM);
+            }
+            this.grkn.ownedCompanies[0].projects[0].managers = [];
+            let prMn = new project_manager_entity_1.ProjectManagerEntity();
+            prMn.createdAt = new Date();
+            prMn.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+            prMn.userId = this.grkn.ownedCompanies[0].projects[0].members[0].id;
+            prMn = yield this._projectManagerRepository.insert(prMn);
+            this.grkn.ownedCompanies[0].projects[0].managers.push(prMn);
+        });
+    }
+    addTasks() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.grkn.ownedCompanies[0].projects[0].tasks = [];
+            for (let i = 0; i < this.TASKCOUNT; i++) {
+                let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].statuses.length));
+                let prio = Math.floor(Math.random() * 9);
+                let tsk = new task_entity_1.TaskEntity();
+                tsk.creatorId = this.grkn.id;
+                tsk.title = faker.name.jobTitle();
+                tsk.description = faker.lorem.words(4);
+                tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+                tsk.statusId = this.grkn.ownedCompanies[0].projects[0].statuses[stind].id;
+                tsk.createdAt = new Date();
+                tsk.lastUpdated = new Date();
+                tsk.code = this.codeSequence;
+                tsk.type = _enums_1.TaskTypes.BASIC;
+                tsk.priority = prio;
+                tsk = yield this._taskRepository.insert(tsk);
+                this.grkn.ownedCompanies[0].projects[0].tasks.push(tsk);
+                this.codeSequence++;
+            }
+        });
+    }
+    addSubProjects() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].statuses.length));
+            let prio = Math.floor(Math.random() * 9);
+            let sbPr = new project_entity_1.ProjectEntity();
+            // sbpr.
+            let tsk = new task_entity_1.TaskEntity();
+            tsk.creatorId = this.grkn.id;
+            tsk.title = faker.name.jobTitle();
+            tsk.description = faker.lorem.words(4);
+            tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+            tsk.statusId = this.grkn.ownedCompanies[0].projects[0].statuses[stind].id;
+            tsk.createdAt = new Date();
+            tsk.lastUpdated = new Date();
+            tsk.code = this.codeSequence;
+            tsk.type = _enums_1.TaskTypes.SUBPROJECT;
+            tsk.priority = prio;
+            // tsk.subProjectId
+        });
     }
     seed() {
         const USERCOUNT = 50;
@@ -6101,11 +6747,14 @@ SeedDatabase = __decorate([
     __param(5, inversify_1.inject(_ioc_1.InjectTypes.Repository.TASK_LABEL)),
     __param(6, inversify_1.inject(_ioc_1.InjectTypes.Repository.LABEL)),
     __param(7, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object])
+    __param(8, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MANAGER)),
+    __param(9, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS_TEMPLATE)),
+    __param(10, inversify_1.inject(_ioc_1.InjectTypes.Repository.ABSTRACT_STATUS)),
+    __param(11, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], SeedDatabase);
 exports.SeedDatabase = SeedDatabase;
 
-/* WEBPACK VAR INJECTION */}.call(this, "/"))
 
 /***/ }),
 

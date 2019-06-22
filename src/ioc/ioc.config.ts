@@ -23,7 +23,11 @@ import {
   ICompanyMembershipRepository,
   IMembershipRequestRepository,
   ILabelRepository,
-  ITaskLabelRepository
+  ITaskLabelRepository,
+  IStatusTemplateRepository,
+  IAbstractStatusRepository,
+  IProjectManagerRepository,
+  ISubProjectRepository
 } from '@repositories/abstract';
 
 import {
@@ -41,7 +45,11 @@ import {
   CompanyMembershipRepository,
   MembershipRequestRepository,
   LabelRepository,
-  TaskLabelRepository
+  TaskLabelRepository,
+  StatusTemplateRepository,
+  AbstractStatusRepository,
+  ProjectManagerRepository,
+  SubProjectRepository
 } from '@repositories/concrete';
 
 import {
@@ -172,6 +180,22 @@ export module IOC {
     container
       .bind<ILabelRepository>(InjectTypes.Repository.LABEL)
       .to(LabelRepository)
+
+    container
+      .bind<IStatusTemplateRepository>(InjectTypes.Repository.STATUS_TEMPLATE)
+      .to(StatusTemplateRepository)
+
+    container
+      .bind<IAbstractStatusRepository>(InjectTypes.Repository.ABSTRACT_STATUS)
+      .to(AbstractStatusRepository)
+
+    container
+      .bind<IProjectManagerRepository>(InjectTypes.Repository.PROJECT_MANAGER)
+      .to(ProjectManagerRepository)
+
+    container
+      .bind<ISubProjectRepository>(InjectTypes.Repository.SUB_PROJECT)
+      .to(SubProjectRepository)
 
 
     // SERVICES

@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { IUserRepository, ICompanyRepository, IProjectRepository, IStatusRepository, ITaskRepository, ITaskLabelRepository, ILabelRepository, IProjectMembershipRepository } from "@repositories/abstract";
+import { IUserRepository, ICompanyRepository, IProjectRepository, IStatusRepository, ITaskRepository, ITaskLabelRepository, ILabelRepository, IProjectMembershipRepository, IAbstractStatusRepository, IStatusTemplateRepository, ICompanyMembershipRepository } from "@repositories/abstract";
 import { InjectTypes } from "@ioc";
 import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
@@ -13,6 +13,11 @@ import { StatusEntity } from "@entities/status.entity";
 import { BaseStatus, TaskTypes } from "@enums";
 import * as appConfig from "@common/app-config";
 import { ProjectMembershipEntity } from '@entities/project-membership.entity';
+import { TaskLabelEntity } from '@entities/task-label.entity';
+import { CompanyMembershipEntity } from '@entities/company-membership.entity';
+import { StatusTemplateEntity } from '@entities/status-template.entity';
+import { AbstractStatusEntity } from '@entities/abstract-status.entity';
+import { ProjectManagerEntity } from '@entities/project-manager.entity';
 
 @injectable()
 export class SeedDatabase {
@@ -25,17 +30,294 @@ export class SeedDatabase {
     @inject(InjectTypes.Repository.TASK_LABEL) private readonly _taskLabelRepository: ITaskLabelRepository,
     @inject(InjectTypes.Repository.LABEL) private readonly _labelRepository: ILabelRepository,
     @inject(InjectTypes.Repository.PROJECT_MEMBERSHIP) private readonly _projectMembershipRepository: IProjectMembershipRepository,
-
+    @inject(InjectTypes.Repository.PROJECT_MANAGER) private readonly _projectManagerRepository: IProjectMembershipRepository,
+    @inject(InjectTypes.Repository.STATUS_TEMPLATE) private readonly _statusTemplateRepository: IStatusTemplateRepository,
+    @inject(InjectTypes.Repository.ABSTRACT_STATUS) private readonly _abstractStatusRepository: IAbstractStatusRepository,
+    @inject(InjectTypes.Repository.COMPANY_MEMBERSHIP) private readonly _companyMembershipRepository: ICompanyMembershipRepository,
 
 
   ) { }
+  users: UserEntity[] = [];
+  companies: CompanyEntity[] = [];
+  projects: ProjectEntity[] = [];
+  tasks: TaskEntity[] = [];
+  statuses: StatusEntity[] = [];
+  taskLabels: TaskLabelEntity[] = [];
+  labels: TaskLabelEntity[] = [];
+  projectMemberships: ProjectMembershipEntity[] = [];
+  companyMemberships: CompanyMembershipEntity[] = [];
 
-  public initialize() {
-    createConnection(appConfig.dbOptions).then(async connection => {
-      console.log(__dirname);
-      console.log("Connected to DB");
-      this.seed();
-    }).catch(error => console.log("TypeORM connection error: ", error));
+  public readonly USERCOUNT = 10;
+  public readonly COMPANYCOUNT = 2;
+  public readonly PROJECTCOUNT = 3;
+  public readonly TASKCOUNT = 15;
+
+  public codeSequence = 1;
+
+  grkn: UserEntity;
+
+  public async initialize() {
+    console.log("INITIALIZING...");
+    let connection = await createConnection(appConfig.dbOptions);
+    console.log("CONNECTED TO DB");
+    try {
+      await this.addUsers();
+      await this.addCompanies();
+      await this.assignUsersToCompany();
+      await this.addStatusTemplates();
+      await this.addProjects();
+      await this.assignUsersToProject();
+      await this.addTasks();
+      // await this.addSubProjects();
+      // await this.addTasksToSubProjects();
+      // await this.addTaskTemplates();
+      console.log("SEED COMPLETED");
+      await connection.close();
+    } catch (e) {
+      console.log(e);
+    }
+
+    process.exit(0);
+  }
+
+  public async addUsers() {
+    for (let i = 0; i < this.USERCOUNT; i++) {
+      let user = new UserEntity();
+      user.name = faker.name.firstName();
+      user.surname = faker.name.lastName();
+      user.username = faker.internet.userName();
+      user.email = faker.internet.email();
+      user.password = 'Password123.';
+      user.createdAt = new Date();
+      user.lastUpdated = new Date();
+      let created = await this._userRepository.insert(user);
+      this.users.push(created);
+    }
+    let grkn = new UserEntity();
+    grkn.name = 'gurkan';
+    grkn.surname = 'demirlerli';
+    grkn.username = 'gurkan30';
+    grkn.email = 'gurkan@example.com';
+    grkn.password = 'Password123.';
+    grkn.createdAt = new Date();
+    grkn.lastUpdated = new Date();
+    this.grkn = await this._userRepository.insert(grkn);
+  }
+
+  public async addCompanies() {
+    for (let i = 0; i < this.COMPANYCOUNT; i++) {
+      let cmp = new CompanyEntity();
+      cmp.name = faker.name.lastName();
+      cmp.description = faker.lorem.words(4);
+      cmp.ownerId = this.users[i].id;
+      cmp.createdAt = new Date();
+      cmp.lastUpdated = new Date();
+      let created = await this._companyRepository.insert(cmp);
+      this.companies.push(created);
+      this.users[i].ownedCompanies = [];
+      this.users[i].ownedCompanies.push(created);
+    }
+
+    this.grkn.ownedCompanies = [];
+    for (let i = 0; i < 2; i++) {
+      let cmp = new CompanyEntity();
+      cmp.name = faker.name.lastName();
+      cmp.description = faker.lorem.words(4);
+      cmp.ownerId = this.grkn.id;
+      cmp.createdAt = new Date();
+      cmp.lastUpdated = new Date();
+      let created = await this._companyRepository.insert(cmp);
+      this.companies.push(created);
+      this.grkn.ownedCompanies.push(created);
+    }
+  }
+
+  public async assignUsersToCompany() {
+    this.grkn.ownedCompanies[0].members = [];
+    for (let i = 0; i < 6; i++) {
+      let cmpM = new CompanyMembershipEntity();
+      cmpM.companyId = this.grkn.ownedCompanies[0].id;
+      cmpM.joiningDate = new Date();
+      cmpM.status = 1;
+      cmpM.userId = this.users[i].id;
+      cmpM = await this._companyMembershipRepository.insert(cmpM);
+      this.grkn.ownedCompanies[0].members.push(cmpM);
+    }
+  }
+
+  public async addStatusTemplates() {
+    let modST = new StatusTemplateEntity();
+    modST.companyId = this.grkn.ownedCompanies[0].id;
+    modST.createdAt = new Date();
+    modST.creatorId = this.grkn.id;
+    modST.lastUpdated = new Date();
+    modST.name = "Character Creating";
+    modST = await this._statusTemplateRepository.insert(modST);
+    modST.statuses = [];
+
+    let todo = new AbstractStatusEntity();
+    todo.baseStatus = BaseStatus.NOT_STARTED;
+    todo.title = "To Do";
+    todo.description = "desc";
+    todo.createdAt = new Date();
+    todo.order = 0;
+    todo.templateId = modST.id;
+    todo = await this._abstractStatusRepository.insert(todo);
+    modST.statuses.push(todo);
+
+    let sketching = new AbstractStatusEntity();
+    sketching.baseStatus = BaseStatus.IN_PROGRESS;
+    sketching.title = "Sketching";
+    sketching.description = "desc";
+    sketching.createdAt = new Date();
+    sketching.order = 0;
+    sketching.templateId = modST.id;
+    sketching = await this._abstractStatusRepository.insert(sketching);
+    modST.statuses.push(sketching);
+
+    let modeling = new AbstractStatusEntity();
+    modeling.baseStatus = BaseStatus.IN_PROGRESS;
+    modeling.title = "Modeling";
+    modeling.description = "desc";
+    modeling.createdAt = new Date();
+    modeling.order = 1;
+    modeling.templateId = modST.id;
+    modeling = await this._abstractStatusRepository.insert(modeling);
+    modST.statuses.push(modeling);
+
+    let texturing = new AbstractStatusEntity();
+    texturing.baseStatus = BaseStatus.IN_PROGRESS;
+    texturing.title = "Texturing";
+    texturing.description = "desc";
+    texturing.createdAt = new Date();
+    texturing.order = 2;
+    texturing.templateId = modST.id;
+    texturing = await this._abstractStatusRepository.insert(texturing);
+    modST.statuses.push(texturing);
+
+    let rigging = new AbstractStatusEntity();
+    rigging.baseStatus = BaseStatus.IN_PROGRESS;
+    rigging.title = "Rigging";
+    rigging.description = "desc";
+    rigging.createdAt = new Date();
+    rigging.order = 3;
+    rigging.templateId = modST.id;
+    rigging = await this._abstractStatusRepository.insert(rigging);
+    modST.statuses.push(rigging);
+
+    let animating = new AbstractStatusEntity();
+    animating.baseStatus = BaseStatus.IN_PROGRESS;
+    animating.title = "Animating";
+    animating.description = "desc";
+    animating.createdAt = new Date();
+    animating.order = 4;
+    animating.templateId = modST.id;
+    animating = await this._abstractStatusRepository.insert(animating);
+    modST.statuses.push(animating);
+
+    let done = new AbstractStatusEntity();
+    done.baseStatus = BaseStatus.FINISHED;
+    done.title = "Done";
+    done.description = "desc";
+    done.createdAt = new Date();
+    done.order = 0;
+    done.templateId = modST.id;
+    done = await this._abstractStatusRepository.insert(done);
+    modST.statuses.push(done);
+    this.grkn.ownedCompanies[0].statusTemplates = [];
+    this.grkn.ownedCompanies[0].statusTemplates.push(modST);
+  }
+
+  public async addProjects() {
+    this.grkn.ownedCompanies[0].projects = [];
+    let krCP = new ProjectEntity();
+    krCP.companyId = this.grkn.ownedCompanies[0].id;
+    krCP.createdAt = new Date();
+    krCP.description = "desc";
+    krCP.lastUpdated = new Date();
+    krCP.title = "Character Crating";
+    krCP.userId = this.grkn.id;
+    krCP = await this._projectRepository.insert(krCP);
+    krCP.statuses = [];
+
+    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[0].statuses.length; i++) {
+      const abs = this.grkn.ownedCompanies[0].statusTemplates[0].statuses[i];
+      let st = new StatusEntity();
+      st.baseStatus = abs.baseStatus;
+      st.createdAt = new Date();
+      st.creatorId = this.grkn.id;
+      st.description = "desc";
+      st.lastUpdated = new Date();
+      st.order = abs.order;
+      st.projectId = krCP.id;
+      st.title = abs.title;
+      st = await this._statusRepository.insert(st);
+      krCP.statuses.push(st);
+    }
+    this.grkn.ownedCompanies[0].projects.push(krCP);
+  }
+
+  public async assignUsersToProject() {
+    for (let i = 0; i < this.grkn.ownedCompanies[0].members.length; i++) {
+      let prM = new ProjectMembershipEntity();
+      prM.createdAt = new Date();
+      prM.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+      prM.userId = this.grkn.ownedCompanies[0].members[i].id;
+      prM = await this._projectMembershipRepository.insert(prM);
+      this.grkn.ownedCompanies[0].projects[0].members = [];
+      this.grkn.ownedCompanies[0].projects[0].members.push(prM);
+    }
+
+    this.grkn.ownedCompanies[0].projects[0].managers = [];
+    let prMn = new ProjectManagerEntity();
+    prMn.createdAt = new Date();
+    prMn.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+    prMn.userId = this.grkn.ownedCompanies[0].projects[0].members[0].id;
+    prMn = await this._projectManagerRepository.insert(prMn);
+    this.grkn.ownedCompanies[0].projects[0].managers.push(prMn);
+  }
+
+  public async addTasks() {
+    this.grkn.ownedCompanies[0].projects[0].tasks = [];
+    for (let i = 0; i < this.TASKCOUNT; i++) {
+      let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].statuses.length));
+      let prio = Math.floor(Math.random() * 9);
+      let tsk = new TaskEntity();
+      tsk.creatorId = this.grkn.id;
+      tsk.title = faker.name.jobTitle();
+      tsk.description = faker.lorem.words(4);
+      tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+      tsk.statusId = this.grkn.ownedCompanies[0].projects[0].statuses[stind].id;
+      tsk.createdAt = new Date();
+      tsk.lastUpdated = new Date();
+      tsk.code = this.codeSequence;
+      tsk.type = TaskTypes.BASIC;
+      tsk.priority = prio;
+      tsk = await this._taskRepository.insert(tsk);
+      this.grkn.ownedCompanies[0].projects[0].tasks.push(tsk);
+      this.codeSequence++;
+    }
+  }
+
+  public async addSubProjects(){
+    let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].statuses.length));
+    let prio = Math.floor(Math.random() * 9);
+
+    let sbPr = new ProjectEntity();
+    // sbpr.
+
+    let tsk = new TaskEntity();
+    tsk.creatorId = this.grkn.id;
+    tsk.title = faker.name.jobTitle();
+    tsk.description = faker.lorem.words(4);
+    tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+    tsk.statusId = this.grkn.ownedCompanies[0].projects[0].statuses[stind].id;
+    tsk.createdAt = new Date();
+    tsk.lastUpdated = new Date();
+    tsk.code = this.codeSequence;
+    tsk.type = TaskTypes.SUBPROJECT;
+    tsk.priority = prio;
+    // tsk.subProjectId
   }
 
   public seed() {

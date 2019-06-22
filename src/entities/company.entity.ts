@@ -3,6 +3,7 @@ import { UserEntity } from '@entities/user.entity';
 import { ProjectEntity } from "@entities/project.entity";
 import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 import { MembershipRequestEntity } from "@entities/membership-request.entity";
+import { StatusTemplateEntity } from "./status-template.entity";
 @Entity("company")
 export class CompanyEntity {
 
@@ -27,6 +28,9 @@ export class CompanyEntity {
 
     @OneToMany(type => MembershipRequestEntity, msr => msr.company)
     requestsSent: MembershipRequestEntity[];
+
+    @OneToMany(type => StatusTemplateEntity, stTemp => stTemp.company)
+    statusTemplates: StatusTemplateEntity[];
 
     @Column("int")
     ownerId: number;

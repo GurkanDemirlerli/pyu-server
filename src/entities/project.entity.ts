@@ -22,12 +22,6 @@ export class ProjectEntity {
   })
   description: string;
 
-  @Column()
-  isSubProject: boolean;
-
-  @OneToOne(type => TaskEntity, task => task.subProject)
-  assignedTask: TaskEntity;
-
   @OneToMany(type => TaskEntity, task => task.project)
   tasks: TaskEntity[];
 
