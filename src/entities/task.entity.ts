@@ -32,10 +32,7 @@ export class TaskEntity {
   @Column("int")
   priority: number;
 
-  @Column("int", { nullable: true })
-  subProjectId: number;
   @OneToOne(type => SubProjectEntity, project => project.assignedTask)
-  @JoinColumn({ name: "subProjectId" })
   subProject: SubProjectEntity;
 
   @OneToMany(type => CommentEntity, comment => comment.task)

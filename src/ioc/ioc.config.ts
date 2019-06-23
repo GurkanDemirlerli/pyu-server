@@ -27,7 +27,8 @@ import {
   IStatusTemplateRepository,
   IAbstractStatusRepository,
   IProjectManagerRepository,
-  ISubProjectRepository
+  ISubProjectRepository,
+  IRootProjectRepository
 } from '@repositories/abstract';
 
 import {
@@ -49,7 +50,8 @@ import {
   StatusTemplateRepository,
   AbstractStatusRepository,
   ProjectManagerRepository,
-  SubProjectRepository
+  SubProjectRepository,
+  RootProjectRepository
 } from '@repositories/concrete';
 
 import {
@@ -196,6 +198,10 @@ export module IOC {
     container
       .bind<ISubProjectRepository>(InjectTypes.Repository.SUB_PROJECT)
       .to(SubProjectRepository)
+
+    container
+      .bind<IRootProjectRepository>(InjectTypes.Repository.ROOT_PROJECT)
+      .to(RootProjectRepository)
 
 
     // SERVICES

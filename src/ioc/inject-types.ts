@@ -18,7 +18,8 @@ export module InjectTypes {
     ABSTRACT_STATUS = 'AbstractStatusRepository',
     STATUS_TEMPLATE = 'StatusTemplateRepository',
     PROJECT_MANAGER = 'ProjectManagerRepository',
-    SUB_PROJECT = 'SubProjectRepository'
+    SUB_PROJECT = 'SubProjectRepository',
+    ROOT_PROJECT = 'RootProjectEntity'
   }
 
   export enum Service {

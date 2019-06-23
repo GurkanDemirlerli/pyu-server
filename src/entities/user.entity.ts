@@ -4,7 +4,6 @@ import { QuestionEntity } from '@entities/question.entity';
 import { CompanyEntity } from '@entities/company.entity';
 import { TaskEntity } from '@entities/task.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { ProjectEntity } from '@entities/project.entity';
 import { AnswerEntity } from '@entities/answer.entity';
 import { StatusEntity } from '@entities/status.entity';
 import { ProjectManagerEntity } from '@entities/project-manager.entity';
@@ -13,6 +12,7 @@ import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 import { StatusTemplateEntity } from './status-template.entity';
+import { RootProjectEntity } from './root-project.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -54,8 +54,8 @@ export class UserEntity {
     @OneToMany(type => TaskEntity, task => task.creator)
     createdTasks: TaskEntity[];
 
-    @OneToMany(type => ProjectEntity, project => project.creator)
-    createdProjects: ProjectEntity[];
+    @OneToMany(type => RootProjectEntity, project => project.creator)
+    createdRootProjects: RootProjectEntity[];
 
     @OneToMany(type => CompanyEntity, company => company.owner)
     ownedCompanies: CompanyEntity[];
@@ -70,7 +70,7 @@ export class UserEntity {
     answers: AnswerEntity[];
 
     @OneToMany(type => CommentEntity, comment => comment.creator)
-    comments: AnswerEntity[];
+    comments: CommentEntity[];
 
     @OneToMany(type => IssueEntity, issue => issue.creator)
     createdIssues: IssueEntity[];
@@ -85,7 +85,7 @@ export class UserEntity {
     companyRequests: MembershipRequestEntity[];
 
     @OneToMany(type => ProjectMembershipEntity, pms => pms.user)
-    projects: ProjectMembershipEntity[];
+    rootProjects: ProjectMembershipEntity[];
 
     @OneToMany(type => ProjectManagerEntity, pmn => pmn.user)
     managedProjects: ProjectManagerEntity[];

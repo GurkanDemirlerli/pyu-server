@@ -1,9 +1,9 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
 import { UserEntity } from '@entities/user.entity';
-import { ProjectEntity } from "@entities/project.entity";
 import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 import { MembershipRequestEntity } from "@entities/membership-request.entity";
 import { StatusTemplateEntity } from "./status-template.entity";
+import { RootProjectEntity } from "./root-project.entity";
 @Entity("company")
 export class CompanyEntity {
 
@@ -20,8 +20,8 @@ export class CompanyEntity {
     })
     description: string;
 
-    @OneToMany(type => ProjectEntity, project => project.company)
-    projects: ProjectEntity[];
+    @OneToMany(type => RootProjectEntity, rt => rt.company)
+    rootProjects: RootProjectEntity[];
 
     @OneToMany(type => CompanyMembershipEntity, cmem => cmem.company)
     members: CompanyMembershipEntity[];

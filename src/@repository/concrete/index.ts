@@ -17,3 +17,4 @@ export { TaskLabelRepository } from './task-label.repository';
 export { AbstractStatusRepository } from './abstract-status.repository';
 export { StatusTemplateRepository } from './status-template.repository';
 export { SubProjectRepository } from './sub-project.repository';
+export { RootProjectRepository } from './root-project.repository';

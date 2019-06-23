@@ -17,3 +17,4 @@ export { IAbstractStatusRepository } from './i-abstract-status.repository';
 export { IStatusTemplateRepository } from './i-status-template.repository';
 export { IProjectManagerRepository } from './i-project-manager.repository';
 export { ISubProjectRepository } from './i-sub-project.repository';
+export { IRootProjectRepository } from './i-root-project.repository';
