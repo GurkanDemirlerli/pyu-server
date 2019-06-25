@@ -4,7 +4,7 @@ import { AnswerController } from '@controllers/answer.controller';
 import { CommentController } from '@controllers/comment.controller';
 import { CompanyController } from '@controllers/company.controller';
 import { IssueController } from '@controllers/issue.controller';
-import { ProjectController } from '@controllers/project.controller';
+import { RootProjectController } from '@controllers/root-project.controller';
 import { QuestionController } from '@controllers/question.controller';
 import { TaskController } from '@controllers/task.controller';
 import { UserController } from '@controllers/user.controller';
@@ -59,10 +59,11 @@ import {
   CommentService,
   CompanyService,
   IssueService,
-  ProjectService,
+  RootProjectService,
   QuestionService,
   TaskService,
   UserService,
+  SubProjectService,
 } from '@services/concrete';
 
 import {
@@ -70,16 +71,18 @@ import {
   ICommentService,
   ICompanyService,
   IIssueService,
-  IProjectService,
+  IRootProjectService,
   IQuestionService,
   ITaskService,
   IUserService,
+  ISubProjectService,
 } from '@services/abstract';
 
 import { Container } from 'inversify';
 
 import 'reflect-metadata';
 import { InjectTypes } from '@ioc';
+import { SubProjectController } from '@controllers/sub-project.controller';
 
 export module IOC {
   export const container = new Container();
@@ -105,7 +108,7 @@ export module IOC {
       .toSelf();
 
     container
-      .bind<ProjectController>(ProjectController)
+      .bind<RootProjectController>(RootProjectController)
       .toSelf();
 
     container
@@ -119,6 +122,10 @@ export module IOC {
     container
       .bind<UserController>(UserController)
       .toSelf();
+
+      container
+        .bind<SubProjectController>(SubProjectController)
+        .toSelf();
 
 
     // REPOSITORIES
@@ -224,8 +231,8 @@ export module IOC {
       .to(IssueService);
 
     container
-      .bind<IProjectService>(InjectTypes.Service.PROJECT)
-      .to(ProjectService);
+      .bind<IRootProjectService>(InjectTypes.Service.ROOTPROJECT)
+      .to(RootProjectService);
 
     container
       .bind<IQuestionService>(InjectTypes.Service.QUESTION)
@@ -238,6 +245,10 @@ export module IOC {
     container
       .bind<IUserService>(InjectTypes.Service.USER)
       .to(UserService);
+
+    container
+      .bind<ISubProjectService>(InjectTypes.Service.SUB_PROJECT)
+      .to(SubProjectService);
 
     return container;
   }

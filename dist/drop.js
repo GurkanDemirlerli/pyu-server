@@ -997,6 +997,12 @@ __decorate([
     __metadata("design:type", project_entity_1.ProjectEntity)
 ], RootProjectEntity.prototype, "baseProject", void 0);
 __decorate([
+    typeorm_1.Column({
+        length: 100
+    }),
+    __metadata("design:type", String)
+], RootProjectEntity.prototype, "description", void 0);
+__decorate([
     typeorm_1.OneToMany(type => issue_entity_1.IssueEntity, issue => issue.project),
     __metadata("design:type", Array)
 ], RootProjectEntity.prototype, "issues", void 0);

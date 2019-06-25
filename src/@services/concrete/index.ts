@@ -3,6 +3,7 @@ export { QuestionService } from './question.service';
 export { IssueService } from './issue.service';
 export { CommentService } from './comment.service';
 export { AnswerService } from './answer.service';
-export { ProjectService } from './project.service';
+export { RootProjectService } from './root-project.service';
 export { TaskService } from './task.service';
 export { CompanyService } from './company.service';
+export { SubProjectService } from "./sub-project.service";

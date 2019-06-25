@@ -27,10 +27,11 @@ export module InjectTypes {
     COMMENT = 'CommentService',
     COMPANY = 'CompanyService',
     ISSUE = 'IssueService',
-    PROJECT = 'ProjectService',
+    ROOTPROJECT = 'RootProjectService',
     QUESTION = 'QuestionService',
     TASK = 'TaskService',
-    USER = 'UserService'
+    USER = 'UserService',
+    SUB_PROJECT = 'SubProjectService'
   }
 
 }

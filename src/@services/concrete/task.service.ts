@@ -7,6 +7,7 @@ import { TaskFilter } from "@models/filters/task-filter";
 import { ITaskService } from "@services/abstract/i-task.service";
 import { TaskEntity } from "@entities/task.entity";
 import { TaskAssignmentEntity } from "@entities/task-assignment.entity";
+import { TaskTypes } from "@enums";
 
 
 @injectable()
@@ -29,31 +30,41 @@ export class TaskService implements ITaskService {
     let taskEn: TaskEntity = Object.assign(new TaskEntity(), model);
     taskEn.createdAt = new Date();
     taskEn.lastUpdated = new Date();
+    taskEn.type = TaskTypes.BASIC;
+    //TODO max değeri getirip +1ini al
+    taskEn.code = 45;
     let inserted: TaskEntity = await this._taskRepository.insert(taskEn);
     console.log(inserted);
-    await this.assignMembers(inserted.id,model.assignees);
+    await this.assignMembers(inserted.id, model.assignees);
     return Promise.resolve(inserted.id);
   }
 
-  //TODO bu idye sahip kişiler gerçenten taskın ait olduğu projenin üyesi mi kontrol et
+  //TODO bu idye sahip kişiler gerçenten taskın ait olduğu projenin üyesi mi kontrol et, transaction yap
   async assignMembers(taskId: number, members: number[]) {
     for (let i = 0; i < members.length; i++) {
-        let tskAsgEn: TaskAssignmentEntity = new TaskAssignmentEntity();
-        tskAsgEn.taskId = taskId;
-        tskAsgEn.userId = members[i];
-        tskAsgEn.createdAt = new Date();
-        await this._taskAssignmentRepository.insert(tskAsgEn);
+      let tskAsgEn: TaskAssignmentEntity = new TaskAssignmentEntity();
+      tskAsgEn.taskId = taskId;
+      tskAsgEn.userId = members[i];
+      tskAsgEn.createdAt = new Date();
+      await this._taskAssignmentRepository.insert(tskAsgEn);
     }
     return Promise.resolve();
   }
 
+  // async convertToProject(id: number, requestorId: number, statusTemplateId: number) {
+  //
+  // }
+
   async list(filters: TaskFilter, requestorId: number) {
     let taskDtos: TaskListDto[] = [];
-    // await this.validateAuthority(filters.projectId, requestorId);
     let tasks = await this._taskRepository.listByFilters(filters);
     tasks.map((tsk) => {
       let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })
       taskDto.commentCount = tsk.comments.length;
+      if (tsk.type === TaskTypes.SUBPROJECT && tsk.subProject) {
+        taskDto.subTaskCount = tsk.subProject.baseProject.tasks.length;
+        taskDto.subProject.baseProject.tasks = undefined;
+      }
       taskDtos.push(taskDto);
     });
     return Promise.resolve(taskDtos);
@@ -74,8 +85,6 @@ export class TaskService implements ITaskService {
       this._taskRepository.findById(id).then((foundTask) => {
         oldTask = foundTask;
         if (!foundTask) throw new AppError('AppError', 'Task not found.', 404);
-        return this.validateAuthority(foundTask.projectId, requestorId);
-      }).then(() => {
         updatedTask = Object.assign(oldTask, model);
         return this._taskRepository.update(id, updatedTask);
       }).then(() => {
@@ -90,8 +99,6 @@ export class TaskService implements ITaskService {
     return new Promise<any>((resolve, reject) => {
       this._taskRepository.findById(id).then((foundTask) => {
         if (!foundTask) throw new AppError('AppError', 'Task not found.', 404);
-        return this.validateAuthority(foundTask.projectId, requestorId);
-      }).then(() => {
         return this._taskRepository.delete(id);
       }).then(() => {
         resolve();
@@ -112,18 +119,18 @@ export class TaskService implements ITaskService {
   }
 
 
-  private validateAuthority(projectId: number, userId: number): Promise<void> {
-    return new Promise<any>((resolve, reject) => {
-      this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
-        let prjct = res;
-        if (prjct.members.filter(x => x.userId === userId).length < 1 && prjct.creator.id !== userId)
-          throw new AppError('AppError', 'Bu projede yetkiniz yoktur.', 403);
-        resolve();
-      }).catch((err) => {
-        reject(err);
-      });
-    });
-  }
+  // private validateAuthority(projectId: number, userId: number): Promise<void> {
+  //   return new Promise<any>((resolve, reject) => {
+  //     this._projectRepository.findOne(projectId, { relations: ["users", "creator"] }).then((res) => {
+  //       let prjct = res;
+  //       if (prjct.members.filter(x => x.userId === userId).length < 1 && prjct.creator.id !== userId)
+  //         throw new AppError('AppError', 'Bu projede yetkiniz yoktur.', 403);
+  //       resolve();
+  //     }).catch((err) => {
+  //       reject(err);
+  //     });
+  //   });
+  // }
 }
 
 

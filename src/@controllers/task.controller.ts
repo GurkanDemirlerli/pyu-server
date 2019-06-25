@@ -98,4 +98,15 @@ export class TaskController {
       return ErrorHandler.handleErrorResponses(error, res, 'updateStatus', 'TaskController');
     });
   }
+
+  convertToProject(req: Request, res: Response, next: NextFunction) {
+    const id: number = +req.params.id;
+    this._taskService.convertToProject(id, req.decoded.id).then(() => {
+      return res.status(200).json({
+        success: true
+      });
+    }).catch((error: Error) => {
+      return ErrorHandler.handleErrorResponses(error, res, 'convertToProject', 'TaskController');
+    });
+  }
 }

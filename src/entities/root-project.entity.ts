@@ -27,7 +27,11 @@ export class RootProjectEntity {
   @JoinColumn({ name: "baseProjectId" })
   baseProject: ProjectEntity;
 
+  @Column({
+    length: 100
+  })
   description: string;
+
   @OneToMany(type => IssueEntity, issue => issue.project)
   issues: IssueEntity[];
 

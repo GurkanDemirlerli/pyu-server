@@ -1,22 +1,24 @@
-import { IProjectService } from "@services/abstract";
+import { IRootProjectService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
-import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository } from "@repositories/abstract";
-import { ProjectCreateDto, ProjectListDto, ProjectDetailDto, ProjectUpdateDto, UserSummaryDto, ProjectUserRegisterDto } from "@models/dtos";
+import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository, IRootProjectRepository } from "@repositories/abstract";
+import { ProjectListDto, ProjectDetailDto, ProjectUpdateDto, UserSummaryDto, ProjectUserRegisterDto, RootProjectCreateDto } from "@models/dtos";
 import { ProjectEntity } from "@entities/project.entity";
 import { ProjectFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
 import { StatusEntity } from "@entities/status.entity";
-import { BaseStatus } from "@enums";
+import { BaseStatus, ProjectTypes } from "@enums";
 import { Uow } from "@repositories/uow";
 import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 import { UserEntity } from "@entities/user.entity";
 import { ProjectMembershipEntity } from "@entities/project-membership.entity";
+import { RootProjectEntity } from "@entities/root-project.entity";
 
 @injectable()
-export class ProjectService implements IProjectService {
+export class RootProjectService implements IRootProjectService {
 
   constructor(
+    @inject(InjectTypes.Repository.ROOT_PROJECT) private readonly _rootProjectRepository: IRootProjectRepository,
     @inject(InjectTypes.Repository.PROJECT) private readonly _projectRepository: IProjectRepository,
     @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository,
     @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
@@ -25,67 +27,38 @@ export class ProjectService implements IProjectService {
   ) { }
 
   //Yalnızca sahibi ekleyebilir
-  async add(model: ProjectCreateDto): Promise<number> {
+  async add(model: RootProjectCreateDto): Promise<number> {
     let companyEn = await this._companyRepository.findOne(model.companyId, { relations: [] });
     if (!companyEn)
       throw new AppError('AppError', 'Company Not Found', 404);
+
+    console.log("Owner:",companyEn.ownerId);
+    console.log("Model:", model.userId)
     if (companyEn.ownerId !== model.userId)
       throw new AppError('AppError', 'You can not add a new project to company which is not yours', 403);
-    let projectEn: ProjectEntity = Object.assign(new ProjectEntity(), model);
-    projectEn.createdAt = new Date();
-    projectEn.lastUpdated = new Date();
+    let prjEn: ProjectEntity;
+    let rtpEn: RootProjectEntity;
+
     let uow = new Uow();
     await uow.start();
     try {
-      projectEn = await this._projectRepository.insert(projectEn, uow.getManager());
-      let status0: StatusEntity = Object.assign(new StatusEntity(), {
-        title: 'Planning',
-        description: 'Proje sürecine dahil olabilecek görevler',
-        baseStatus: BaseStatus.PLANNINING,
-        order: 0,
-        creatorId: model.userId,
-        projectId: projectEn.id,
-        createdAt: new Date(),
-        lastUpdated: new Date()
-      });
-      let status1: StatusEntity = Object.assign(new StatusEntity(), {
-        title: 'To do',
-        description: 'Proje sürecinde olan ama henüz baslanmamis görevler',
-        baseStatus: BaseStatus.NOT_STARTED,
-        order: 0,
-        creatorId: model.userId,
-        projectId: projectEn.id,
-        createdAt: new Date(),
-        lastUpdated: new Date()
-      });
-      let status2: StatusEntity = Object.assign(new StatusEntity(), {
-        title: 'In Progress',
-        description: 'Yapılmakta olan görevler',
-        baseStatus: BaseStatus.IN_PROGRESS,
-        order: 0,
-        creatorId: model.userId,
-        projectId: projectEn.id,
-        createdAt: new Date(),
-        lastUpdated: new Date()
-      });
-      let status3: StatusEntity = Object.assign(new StatusEntity(), {
-        title: 'Done',
-        description: 'Bitmiş görevler',
-        baseStatus: BaseStatus.FINISHED,
-        order: 0,
-        creatorId: model.userId,
-        projectId: projectEn.id,
-        createdAt: new Date(),
-        lastUpdated: new Date()
-      });
-      await this._statusRepository.insert(status0, uow.getManager());
-      await this._statusRepository.insert(status1, uow.getManager());
-      await this._statusRepository.insert(status2, uow.getManager());
-      await this._statusRepository.insert(status3, uow.getManager());
+      prjEn = new ProjectEntity();
+      prjEn.projectType = ProjectTypes.ROOT;
+      prjEn = await this._projectRepository.insert(prjEn, uow.getManager());
+
+      rtpEn = new RootProjectEntity();
+      rtpEn.baseProjectId = prjEn.id;
+      rtpEn.companyId = model.companyId;
+      rtpEn.userId = model.userId;
+      rtpEn.title = model.title;
+      rtpEn.description = model.description;
+      rtpEn.createdAt = new Date();
+      rtpEn.lastUpdated = new Date();
+      rtpEn = await this._rootProjectRepository.insert(rtpEn, uow.getManager());
 
       await uow.commit();
     } catch (err) { await uow.rollback(); throw err; } finally { await uow.release(); }
-    return Promise.resolve(projectEn.id);
+    return Promise.resolve(rtpEn.id);
   }
 
   //sadece ayni sirkettekiler erisebilir
@@ -104,12 +77,12 @@ export class ProjectService implements IProjectService {
 
   //sadece ayni sirkettekiler erisebilir
   async find(id: number, requestorId: number): Promise<ProjectDetailDto> {
-    let projectEntity = await this._projectRepository.findForDetails(id);
-    if (!projectEntity) throw new AppError('AppError', 'Project not found.', 404);
-    const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: projectEntity.company.id } });
-    if (!memberEn && projectEntity.company.owner.id !== requestorId)
+    let rtpEn = await this._rootProjectRepository.findForDetails(id);
+    if (!rtpEn) throw new AppError('AppError', 'Project not found.', 404);
+    const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: rtpEn.company.id } });
+    if (!memberEn && rtpEn.company.owner.id !== requestorId)
       throw new AppError('AppError', 'You are not part of this company', 403);
-    let prjDto: ProjectDetailDto = Object.assign(new ProjectDetailDto(), projectEntity);
+    let prjDto: ProjectDetailDto = Object.assign(new ProjectDetailDto(), rtpEn);
     return Promise.resolve(prjDto);
   }
 

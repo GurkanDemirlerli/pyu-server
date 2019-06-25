@@ -9,4 +9,5 @@ export interface ITaskService {
   update(id: number, model: TaskUpdateDto, requestorId: number): Promise<TaskEntity>;
   delete(id: number, requestorId: number): Promise<void>;
   changeStatus(id: number, model: TaskStatusUpdateDto): Promise<void>;
+  convertToProject(id: number, requestorId: number): Promise<TaskDetailDto>;
 }

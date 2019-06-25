@@ -6,3 +6,4 @@ export { ProjectFilter } from '@models/filters/project-filter';
 export { QuestionFilter } from '@models/filters/question-filter';
 export { TaskFilter } from '@models/filters/task-filter';
 export { UserFilter } from '@models/filters/user-filter';
+export { RootProjectFilter } from '@models/filters/root-project-filter';

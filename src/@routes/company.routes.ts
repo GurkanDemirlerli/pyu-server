@@ -4,7 +4,7 @@ import { validationMiddleware } from '@middlewares';
 import { authorize } from '@middlewares';
 import { IOC } from '@ioc';
 import { CompanyController } from '@controllers/company.controller';
-import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto } from '@models/dtos';
+import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from '@models/dtos';
 
 export class CompanyRoutes {
     public static configureRoutes(app: express.Application): void {
@@ -34,6 +34,11 @@ export class CompanyRoutes {
             .put(authorize, (req, res, next) => ctrl.acceptMembership(req, res, next));
 
         //TODO declineMembership metodu ekle
+
+        app.route(root + '/:id/addStatusTemplate')
+            .post(validationMiddleware(AddStatusTemplateDto), authorize, (req, res, next) => ctrl.addStatusTemplate(req, res, next));
+
+
 
     }
 }
