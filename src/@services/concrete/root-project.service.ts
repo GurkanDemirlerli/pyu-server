@@ -13,6 +13,7 @@ import { CompanyMembershipEntity } from "@entities/company-membership.entity";
 import { UserEntity } from "@entities/user.entity";
 import { ProjectMembershipEntity } from "@entities/project-membership.entity";
 import { RootProjectEntity } from "@entities/root-project.entity";
+import { TreeExplorerItem } from "@models";
 
 @injectable()
 export class RootProjectService implements IRootProjectService {
@@ -32,7 +33,7 @@ export class RootProjectService implements IRootProjectService {
     if (!companyEn)
       throw new AppError('AppError', 'Company Not Found', 404);
 
-    console.log("Owner:",companyEn.ownerId);
+    console.log("Owner:", companyEn.ownerId);
     console.log("Model:", model.userId)
     if (companyEn.ownerId !== model.userId)
       throw new AppError('AppError', 'You can not add a new project to company which is not yours', 403);
@@ -132,10 +133,25 @@ export class RootProjectService implements IRootProjectService {
   async addMember(id: number, model: ProjectUserRegisterDto): Promise<void> {
     let prjMbshipEn: ProjectMembershipEntity = new ProjectMembershipEntity();
     prjMbshipEn.userId = model.userId;
-    prjMbshipEn.projectId = id;
+    // prjMbshipEn.projectId = id;
     prjMbshipEn.createdAt = new Date();
     await this._projectMembershipRepository.insert(prjMbshipEn);
     return Promise.resolve();
+  }
+
+
+
+  async getTree(id: number): Promise<TreeExplorerItem> {
+    let tr: TreeExplorerItem = new TreeExplorerItem();
+    let root = await this._rootProjectRepository.findOne(id, null);
+    tr.label = root.title;
+    tr.data = root.baseProjectId;
+    tr.expandedIcon = "fa fa-folder-open";
+    tr.collapsedIcon = "fa fa-folder";
+
+    await this._projectRepository.populateChilds();
+
+    return Promise.resolve(new TreeExplorerItem());
   }
 
 }

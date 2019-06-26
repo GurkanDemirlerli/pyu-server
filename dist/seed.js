@@ -2712,6 +2712,7 @@ const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
 const root_project_entity_1 = __webpack_require__(/*! @entities/root-project.entity */ "./src/entities/root-project.entity.ts");
+const _models_1 = __webpack_require__(/*! @models */ "./src/_models/index.ts");
 let RootProjectService = class RootProjectService {
     constructor(_rootProjectRepository, _projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository) {
         this._rootProjectRepository = _rootProjectRepository;
@@ -2840,10 +2841,22 @@ let RootProjectService = class RootProjectService {
         return __awaiter(this, void 0, void 0, function* () {
             let prjMbshipEn = new project_membership_entity_1.ProjectMembershipEntity();
             prjMbshipEn.userId = model.userId;
-            prjMbshipEn.projectId = id;
+            // prjMbshipEn.projectId = id;
             prjMbshipEn.createdAt = new Date();
             yield this._projectMembershipRepository.insert(prjMbshipEn);
             return Promise.resolve();
+        });
+    }
+    getTree(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let tr = new _models_1.TreeExplorerItem();
+            let root = yield this._rootProjectRepository.findOne(id, null);
+            tr.label = root.title;
+            tr.data = root.baseProjectId;
+            tr.expandedIcon = "fa fa-folder-open";
+            tr.collapsedIcon = "fa fa-folder";
+            yield this._projectRepository.populateChilds();
+            return Promise.resolve(new _models_1.TreeExplorerItem());
         });
     }
 };
@@ -4515,6 +4528,42 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class UserSummaryDto {
 }
 exports.UserSummaryDto = UserSummaryDto;
+
+
+/***/ }),
+
+/***/ "./src/_models/index.ts":
+/*!******************************!*\
+  !*** ./src/_models/index.ts ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var tree_explorer_item_model_1 = __webpack_require__(/*! ./tree-explorer-item.model */ "./src/_models/tree-explorer-item.model.ts");
+exports.TreeExplorerItem = tree_explorer_item_model_1.TreeExplorerItem;
+
+
+/***/ }),
+
+/***/ "./src/_models/tree-explorer-item.model.ts":
+/*!*************************************************!*\
+  !*** ./src/_models/tree-explorer-item.model.ts ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class TreeExplorerItem {
+    constructor() {
+        this.children = [];
+    }
+}
+exports.TreeExplorerItem = TreeExplorerItem;
 
 
 /***/ }),
