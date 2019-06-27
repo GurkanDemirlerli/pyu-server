@@ -17,10 +17,6 @@ export class RootProjectEntity {
   })
   title: string;
 
-  @Column({
-    length: 100
-  })
-
   @Column("int")
   baseProjectId: number;
   @OneToOne(type => ProjectEntity, bs => bs.rootProject)

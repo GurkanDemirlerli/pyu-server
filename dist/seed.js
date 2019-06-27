@@ -5467,9 +5467,6 @@ __decorate([
     __metadata("design:type", String)
 ], RootProjectEntity.prototype, "title", void 0);
 __decorate([
-    typeorm_1.Column({
-        length: 100
-    }),
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
 ], RootProjectEntity.prototype, "baseProjectId", void 0);
