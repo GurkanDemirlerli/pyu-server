@@ -12,7 +12,7 @@ import { ProjectMembershipEntity } from '@entities/project-membership.entity';
 import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 import { StatusTemplateEntity } from './status-template.entity';
-import { RootProjectEntity } from './root-project.entity';
+import { ProjectEntity } from './project.entity';
 
 @Entity("user")
 export class UserEntity {
@@ -54,8 +54,8 @@ export class UserEntity {
     @OneToMany(type => TaskEntity, task => task.creator)
     createdTasks: TaskEntity[];
 
-    @OneToMany(type => RootProjectEntity, project => project.creator)
-    createdRootProjects: RootProjectEntity[];
+    @OneToMany(type => ProjectEntity, project => project.creator)
+    createdProjects: ProjectEntity[];
 
     @OneToMany(type => CompanyEntity, company => company.owner)
     ownedCompanies: CompanyEntity[];
@@ -85,7 +85,7 @@ export class UserEntity {
     companyRequests: MembershipRequestEntity[];
 
     @OneToMany(type => ProjectMembershipEntity, pms => pms.user)
-    rootProjects: ProjectMembershipEntity[];
+    projectMemberships: ProjectMembershipEntity[];
 
     @OneToMany(type => ProjectManagerEntity, pmn => pmn.user)
     managedProjects: ProjectManagerEntity[];

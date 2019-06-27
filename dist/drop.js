@@ -115,8 +115,7 @@ const task_label_entity_1 = __webpack_require__(/*! @entities/task-label.entity 
 const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
 const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-const sub_project_entity_1 = __webpack_require__(/*! @entities/sub-project.entity */ "./src/entities/sub-project.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! @entities/root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_folder_entity_1 = __webpack_require__(/*! @entities/project-folder.entity */ "./src/entities/project-folder.entity.ts");
 exports.dbOptions = {
     type: "mysql",
     host: "localhost",
@@ -143,8 +142,7 @@ exports.dbOptions = {
         abstract_status_entity_1.AbstractStatusEntity,
         status_template_entity_1.StatusTemplateEntity,
         task_label_entity_1.TaskLabelEntity,
-        sub_project_entity_1.SubProjectEntity,
-        root_project_entity_1.RootProjectEntity
+        project_folder_entity_1.ProjectFolderEntity
     ],
     synchronize: true,
 };
@@ -446,7 +444,7 @@ const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/en
 const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
 const membership_request_entity_1 = __webpack_require__(/*! @entities/membership-request.entity */ "./src/entities/membership-request.entity.ts");
 const status_template_entity_1 = __webpack_require__(/*! ./status-template.entity */ "./src/entities/status-template.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
 let CompanyEntity = class CompanyEntity {
 };
 __decorate([
@@ -466,9 +464,9 @@ __decorate([
     __metadata("design:type", String)
 ], CompanyEntity.prototype, "description", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => root_project_entity_1.RootProjectEntity, rt => rt.company),
+    typeorm_1.OneToMany(type => project_entity_1.ProjectEntity, prj => prj.company),
     __metadata("design:type", Array)
-], CompanyEntity.prototype, "rootProjects", void 0);
+], CompanyEntity.prototype, "projects", void 0);
 __decorate([
     typeorm_1.OneToMany(type => company_membership_entity_1.CompanyMembershipEntity, cmem => cmem.company),
     __metadata("design:type", Array)
@@ -528,7 +526,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
 let IssueEntity = class IssueEntity {
 };
 __decorate([
@@ -563,11 +561,11 @@ __decorate([
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
-], IssueEntity.prototype, "rootProjectId", void 0);
+], IssueEntity.prototype, "projectId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => root_project_entity_1.RootProjectEntity, rt => rt.issues),
-    typeorm_1.JoinColumn({ name: "rootProjectId" }),
-    __metadata("design:type", root_project_entity_1.RootProjectEntity)
+    typeorm_1.ManyToOne(type => project_entity_1.ProjectEntity, prj => prj.issues),
+    typeorm_1.JoinColumn({ name: "projectId" }),
+    __metadata("design:type", project_entity_1.ProjectEntity)
 ], IssueEntity.prototype, "project", void 0);
 __decorate([
     typeorm_1.Column(),
@@ -692,6 +690,74 @@ exports.MembershipRequestEntity = MembershipRequestEntity;
 
 /***/ }),
 
+/***/ "./src/entities/project-folder.entity.ts":
+/*!***********************************************!*\
+  !*** ./src/entities/project-folder.entity.ts ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
+const company_entity_1 = __webpack_require__(/*! @entities/company.entity */ "./src/entities/company.entity.ts");
+const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
+let ProjectFolderEntity = class ProjectFolderEntity {
+};
+__decorate([
+    typeorm_1.PrimaryGeneratedColumn(),
+    __metadata("design:type", Number)
+], ProjectFolderEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column({
+        length: 300
+    }),
+    __metadata("design:type", String)
+], ProjectFolderEntity.prototype, "title", void 0);
+__decorate([
+    typeorm_1.Column("int", { nullable: true }),
+    __metadata("design:type", Number)
+], ProjectFolderEntity.prototype, "rootProjectId", void 0);
+__decorate([
+    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, bs => bs.rootFolder),
+    typeorm_1.JoinColumn({ name: "rootProjectId" }),
+    __metadata("design:type", project_entity_1.ProjectEntity)
+], ProjectFolderEntity.prototype, "rootProject", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => project_entity_1.ProjectEntity, prj => prj.projectFolder),
+    __metadata("design:type", Array)
+], ProjectFolderEntity.prototype, "projects", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], ProjectFolderEntity.prototype, "companyId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => company_entity_1.CompanyEntity, company => company.projects),
+    typeorm_1.JoinColumn({ name: "companyId" }),
+    __metadata("design:type", company_entity_1.CompanyEntity)
+], ProjectFolderEntity.prototype, "company", void 0);
+ProjectFolderEntity = __decorate([
+    typeorm_1.Entity("project_folder")
+], ProjectFolderEntity);
+exports.ProjectFolderEntity = ProjectFolderEntity;
+//                                              ROOT FOLDER
+//                                              ROOT PROJECT
+//                              PROJECT                             PROJECT
+//                PROJECT               PROJECT         PROJECT                 PROJECT
+
+
+/***/ }),
+
 /***/ "./src/entities/project-manager.entity.ts":
 /*!************************************************!*\
   !*** ./src/entities/project-manager.entity.ts ***!
@@ -713,7 +779,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
 let ProjectManagerEntity = class ProjectManagerEntity {
 };
 __decorate([
@@ -732,11 +798,11 @@ __decorate([
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
-], ProjectManagerEntity.prototype, "rootProjectId", void 0);
+], ProjectManagerEntity.prototype, "projectId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => root_project_entity_1.RootProjectEntity, prj => prj.managers),
-    typeorm_1.JoinColumn({ name: "rootProjectId" }),
-    __metadata("design:type", root_project_entity_1.RootProjectEntity)
+    typeorm_1.ManyToOne(type => project_entity_1.ProjectEntity, prj => prj.managers),
+    typeorm_1.JoinColumn({ name: "projectId" }),
+    __metadata("design:type", project_entity_1.ProjectEntity)
 ], ProjectManagerEntity.prototype, "project", void 0);
 __decorate([
     typeorm_1.Column(),
@@ -771,7 +837,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
 let ProjectMembershipEntity = class ProjectMembershipEntity {
 };
 __decorate([
@@ -783,19 +849,19 @@ __decorate([
     __metadata("design:type", Number)
 ], ProjectMembershipEntity.prototype, "userId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => user_entity_1.UserEntity, user => user.rootProjects),
+    typeorm_1.ManyToOne(type => user_entity_1.UserEntity, user => user.projectMemberships),
     typeorm_1.JoinColumn({ name: "userId" }),
     __metadata("design:type", user_entity_1.UserEntity)
 ], ProjectMembershipEntity.prototype, "user", void 0);
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
-], ProjectMembershipEntity.prototype, "rootProjectId", void 0);
+], ProjectMembershipEntity.prototype, "projectId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => root_project_entity_1.RootProjectEntity, rt => rt.managers),
-    typeorm_1.JoinColumn({ name: "rootProjectId" }),
-    __metadata("design:type", root_project_entity_1.RootProjectEntity)
-], ProjectMembershipEntity.prototype, "rootProject", void 0);
+    typeorm_1.ManyToOne(type => project_entity_1.ProjectEntity, rt => rt.managers),
+    typeorm_1.JoinColumn({ name: "projectId" }),
+    __metadata("design:type", project_entity_1.ProjectEntity)
+], ProjectMembershipEntity.prototype, "project", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", Date)
@@ -827,17 +893,97 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var ProjectEntity_1;
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
 const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
-const sub_project_entity_1 = __webpack_require__(/*! ./sub-project.entity */ "./src/entities/sub-project.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
-let ProjectEntity = class ProjectEntity {
+const issue_entity_1 = __webpack_require__(/*! ./issue.entity */ "./src/entities/issue.entity.ts");
+const company_entity_1 = __webpack_require__(/*! ./company.entity */ "./src/entities/company.entity.ts");
+const user_entity_1 = __webpack_require__(/*! ./user.entity */ "./src/entities/user.entity.ts");
+const project_membership_entity_1 = __webpack_require__(/*! ./project-membership.entity */ "./src/entities/project-membership.entity.ts");
+const project_manager_entity_1 = __webpack_require__(/*! ./project-manager.entity */ "./src/entities/project-manager.entity.ts");
+const question_entity_1 = __webpack_require__(/*! ./question.entity */ "./src/entities/question.entity.ts");
+const project_folder_entity_1 = __webpack_require__(/*! ./project-folder.entity */ "./src/entities/project-folder.entity.ts");
+let ProjectEntity = ProjectEntity_1 = 
+// @Tree("closure-table")
+class ProjectEntity {
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
     __metadata("design:type", Number)
 ], ProjectEntity.prototype, "id", void 0);
+__decorate([
+    typeorm_1.Column({ length: 300 }),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "title", void 0);
+__decorate([
+    typeorm_1.Column({ length: 300 }),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "description", void 0);
+__decorate([
+    typeorm_1.Column({ length: 3 }),
+    __metadata("design:type", String)
+], ProjectEntity.prototype, "prefix", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], ProjectEntity.prototype, "createdAt", void 0);
+__decorate([
+    typeorm_1.Column(),
+    __metadata("design:type", Date)
+], ProjectEntity.prototype, "lastUpdated", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], ProjectEntity.prototype, "companyId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => company_entity_1.CompanyEntity, company => company.projects),
+    typeorm_1.JoinColumn({ name: "companyId" }),
+    __metadata("design:type", company_entity_1.CompanyEntity)
+], ProjectEntity.prototype, "company", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], ProjectEntity.prototype, "creatorId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => user_entity_1.UserEntity, user => user.createdProjects),
+    typeorm_1.JoinColumn({ name: "creatorId" }),
+    __metadata("design:type", user_entity_1.UserEntity)
+], ProjectEntity.prototype, "creator", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => ProjectEntity_1, prj => prj.parent),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "children", void 0);
+__decorate([
+    typeorm_1.Column("int", { nullable: true }),
+    __metadata("design:type", Number)
+], ProjectEntity.prototype, "firstParentId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => ProjectEntity_1, pr => pr.descendants),
+    typeorm_1.JoinColumn({ name: "firstParentId" }),
+    __metadata("design:type", ProjectEntity)
+], ProjectEntity.prototype, "firstParent", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => ProjectEntity_1, prj => prj.firstParent),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "descendants", void 0);
+__decorate([
+    typeorm_1.Column("int", { nullable: true }),
+    __metadata("design:type", Number)
+], ProjectEntity.prototype, "parentId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => ProjectEntity_1, prj => prj.children),
+    typeorm_1.JoinColumn({ name: "parentId" }),
+    __metadata("design:type", ProjectEntity)
+], ProjectEntity.prototype, "parent", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => project_folder_entity_1.ProjectFolderEntity, pf => pf.rootProject),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "rootFolder", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => issue_entity_1.IssueEntity, issue => issue.project),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "issues", void 0);
 __decorate([
     typeorm_1.OneToMany(type => task_entity_1.TaskEntity, task => task.project),
     __metadata("design:type", Array)
@@ -847,19 +993,20 @@ __decorate([
     __metadata("design:type", Array)
 ], ProjectEntity.prototype, "statuses", void 0);
 __decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], ProjectEntity.prototype, "projectType", void 0);
+    typeorm_1.OneToMany(type => project_membership_entity_1.ProjectMembershipEntity, pms => pms.project),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "members", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => sub_project_entity_1.SubProjectEntity, sb => sb.baseProject),
-    __metadata("design:type", sub_project_entity_1.SubProjectEntity)
-], ProjectEntity.prototype, "subProject", void 0);
+    typeorm_1.OneToMany(type => project_manager_entity_1.ProjectManagerEntity, prm => prm.project),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "managers", void 0);
 __decorate([
-    typeorm_1.OneToOne(type => root_project_entity_1.RootProjectEntity, rt => rt.baseProject),
-    __metadata("design:type", root_project_entity_1.RootProjectEntity)
-], ProjectEntity.prototype, "rootProject", void 0);
-ProjectEntity = __decorate([
+    typeorm_1.OneToMany(type => question_entity_1.QuestionEntity, question => question.project),
+    __metadata("design:type", Array)
+], ProjectEntity.prototype, "questions", void 0);
+ProjectEntity = ProjectEntity_1 = __decorate([
     typeorm_1.Entity("project")
+    // @Tree("closure-table")
 ], ProjectEntity);
 exports.ProjectEntity = ProjectEntity;
 
@@ -885,10 +1032,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
 const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
 const answer_entity_1 = __webpack_require__(/*! @entities/answer.entity */ "./src/entities/answer.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
 let QuestionEntity = class QuestionEntity {
 };
 __decorate([
@@ -925,9 +1072,9 @@ __decorate([
     __metadata("design:type", Number)
 ], QuestionEntity.prototype, "projectId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => root_project_entity_1.RootProjectEntity, project => project.questions),
+    typeorm_1.ManyToOne(type => project_entity_1.ProjectEntity, project => project.questions),
     typeorm_1.JoinColumn({ name: "projectId" }),
-    __metadata("design:type", root_project_entity_1.RootProjectEntity)
+    __metadata("design:type", project_entity_1.ProjectEntity)
 ], QuestionEntity.prototype, "project", void 0);
 __decorate([
     typeorm_1.Column(),
@@ -941,110 +1088,6 @@ QuestionEntity = __decorate([
     typeorm_1.Entity("question")
 ], QuestionEntity);
 exports.QuestionEntity = QuestionEntity;
-
-
-/***/ }),
-
-/***/ "./src/entities/root-project.entity.ts":
-/*!*********************************************!*\
-  !*** ./src/entities/root-project.entity.ts ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const issue_entity_1 = __webpack_require__(/*! @entities/issue.entity */ "./src/entities/issue.entity.ts");
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/entities/user.entity.ts");
-const company_entity_1 = __webpack_require__(/*! @entities/company.entity */ "./src/entities/company.entity.ts");
-const project_manager_entity_1 = __webpack_require__(/*! @entities/project-manager.entity */ "./src/entities/project-manager.entity.ts");
-const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
-const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
-const question_entity_1 = __webpack_require__(/*! ./question.entity */ "./src/entities/question.entity.ts");
-let RootProjectEntity = class RootProjectEntity {
-};
-__decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], RootProjectEntity.prototype, "id", void 0);
-__decorate([
-    typeorm_1.Column({
-        length: 100
-    }),
-    __metadata("design:type", String)
-], RootProjectEntity.prototype, "title", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], RootProjectEntity.prototype, "baseProjectId", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, bs => bs.rootProject),
-    typeorm_1.JoinColumn({ name: "baseProjectId" }),
-    __metadata("design:type", project_entity_1.ProjectEntity)
-], RootProjectEntity.prototype, "baseProject", void 0);
-__decorate([
-    typeorm_1.Column({
-        length: 100
-    }),
-    __metadata("design:type", String)
-], RootProjectEntity.prototype, "description", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => issue_entity_1.IssueEntity, issue => issue.project),
-    __metadata("design:type", Array)
-], RootProjectEntity.prototype, "issues", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], RootProjectEntity.prototype, "companyId", void 0);
-__decorate([
-    typeorm_1.ManyToOne(type => company_entity_1.CompanyEntity, company => company.rootProjects),
-    typeorm_1.JoinColumn({ name: "companyId" }),
-    __metadata("design:type", company_entity_1.CompanyEntity)
-], RootProjectEntity.prototype, "company", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], RootProjectEntity.prototype, "userId", void 0);
-__decorate([
-    typeorm_1.ManyToOne(type => user_entity_1.UserEntity, user => user.createdRootProjects),
-    typeorm_1.JoinColumn({ name: "userId" }),
-    __metadata("design:type", user_entity_1.UserEntity)
-], RootProjectEntity.prototype, "creator", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Date)
-], RootProjectEntity.prototype, "createdAt", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", Date)
-], RootProjectEntity.prototype, "lastUpdated", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => project_membership_entity_1.ProjectMembershipEntity, pms => pms.rootProject),
-    __metadata("design:type", Array)
-], RootProjectEntity.prototype, "members", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => project_manager_entity_1.ProjectManagerEntity, prm => prm.project),
-    __metadata("design:type", Array)
-], RootProjectEntity.prototype, "managers", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => question_entity_1.QuestionEntity, question => question.rootProject),
-    __metadata("design:type", Array)
-], RootProjectEntity.prototype, "questions", void 0);
-RootProjectEntity = __decorate([
-    typeorm_1.Entity("root_project")
-], RootProjectEntity);
-exports.RootProjectEntity = RootProjectEntity;
 
 
 /***/ }),
@@ -1209,60 +1252,6 @@ exports.StatusEntity = StatusEntity;
 
 /***/ }),
 
-/***/ "./src/entities/sub-project.entity.ts":
-/*!********************************************!*\
-  !*** ./src/entities/sub-project.entity.ts ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
-const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
-let SubProjectEntity = class SubProjectEntity {
-};
-__decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], SubProjectEntity.prototype, "id", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], SubProjectEntity.prototype, "assignedTaskId", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => task_entity_1.TaskEntity, task => task.subProject),
-    typeorm_1.JoinColumn({ name: "assignedTaskId" }),
-    __metadata("design:type", task_entity_1.TaskEntity)
-], SubProjectEntity.prototype, "assignedTask", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], SubProjectEntity.prototype, "baseProjectId", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, bs => bs.subProject),
-    typeorm_1.JoinColumn({ name: "baseProjectId" }),
-    __metadata("design:type", project_entity_1.ProjectEntity)
-], SubProjectEntity.prototype, "baseProject", void 0);
-SubProjectEntity = __decorate([
-    typeorm_1.Entity("sub_project")
-], SubProjectEntity);
-exports.SubProjectEntity = SubProjectEntity;
-
-
-/***/ }),
-
 /***/ "./src/entities/task-assignment.entity.ts":
 /*!************************************************!*\
   !*** ./src/entities/task-assignment.entity.ts ***!
@@ -1402,7 +1391,6 @@ const user_entity_1 = __webpack_require__(/*! @entities/user.entity */ "./src/en
 const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
 const task_label_entity_1 = __webpack_require__(/*! ./task-label.entity */ "./src/entities/task-label.entity.ts");
-const sub_project_entity_1 = __webpack_require__(/*! ./sub-project.entity */ "./src/entities/sub-project.entity.ts");
 let TaskEntity = class TaskEntity {
 };
 __decorate([
@@ -1433,10 +1421,6 @@ __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
 ], TaskEntity.prototype, "priority", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => sub_project_entity_1.SubProjectEntity, project => project.assignedTask),
-    __metadata("design:type", sub_project_entity_1.SubProjectEntity)
-], TaskEntity.prototype, "subProject", void 0);
 __decorate([
     typeorm_1.OneToMany(type => comment_entity_1.CommentEntity, comment => comment.task),
     __metadata("design:type", Array)
@@ -1534,7 +1518,7 @@ const project_membership_entity_1 = __webpack_require__(/*! @entities/project-me
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
 const company_membership_entity_1 = __webpack_require__(/*! @entities/company-membership.entity */ "./src/entities/company-membership.entity.ts");
 const status_template_entity_1 = __webpack_require__(/*! ./status-template.entity */ "./src/entities/status-template.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./root-project.entity */ "./src/entities/root-project.entity.ts");
+const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
 let UserEntity = class UserEntity {
 };
 __decorate([
@@ -1584,9 +1568,9 @@ __decorate([
     __metadata("design:type", Array)
 ], UserEntity.prototype, "createdTasks", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => root_project_entity_1.RootProjectEntity, project => project.creator),
+    typeorm_1.OneToMany(type => project_entity_1.ProjectEntity, project => project.creator),
     __metadata("design:type", Array)
-], UserEntity.prototype, "createdRootProjects", void 0);
+], UserEntity.prototype, "createdProjects", void 0);
 __decorate([
     typeorm_1.OneToMany(type => company_entity_1.CompanyEntity, company => company.owner),
     __metadata("design:type", Array)
@@ -1626,7 +1610,7 @@ __decorate([
 __decorate([
     typeorm_1.OneToMany(type => project_membership_entity_1.ProjectMembershipEntity, pms => pms.user),
     __metadata("design:type", Array)
-], UserEntity.prototype, "rootProjects", void 0);
+], UserEntity.prototype, "projectMemberships", void 0);
 __decorate([
     typeorm_1.OneToMany(type => project_manager_entity_1.ProjectManagerEntity, pmn => pmn.user),
     __metadata("design:type", Array)

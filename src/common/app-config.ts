@@ -19,8 +19,7 @@ import { AbstractStatusEntity } from '@entities/abstract-status.entity';
 
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
-import { SubProjectEntity } from '@entities/sub-project.entity';
-import { RootProjectEntity } from '@entities/root-project.entity';
+import { ProjectFolderEntity } from '@entities/project-folder.entity';
 
 
 
@@ -50,8 +49,7 @@ export let dbOptions: ConnectionOptions = {
         AbstractStatusEntity,
         StatusTemplateEntity,
         TaskLabelEntity,
-        SubProjectEntity,
-        RootProjectEntity
+        ProjectFolderEntity
 
     ],
     synchronize: true,

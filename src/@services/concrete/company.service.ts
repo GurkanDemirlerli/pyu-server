@@ -151,4 +151,16 @@ export class CompanyService implements ICompanyService {
     return Promise.resolve();
   }
 
+  async showTree(companyId: number):Promise<any> {
+    let trees = await this._companyRepository.getTree(companyId);
+    console.log("TREE", trees);
+
+    for (let i = 0; i < trees.length; i++) {
+        let x = Object.assign({}, trees[i]);
+        console.log(i);
+        console.log(x);
+    }
+    Promise.resolve(trees);
+  }
+
 }

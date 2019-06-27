@@ -116,7 +116,17 @@ export class CompanyController {
     });
   }
 
-
-
+  showTree(req: Request, res: Response, next: NextFunction) {
+    const companyId: number = +req.params.id;
+    this._companyService.showTree(companyId).then((result) => {
+      console.log("RESSSSSS",result);
+      return res.status(200).json({
+        success: true,
+        data: result
+      });
+    }).catch((error: Error) => {
+      return ErrorHandler.handleErrorResponses(error, res, 'showTree', 'CompanyController');
+    });
+  }
 
 }

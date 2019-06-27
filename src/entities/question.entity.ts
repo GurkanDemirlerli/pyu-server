@@ -2,7 +2,6 @@ import { ProjectEntity } from '@entities/project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 import { UserEntity } from '@entities/user.entity';
 import { AnswerEntity } from '@entities/answer.entity';
-import { RootProjectEntity } from './root-project.entity';
 @Entity("question")
 export class QuestionEntity {
 
@@ -30,9 +29,9 @@ export class QuestionEntity {
 
     @Column("int")
     projectId: number;
-    @ManyToOne(type => RootProjectEntity, project => project.questions)
+    @ManyToOne(type => ProjectEntity, project => project.questions)
     @JoinColumn({ name: "projectId" })
-    project: RootProjectEntity;
+    project: ProjectEntity;
 
     @Column()
     createdAt: Date;

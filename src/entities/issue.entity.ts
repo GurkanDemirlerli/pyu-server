@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn } from "typeorm";
 import { UserEntity } from '@entities/user.entity';
 import { TaskEntity } from '@entities/task.entity';
-import { RootProjectEntity } from './root-project.entity';
+import { ProjectEntity } from "./project.entity";
 @Entity("issue")
 export class IssueEntity {
 
@@ -28,10 +28,10 @@ export class IssueEntity {
     creator: UserEntity;
 
     @Column("int")
-    rootProjectId: number;
-    @ManyToOne(type => RootProjectEntity, rt => rt.issues)
-    @JoinColumn({ name: "rootProjectId" })
-    project: RootProjectEntity;
+    projectId: number;
+    @ManyToOne(type => ProjectEntity, prj => prj.issues)
+    @JoinColumn({ name: "projectId" })
+    project: ProjectEntity;
 
     @Column()
     createdAt: Date;

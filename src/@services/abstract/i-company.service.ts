@@ -11,4 +11,5 @@ export interface ICompanyService {
     requestMembership(id: number, model: CompanyUserRegisterDto, requestorId: number): Promise<void>;
     acceptMembership(id: number, requestorId: number): Promise<void>;
     addStatusTemplate(id: number, model: AddStatusTemplateDto, requestorId: number): Promise<any>;
+    showTree(companyId: number) :Promise<any>;
 }

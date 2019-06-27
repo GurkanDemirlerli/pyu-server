@@ -6,7 +6,6 @@ import { UserEntity } from '@entities/user.entity';
 import { StatusEntity } from '@entities/status.entity';
 import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
 import { TaskLabelEntity } from './task-label.entity';
-import { SubProjectEntity } from './sub-project.entity';
 @Entity("task")
 export class TaskEntity {
 
@@ -31,9 +30,6 @@ export class TaskEntity {
 
   @Column("int")
   priority: number;
-
-  @OneToOne(type => SubProjectEntity, project => project.assignedTask)
-  subProject: SubProjectEntity;
 
   @OneToMany(type => CommentEntity, comment => comment.task)
   comments: CommentEntity[];

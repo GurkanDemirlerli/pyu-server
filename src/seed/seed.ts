@@ -11,8 +11,6 @@ import {
   IAbstractStatusRepository,
   IStatusTemplateRepository,
   ICompanyMembershipRepository,
-  ISubProjectRepository,
-  IRootProjectRepository,
   IProjectManagerRepository
 } from "@repositories/abstract";
 import { InjectTypes } from "@ioc";
@@ -32,8 +30,8 @@ import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 import { StatusTemplateEntity } from '@entities/status-template.entity';
 import { AbstractStatusEntity } from '@entities/abstract-status.entity';
 import { ProjectManagerEntity } from '@entities/project-manager.entity';
-import { SubProjectEntity } from '@entities/sub-project.entity';
-import { RootProjectEntity } from '@entities/root-project.entity';
+import { ProjectFolderEntity } from '@entities/project-folder.entity';
+
 
 @injectable()
 export class SeedDatabase {
@@ -50,8 +48,6 @@ export class SeedDatabase {
     @inject(InjectTypes.Repository.STATUS_TEMPLATE) private readonly _statusTemplateRepository: IStatusTemplateRepository,
     @inject(InjectTypes.Repository.ABSTRACT_STATUS) private readonly _abstractStatusRepository: IAbstractStatusRepository,
     @inject(InjectTypes.Repository.COMPANY_MEMBERSHIP) private readonly _companyMembershipRepository: ICompanyMembershipRepository,
-    @inject(InjectTypes.Repository.SUB_PROJECT) private readonly _subProjectRepository: ISubProjectRepository,
-    @inject(InjectTypes.Repository.ROOT_PROJECT) private readonly _rootProjectRepository: IRootProjectRepository,
 
   ) { }
   users: UserEntity[] = [];
@@ -86,14 +82,14 @@ export class SeedDatabase {
       console.log("assignUsersToCompany OK");
       await this.addStatusTemplates();
       console.log("addStatusTemplates OK");
-      await this.addRootProjects();
-      console.log("addRootProjects OK");
-      await this.assignUsersToProject();
-      console.log("assignUsersToProject OK");
-      await this.addTasks();
-      console.log("addTasks OK");
-      await this.addSubProjects();
-      console.log("addSubProjects OK");
+      await this.addProjects();
+      console.log("addProject OK");
+      // await this.assignUsersToProject();
+      // console.log("assignUsersToProject OK");
+      // await this.addTasks();
+      // console.log("addTasks OK");
+      // await this.addSubProjects();
+      // console.log("addSubProjects OK");
       // await this.addTaskTemplates();
       console.log("SEED COMPLETED");
       await connection.close();
@@ -284,15 +280,80 @@ export class SeedDatabase {
 
   }
 
+  public async addProjects() {
+    let lv0_pA = new ProjectEntity();
+    lv0_pA.companyId = this.grkn.ownedCompanies[0].id;
+    lv0_pA.createdAt = new Date();
+    lv0_pA.creatorId = this.grkn.id;
+    lv0_pA.description = faker.lorem.words(4);
+    lv0_pA.lastUpdated = new Date();
+    lv0_pA.prefix = 'PRE';
+    lv0_pA.title = faker.lorem.words(2);
+
+    lv0_pA = await this._projectRepository.insert(lv0_pA);
+
+    let lv1_pA_1 = new ProjectEntity();
+    lv1_pA_1.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_1.createdAt = new Date();
+    lv1_pA_1.creatorId = this.grkn.id;
+    lv1_pA_1.description = faker.lorem.words(4);
+    lv1_pA_1.lastUpdated = new Date();
+    lv1_pA_1.prefix = 'PRE';
+    lv1_pA_1.title = faker.lorem.words(2);
+    lv1_pA_1.parentId = lv0_pA.id;
+    lv1_pA_1.firstParentId = lv0_pA.id;
+    lv1_pA_1 = await this._projectRepository.insert(lv1_pA_1);
+
+    let lv1_pA_2 = new ProjectEntity();
+    lv1_pA_2.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_2.createdAt = new Date();
+    lv1_pA_2.creatorId = this.grkn.id;
+    lv1_pA_2.description = faker.lorem.words(4);
+    lv1_pA_2.lastUpdated = new Date();
+    lv1_pA_2.prefix = 'PRE';
+    lv1_pA_2.title = faker.lorem.words(2);
+    lv1_pA_2.parentId = lv0_pA.id;
+    lv1_pA_2.firstParentId = lv0_pA.id;
+    lv1_pA_2 = await this._projectRepository.insert(lv1_pA_2);
+
+    let lv1_pA_3 = new ProjectEntity();
+    lv1_pA_3.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_3.createdAt = new Date();
+    lv1_pA_3.creatorId = this.grkn.id;
+    lv1_pA_3.description = faker.lorem.words(4);
+    lv1_pA_3.lastUpdated = new Date();
+    lv1_pA_3.prefix = 'PRE';
+    lv1_pA_3.title = faker.lorem.words(2);
+    lv1_pA_3.parentId = lv0_pA.id;
+    lv1_pA_3.firstParentId = lv0_pA.id;
+    lv1_pA_3 = await this._projectRepository.insert(lv1_pA_3);
+
+
+    let lv2_pA_1_1 = new ProjectEntity();
+    lv2_pA_1_1.companyId = this.grkn.ownedCompanies[0].id;
+    lv2_pA_1_1.createdAt = new Date();
+    lv2_pA_1_1.creatorId = this.grkn.id;
+    lv2_pA_1_1.description = faker.lorem.words(4);
+    lv2_pA_1_1.lastUpdated = new Date();
+    lv2_pA_1_1.prefix = 'PRE';
+    lv2_pA_1_1.title = faker.lorem.words(2);
+    lv2_pA_1_1.parentId = lv1_pA_1.id;
+    lv2_pA_1_1.firstParentId = lv0_pA.id;
+    lv2_pA_1_1 = await this._projectRepository.insert(lv2_pA_1_1);
+
+
+    // let folder = new ProjectFolderEntity();
+
+  }
+
   public async addRootProjects() {
-    this.grkn.ownedCompanies[0].rootProjects = [];
+    this.grkn.ownedCompanies[0].projects = [];
 
-    let krP = new ProjectEntity();
-    krP.projectType = ProjectTypes.ROOT;
-
-    krP = await this._projectRepository.insert(krP);
-    krP.statuses = [];
-    krP.tasks = [];
+    let lv1 = new ProjectEntity();
+    lv1 = await this._projectRepository.insert(lv1);
+    lv1.statuses = [];
+    lv1.tasks = [];
+    // lv1.
 
     let krCP = new RootProjectEntity();
     krCP.companyId = this.grkn.ownedCompanies[0].id;
