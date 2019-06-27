@@ -12,6 +12,9 @@ import { TaskTypes } from "@enums";
 
 @injectable()
 export class TaskService implements ITaskService {
+    convertToProject(id: number, requestorId: number): Promise<TaskDetailDto> {
+        throw new Error("Method not implemented.");
+    }
 
   constructor(
     @inject(InjectTypes.Repository.TASK) private readonly _taskRepository: ITaskRepository,
@@ -30,7 +33,6 @@ export class TaskService implements ITaskService {
     let taskEn: TaskEntity = Object.assign(new TaskEntity(), model);
     taskEn.createdAt = new Date();
     taskEn.lastUpdated = new Date();
-    taskEn.type = TaskTypes.BASIC;
     //TODO max değeri getirip +1ini al
     taskEn.code = 45;
     let inserted: TaskEntity = await this._taskRepository.insert(taskEn);
@@ -61,10 +63,6 @@ export class TaskService implements ITaskService {
     tasks.map((tsk) => {
       let taskDto = Object.assign(new TaskListDto(), tsk, { comments: undefined })
       taskDto.commentCount = tsk.comments.length;
-      if (tsk.type === TaskTypes.SUBPROJECT && tsk.subProject) {
-        taskDto.subTaskCount = tsk.subProject.baseProject.tasks.length;
-        taskDto.subProject.baseProject.tasks = undefined;
-      }
       taskDtos.push(taskDto);
     });
     return Promise.resolve(taskDtos);

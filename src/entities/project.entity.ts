@@ -7,10 +7,8 @@ import { UserEntity } from "./user.entity";
 import { ProjectMembershipEntity } from "./project-membership.entity";
 import { ProjectManagerEntity } from "./project-manager.entity";
 import { QuestionEntity } from "./question.entity";
-import { ProjectFolderEntity } from "./project-folder.entity";
 
 @Entity("project")
-// @Tree("closure-table")
 export class ProjectEntity {
 
   @PrimaryGeneratedColumn()
@@ -46,37 +44,26 @@ export class ProjectEntity {
   @OneToMany(type => ProjectEntity, prj => prj.parent)
   children: ProjectEntity[];
 
-  // @Column("int")
-  // projectFolderId: number;
-  // @OneToOne(type => ProjectFolderEntity, pf => pf.projects)
-  // @JoinColumn({ name: "projectFolderId" })
-  // projectFolder: ProjectFolderEntity;
+  // @Column("int", { nullable: true })
+  // firstParentId: number;
+  // @ManyToOne(type => ProjectEntity, pr => pr.descendants)
+  // @JoinColumn({ name: "firstParentId" })
+  // firstParent: ProjectEntity;
+  //
+  // @OneToMany(type => ProjectEntity, prj => prj.firstParent)
+  // descendants: ProjectEntity[];
 
   @Column("int", { nullable: true })
-  firstParentId: number;
-  @ManyToOne(type => ProjectEntity, pr => pr.descendants)
-  @JoinColumn({ name: "firstParentId" })
-  firstParent: ProjectEntity;
-
-  @OneToMany(type => ProjectEntity, prj => prj.firstParent)
-  descendants: ProjectEntity[];
+  statusId: number;
+  @ManyToOne(type => StatusEntity, status => status.projects)
+  @JoinColumn({ name: "statusId" })
+  status: StatusEntity;
 
   @Column("int", { nullable: true })
   parentId: number;
   @ManyToOne(type => ProjectEntity, prj => prj.children)
   @JoinColumn({ name: "parentId" })
   parent: ProjectEntity;
-
-  @OneToMany(type => ProjectFolderEntity, pf => pf.rootProject)
-  rootFolder: ProjectFolderEntity[];
-
-
-
-  // @TreeChildren()
-  // children: ProjectEntity[];
-  //
-  // @TreeParent()
-  // parent: ProjectEntity;
 
   @OneToMany(type => IssueEntity, issue => issue.project)
   issues: IssueEntity[];

@@ -21,9 +21,9 @@ export class TaskEntity {
     length: 100
   })
   description: string;
-
-  @Column("int")
-  type: number;
+  //
+  // @Column("int")
+  // type: number;
 
   @Column("int")
   code: number;

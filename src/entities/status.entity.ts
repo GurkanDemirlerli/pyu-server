@@ -27,6 +27,9 @@ export class StatusEntity {
     @OneToMany(type => TaskEntity, task => task.status)
     tasks: TaskEntity[];
 
+    @OneToMany(type => ProjectEntity, prj => prj.status)
+    projects: ProjectEntity[];
+
     @Column("int")
     creatorId: number;
     @ManyToOne(type => UserEntity, user => user.createdStatuses)

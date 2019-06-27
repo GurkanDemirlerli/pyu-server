@@ -11,6 +11,7 @@ import { MembershipRequestEntity } from "@entities/membership-request.entity";
 import { Uow } from "@repositories/uow";
 import { StatusTemplateEntity } from "@entities/status-template.entity";
 import { AbstractStatusEntity } from "@entities/abstract-status.entity";
+import { ProjectTreeItem } from "@models/project-tree-item.dto";
 
 @injectable()
 export class CompanyService implements ICompanyService {
@@ -39,7 +40,7 @@ export class CompanyService implements ICompanyService {
     let companyEns: CompanyEntity[] = await this._companyRepository.listByFiltersAndUser(filters, requestorId);
     companyEns.map((cmp) => {
       let companyDto: CompanyListDto = Object.assign(new CompanyListDto(), cmp, { rootProjects: undefined, users: undefined })
-      companyDto.projectCount = cmp.rootProjects.length;
+      companyDto.projectCount = cmp.projects.length;
       companyDto.userCount = cmp.members.length;
       companyDtos.push(companyDto);
     });
@@ -51,7 +52,7 @@ export class CompanyService implements ICompanyService {
     let companyEn: CompanyEntity = await this._companyRepository.findForDetails(id);
     if (!companyEn) throw new AppError('AppError', 'Company not found.', 404);
     let companyDto: CompanyDetailDto = Object.assign(new CompanyDetailDto(), companyEn, { projects: undefined, users: undefined });
-    companyDto.projectCount = companyEn.rootProjects.length;
+    companyDto.projectCount = companyEn.projects.length;
     companyDto.userCount = companyEn.members.length;
     return Promise.resolve(companyDto);
   }
@@ -151,16 +152,52 @@ export class CompanyService implements ICompanyService {
     return Promise.resolve();
   }
 
-  async showTree(companyId: number):Promise<any> {
+  async showTree(companyId: number): Promise<any> {
     let trees = await this._companyRepository.getTree(companyId);
-    console.log("TREE", trees);
+    let treeFlatList: any[] = [];
 
-    for (let i = 0; i < trees.length; i++) {
-        let x = Object.assign({}, trees[i]);
-        console.log(i);
-        console.log(x);
+    for (let i = 0; i < trees[0].length; i++) {
+      let x = Object.assign(new ProjectTreeItem(), trees[0][i]);
+      treeFlatList.push(x);
     }
-    Promise.resolve(trees);
+    let roots = treeFlatList.filter(r => r.parentId === null);
+    for (let i in roots) {
+      roots[i].children = this.getNestedChildren(treeFlatList, roots[i].id);
+    }
+
+    let nw = roots.map((item) => {
+    return Object.assign({}, {
+        label: item.title,
+        data: item.id,
+        expandedIcon: "fa fa-folder-open",
+        collapsedIcon: "fa fa-folder",
+        children: item.children,
+      });
+    });
+
+    return Promise.resolve(nw);
+  }
+
+  private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
+    let out = []
+    for (let i in array) {
+      if (array[i].parentId == parentId) {
+        let children = this.getNestedChildren(array, array[i].id)
+        if (children.length) {
+          array[i].children = children
+        }
+        out.push({
+          label: array[i].title,
+          data: array[i].id,
+          expandedIcon: "fa fa-folder-open",
+          collapsedIcon: "fa fa-folder",
+          children: array[i].children
+        })
+        // out.push(array[i])
+      }
+    }
+
+    return out;
   }
 
 }

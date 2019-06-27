@@ -19,7 +19,6 @@ import { AbstractStatusEntity } from '@entities/abstract-status.entity';
 
 import { ConnectionOptions } from "typeorm";
 import 'reflect-metadata';
-import { ProjectFolderEntity } from '@entities/project-folder.entity';
 
 
 
@@ -49,8 +48,6 @@ export let dbOptions: ConnectionOptions = {
         AbstractStatusEntity,
         StatusTemplateEntity,
         TaskLabelEntity,
-        ProjectFolderEntity
-
     ],
     synchronize: true,
 }

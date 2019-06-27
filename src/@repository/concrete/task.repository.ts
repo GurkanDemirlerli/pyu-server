@@ -1,6 +1,6 @@
 import { RepositoryBase } from './base/repository.base';
 import { ITaskRepository } from "../abstract/i-task.repository";
-import { TaskEntity } from "./../../entities/task.entity";
+import { TaskEntity } from "@entities/task.entity";
 import { injectable } from "inversify";
 import 'reflect-metadata';
 import { getManager } from 'typeorm';
@@ -29,9 +29,6 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
     }
     query = query
       .leftJoin("task.comments", "comment").addSelect(["comment.id"])
-      .leftJoinAndSelect("task.subProject", "sbp")
-      .leftJoinAndSelect("sbp.baseProject", "bsp")
-      .leftJoinAndSelect("bsp.tasks", "sbts")
 
     return query.orderBy("task.id", "DESC").getMany();
   }
@@ -46,12 +43,7 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
       .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
       .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
       .leftJoinAndSelect("task.project", "project")
-      .leftJoinAndSelect("project.subProject", "pps")
-      .leftJoinAndSelect("project.rootProject", "ppr")
       .leftJoin("task.status", "status").addSelect(["status.id", "status.title", "status.description"])
-      .leftJoinAndSelect("task.subProject", "sbp")
-      .leftJoinAndSelect("sbp.baseProject", "bsp")
-      .leftJoinAndSelect("bsp.tasks", "sbts")
 
     return query.getOne();
   }

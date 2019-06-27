@@ -30,7 +30,6 @@ import { CompanyMembershipEntity } from '@entities/company-membership.entity';
 import { StatusTemplateEntity } from '@entities/status-template.entity';
 import { AbstractStatusEntity } from '@entities/abstract-status.entity';
 import { ProjectManagerEntity } from '@entities/project-manager.entity';
-import { ProjectFolderEntity } from '@entities/project-folder.entity';
 
 
 @injectable()
@@ -84,10 +83,10 @@ export class SeedDatabase {
       console.log("addStatusTemplates OK");
       await this.addProjects();
       console.log("addProject OK");
-      // await this.assignUsersToProject();
-      // console.log("assignUsersToProject OK");
-      // await this.addTasks();
-      // console.log("addTasks OK");
+      await this.assignUsersToProject();
+      console.log("assignUsersToProject OK");
+      await this.addTasks();
+      console.log("addTasks OK");
       // await this.addSubProjects();
       // console.log("addSubProjects OK");
       // await this.addTaskTemplates();
@@ -290,81 +289,9 @@ export class SeedDatabase {
     lv0_pA.prefix = 'PRE';
     lv0_pA.title = faker.lorem.words(2);
 
+    lv0_pA.statuses = [];
+    lv0_pA.tasks = [];
     lv0_pA = await this._projectRepository.insert(lv0_pA);
-
-    let lv1_pA_1 = new ProjectEntity();
-    lv1_pA_1.companyId = this.grkn.ownedCompanies[0].id;
-    lv1_pA_1.createdAt = new Date();
-    lv1_pA_1.creatorId = this.grkn.id;
-    lv1_pA_1.description = faker.lorem.words(4);
-    lv1_pA_1.lastUpdated = new Date();
-    lv1_pA_1.prefix = 'PRE';
-    lv1_pA_1.title = faker.lorem.words(2);
-    lv1_pA_1.parentId = lv0_pA.id;
-    lv1_pA_1.firstParentId = lv0_pA.id;
-    lv1_pA_1 = await this._projectRepository.insert(lv1_pA_1);
-
-    let lv1_pA_2 = new ProjectEntity();
-    lv1_pA_2.companyId = this.grkn.ownedCompanies[0].id;
-    lv1_pA_2.createdAt = new Date();
-    lv1_pA_2.creatorId = this.grkn.id;
-    lv1_pA_2.description = faker.lorem.words(4);
-    lv1_pA_2.lastUpdated = new Date();
-    lv1_pA_2.prefix = 'PRE';
-    lv1_pA_2.title = faker.lorem.words(2);
-    lv1_pA_2.parentId = lv0_pA.id;
-    lv1_pA_2.firstParentId = lv0_pA.id;
-    lv1_pA_2 = await this._projectRepository.insert(lv1_pA_2);
-
-    let lv1_pA_3 = new ProjectEntity();
-    lv1_pA_3.companyId = this.grkn.ownedCompanies[0].id;
-    lv1_pA_3.createdAt = new Date();
-    lv1_pA_3.creatorId = this.grkn.id;
-    lv1_pA_3.description = faker.lorem.words(4);
-    lv1_pA_3.lastUpdated = new Date();
-    lv1_pA_3.prefix = 'PRE';
-    lv1_pA_3.title = faker.lorem.words(2);
-    lv1_pA_3.parentId = lv0_pA.id;
-    lv1_pA_3.firstParentId = lv0_pA.id;
-    lv1_pA_3 = await this._projectRepository.insert(lv1_pA_3);
-
-
-    let lv2_pA_1_1 = new ProjectEntity();
-    lv2_pA_1_1.companyId = this.grkn.ownedCompanies[0].id;
-    lv2_pA_1_1.createdAt = new Date();
-    lv2_pA_1_1.creatorId = this.grkn.id;
-    lv2_pA_1_1.description = faker.lorem.words(4);
-    lv2_pA_1_1.lastUpdated = new Date();
-    lv2_pA_1_1.prefix = 'PRE';
-    lv2_pA_1_1.title = faker.lorem.words(2);
-    lv2_pA_1_1.parentId = lv1_pA_1.id;
-    lv2_pA_1_1.firstParentId = lv0_pA.id;
-    lv2_pA_1_1 = await this._projectRepository.insert(lv2_pA_1_1);
-
-
-    // let folder = new ProjectFolderEntity();
-
-  }
-
-  public async addRootProjects() {
-    this.grkn.ownedCompanies[0].projects = [];
-
-    let lv1 = new ProjectEntity();
-    lv1 = await this._projectRepository.insert(lv1);
-    lv1.statuses = [];
-    lv1.tasks = [];
-    // lv1.
-
-    let krCP = new RootProjectEntity();
-    krCP.companyId = this.grkn.ownedCompanies[0].id;
-    krCP.createdAt = new Date();
-    krCP.description = "desc";
-    krCP.lastUpdated = new Date();
-    krCP.title = "Character Crating";
-    krCP.userId = this.grkn.id;
-    krCP.baseProjectId = krP.id;
-    krCP = await this._rootProjectRepository.insert(krCP);
-    krCP.baseProject = krP;
 
     for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[0].statuses.length; i++) {
       const abs = this.grkn.ownedCompanies[0].statusTemplates[0].statuses[i];
@@ -375,122 +302,221 @@ export class SeedDatabase {
       st.description = "desc";
       st.lastUpdated = new Date();
       st.order = abs.order;
-      st.projectId = krCP.baseProject.id;
+      st.projectId = lv0_pA.id;
       st.title = abs.title;
       st = await this._statusRepository.insert(st);
-      krCP.baseProject.statuses.push(st);
+      lv0_pA.statuses.push(st);
     }
-    this.grkn.ownedCompanies[0].rootProjects.push(krCP);
+
+    this.grkn.ownedCompanies[0].projects = [];
+    this.grkn.ownedCompanies[0].projects.push(lv0_pA);
+
+
+    let lv1_pA_1 = new ProjectEntity();
+    lv1_pA_1.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_1.createdAt = new Date();
+    lv1_pA_1.creatorId = this.grkn.id;
+    lv1_pA_1.description = faker.lorem.words(4);
+    lv1_pA_1.lastUpdated = new Date();
+    lv1_pA_1.prefix = 'PRE';
+    lv1_pA_1.title = faker.lorem.words(2);
+    lv1_pA_1.parentId = lv0_pA.id;
+    lv1_pA_1 = await this._projectRepository.insert(lv1_pA_1);
+
+    this.grkn.ownedCompanies[0].projects.push(lv1_pA_1);
+    this.grkn.ownedCompanies[0].projects[0].children = [];
+
+    this.grkn.ownedCompanies[0].projects[0].children.push(lv1_pA_1);
+
+
+    let lv1_pA_2 = new ProjectEntity();
+    lv1_pA_2.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_2.createdAt = new Date();
+    lv1_pA_2.creatorId = this.grkn.id;
+    lv1_pA_2.description = faker.lorem.words(4);
+    lv1_pA_2.lastUpdated = new Date();
+    lv1_pA_2.prefix = 'PRE';
+    lv1_pA_2.title = faker.lorem.words(2);
+    lv1_pA_2.parentId = lv0_pA.id;
+    lv1_pA_2 = await this._projectRepository.insert(lv1_pA_2);
+
+    this.grkn.ownedCompanies[0].projects.push(lv1_pA_2);
+    this.grkn.ownedCompanies[0].projects[0].children.push(lv1_pA_2);
+
+    let lv1_pA_3 = new ProjectEntity();
+    lv1_pA_3.companyId = this.grkn.ownedCompanies[0].id;
+    lv1_pA_3.createdAt = new Date();
+    lv1_pA_3.creatorId = this.grkn.id;
+    lv1_pA_3.description = faker.lorem.words(4);
+    lv1_pA_3.lastUpdated = new Date();
+    lv1_pA_3.prefix = 'PRE';
+    lv1_pA_3.title = faker.lorem.words(2);
+    lv1_pA_3.parentId = lv0_pA.id;
+    lv1_pA_3 = await this._projectRepository.insert(lv1_pA_3);
+
+    this.grkn.ownedCompanies[0].projects.push(lv1_pA_3);
+    this.grkn.ownedCompanies[0].projects[0].children.push(lv1_pA_3);
+
+    let lv2_pA_1_1 = new ProjectEntity();
+    lv2_pA_1_1.companyId = this.grkn.ownedCompanies[0].id;
+    lv2_pA_1_1.createdAt = new Date();
+    lv2_pA_1_1.creatorId = this.grkn.id;
+    lv2_pA_1_1.description = faker.lorem.words(4);
+    lv2_pA_1_1.lastUpdated = new Date();
+    lv2_pA_1_1.prefix = 'PRE';
+    lv2_pA_1_1.title = faker.lorem.words(2);
+    lv2_pA_1_1.parentId = lv1_pA_1.id;
+    lv2_pA_1_1 = await this._projectRepository.insert(lv2_pA_1_1);
+
+    this.grkn.ownedCompanies[0].projects.push(lv2_pA_1_1);
+    this.grkn.ownedCompanies[0].projects[0].children[0].children = [];
+    this.grkn.ownedCompanies[0].projects[0].children[0].children.push(lv2_pA_1_1);
   }
+
+  // public async addRootProjects() {
+  //   this.grkn.ownedCompanies[0].projects = [];
+  //
+  //   let lv1 = new ProjectEntity();
+  //   lv1 = await this._projectRepository.insert(lv1);
+  //   lv1.statuses = [];
+  //   lv1.tasks = [];
+  //   // lv1.
+  //
+  //   let krCP = new RootProjectEntity();
+  //   krCP.companyId = this.grkn.ownedCompanies[0].id;
+  //   krCP.createdAt = new Date();
+  //   krCP.description = "desc";
+  //   krCP.lastUpdated = new Date();
+  //   krCP.title = "Character Crating";
+  //   krCP.userId = this.grkn.id;
+  //   krCP.baseProjectId = krP.id;
+  //   krCP = await this._rootProjectRepository.insert(krCP);
+  //   krCP.baseProject = krP;
+  //
+  //   for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[0].statuses.length; i++) {
+  //     const abs = this.grkn.ownedCompanies[0].statusTemplates[0].statuses[i];
+  //     let st = new StatusEntity();
+  //     st.baseStatus = abs.baseStatus;
+  //     st.createdAt = new Date();
+  //     st.creatorId = this.grkn.id;
+  //     st.description = "desc";
+  //     st.lastUpdated = new Date();
+  //     st.order = abs.order;
+  //     st.projectId = krCP.baseProject.id;
+  //     st.title = abs.title;
+  //     st = await this._statusRepository.insert(st);
+  //     krCP.baseProject.statuses.push(st);
+  //   }
+  //   this.grkn.ownedCompanies[0].rootProjects.push(krCP);
+  // }
 
   public async assignUsersToProject() {
     for (let i = 0; i < this.grkn.ownedCompanies[0].members.length; i++) {
       let prM = new ProjectMembershipEntity();
       prM.createdAt = new Date();
-      prM.rootProjectId = this.grkn.ownedCompanies[0].rootProjects[0].id;
+      prM.projectId = this.grkn.ownedCompanies[0].projects[0].id;
       prM.userId = this.grkn.ownedCompanies[0].members[i].id;
       prM = await this._projectMembershipRepository.insert(prM);
-      this.grkn.ownedCompanies[0].rootProjects[0].members = [];
-      this.grkn.ownedCompanies[0].rootProjects[0].members.push(prM);
+      this.grkn.ownedCompanies[0].projects[0].members = [];
+      this.grkn.ownedCompanies[0].projects[0].members.push(prM);
     }
 
-    this.grkn.ownedCompanies[0].rootProjects[0].managers = [];
+    this.grkn.ownedCompanies[0].projects[0].managers = [];
     let prMn = new ProjectManagerEntity();
     prMn.createdAt = new Date();
-    prMn.rootProjectId = this.grkn.ownedCompanies[0].rootProjects[0].id;
-    prMn.userId = this.grkn.ownedCompanies[0].rootProjects[0].members[0].id;
+    prMn.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+    prMn.userId = this.grkn.ownedCompanies[0].projects[0].members[0].id;
     prMn = await this._projectManagerRepository.insert(prMn);
-    this.grkn.ownedCompanies[0].rootProjects[0].managers.push(prMn);
+    this.grkn.ownedCompanies[0].projects[0].managers.push(prMn);
   }
 
   public async addTasks() {
-    this.grkn.ownedCompanies[0].rootProjects[0].baseProject.tasks = [];
+    this.grkn.ownedCompanies[0].projects[0].tasks = [];
     for (let i = 0; i < this.TASKCOUNT; i++) {
-      let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].rootProjects[0].baseProject.statuses.length));
+      let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].statuses.length));
       let prio = Math.floor(Math.random() * 9);
       let tsk = new TaskEntity();
       tsk.creatorId = this.grkn.id;
       tsk.title = faker.name.jobTitle();
       tsk.description = faker.lorem.words(4);
-      tsk.projectId = this.grkn.ownedCompanies[0].rootProjects[0].baseProject.id;
-      tsk.statusId = this.grkn.ownedCompanies[0].rootProjects[0].baseProject.statuses[stind].id;
+      tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+      tsk.statusId = this.grkn.ownedCompanies[0].projects[0].statuses[stind].id;
       tsk.createdAt = new Date();
       tsk.lastUpdated = new Date();
       tsk.code = this.codeSequence;
-      tsk.type = TaskTypes.BASIC;
       tsk.priority = prio;
       tsk = await this._taskRepository.insert(tsk);
-      this.grkn.ownedCompanies[0].rootProjects[0].baseProject.tasks.push(tsk);
+      this.grkn.ownedCompanies[0].projects[0].tasks.push(tsk);
       this.codeSequence++;
     }
   }
 
-  public async addSubProjects() {
-    let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].rootProjects[0].baseProject.statuses.length));
-    let prio = Math.floor(Math.random() * 9);
-
-    let tsk = new TaskEntity();
-    tsk.creatorId = this.grkn.id;
-    tsk.title = faker.name.jobTitle();
-    tsk.description = faker.lorem.words(4);
-    tsk.projectId = this.grkn.ownedCompanies[0].rootProjects[0].id;
-    tsk.statusId = this.grkn.ownedCompanies[0].rootProjects[0].baseProject.statuses[stind].id;
-    tsk.createdAt = new Date();
-    tsk.lastUpdated = new Date();
-    tsk.code = this.codeSequence;
-    tsk.type = TaskTypes.SUBPROJECT;
-    tsk.priority = prio;
-
-    tsk = await this._taskRepository.insert(tsk);
-
-    let sbP = new ProjectEntity();
-    sbP.projectType = ProjectTypes.SUB;
-    sbP = await this._projectRepository.insert(sbP);
-    sbP.statuses = [];
-    sbP.tasks = [];
-
-    let sbPr = new SubProjectEntity();
-    sbPr.assignedTaskId = tsk.id;
-    sbPr.baseProjectId = sbP.id;
-    sbPr = await this._subProjectRepository.insert(sbPr);
-    sbPr.baseProject = sbP;
-
-    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
-      const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
-      let st = new StatusEntity();
-      st.baseStatus = abs.baseStatus;
-      st.createdAt = new Date();
-      st.creatorId = this.grkn.id;
-      st.description = "desc";
-      st.lastUpdated = new Date();
-      st.order = abs.order;
-      st.projectId = sbPr.baseProjectId;
-      st.title = abs.title;
-      st = await this._statusRepository.insert(st);
-      sbPr.baseProject.statuses.push(st);
-    }
-
-    tsk.subProject = sbPr;
-
-    for (let i = 0; i < 5; i++) {
-      let stind = Math.floor(Math.random() * (tsk.subProject.baseProject.statuses.length));
-      let prio = Math.floor(Math.random() * 9);
-      let sbTsk = new TaskEntity();
-      sbTsk.creatorId = this.grkn.id;
-      sbTsk.title = faker.name.jobTitle();
-      sbTsk.description = faker.lorem.words(4);
-      sbTsk.projectId = tsk.subProject.baseProject.id;
-      sbTsk.statusId = tsk.subProject.baseProject.statuses[stind].id;
-      sbTsk.createdAt = new Date();
-      sbTsk.lastUpdated = new Date();
-      sbTsk.code = this.codeSequence;
-      sbTsk.type = TaskTypes.BASIC;
-      sbTsk.priority = prio;
-      sbTsk = await this._taskRepository.insert(sbTsk);
-      tsk.subProject.baseProject.tasks.push(sbTsk);
-      this.codeSequence++;
-    }
-    this.grkn.ownedCompanies[0].rootProjects[0].baseProject.tasks.push(tsk);
-  }
+  // public async addSubProjects() {
+  //   let stind = Math.floor(Math.random() * (this.grkn.ownedCompanies[0].projects[0].baseProject.statuses.length));
+  //   let prio = Math.floor(Math.random() * 9);
+  //
+  //   let tsk = new TaskEntity();
+  //   tsk.creatorId = this.grkn.id;
+  //   tsk.title = faker.name.jobTitle();
+  //   tsk.description = faker.lorem.words(4);
+  //   tsk.projectId = this.grkn.ownedCompanies[0].projects[0].id;
+  //   tsk.statusId = this.grkn.ownedCompanies[0].projects[0].baseProject.statuses[stind].id;
+  //   tsk.createdAt = new Date();
+  //   tsk.lastUpdated = new Date();
+  //   tsk.code = this.codeSequence;
+  //   tsk.type = TaskTypes.SUBPROJECT;
+  //   tsk.priority = prio;
+  //
+  //   tsk = await this._taskRepository.insert(tsk);
+  //
+  //   let sbP = new ProjectEntity();
+  //   sbP.projectType = ProjectTypes.SUB;
+  //   sbP = await this._projectRepository.insert(sbP);
+  //   sbP.statuses = [];
+  //   sbP.tasks = [];
+  //
+  //   let sbPr = new SubProjectEntity();
+  //   sbPr.assignedTaskId = tsk.id;
+  //   sbPr.baseProjectId = sbP.id;
+  //   sbPr = await this._subProjectRepository.insert(sbPr);
+  //   sbPr.baseProject = sbP;
+  //
+  //   for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
+  //     const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
+  //     let st = new StatusEntity();
+  //     st.baseStatus = abs.baseStatus;
+  //     st.createdAt = new Date();
+  //     st.creatorId = this.grkn.id;
+  //     st.description = "desc";
+  //     st.lastUpdated = new Date();
+  //     st.order = abs.order;
+  //     st.projectId = sbPr.baseProjectId;
+  //     st.title = abs.title;
+  //     st = await this._statusRepository.insert(st);
+  //     sbPr.baseProject.statuses.push(st);
+  //   }
+  //
+  //   tsk.subProject = sbPr;
+  //
+  //   for (let i = 0; i < 5; i++) {
+  //     let stind = Math.floor(Math.random() * (tsk.subProject.baseProject.statuses.length));
+  //     let prio = Math.floor(Math.random() * 9);
+  //     let sbTsk = new TaskEntity();
+  //     sbTsk.creatorId = this.grkn.id;
+  //     sbTsk.title = faker.name.jobTitle();
+  //     sbTsk.description = faker.lorem.words(4);
+  //     sbTsk.projectId = tsk.subProject.baseProject.id;
+  //     sbTsk.statusId = tsk.subProject.baseProject.statuses[stind].id;
+  //     sbTsk.createdAt = new Date();
+  //     sbTsk.lastUpdated = new Date();
+  //     sbTsk.code = this.codeSequence;
+  //     sbTsk.type = TaskTypes.BASIC;
+  //     sbTsk.priority = prio;
+  //     sbTsk = await this._taskRepository.insert(sbTsk);
+  //     tsk.subProject.baseProject.tasks.push(sbTsk);
+  //     this.codeSequence++;
+  //   }
+  //   this.grkn.ownedCompanies[0].rootProjects[0].baseProject.tasks.push(tsk);
+  // }
 
 }

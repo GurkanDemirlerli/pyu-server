@@ -410,7 +410,6 @@ let CompanyController = class CompanyController {
     showTree(req, res, next) {
         const companyId = +req.params.id;
         this._companyService.showTree(companyId).then((result) => {
-            console.log("RESSSSSS", result);
             return res.status(200).json({
                 success: true,
                 data: result
@@ -529,6 +528,143 @@ exports.IssueController = IssueController;
 
 /***/ }),
 
+/***/ "./src/@controllers/project.controller.ts":
+/*!************************************************!*\
+  !*** ./src/@controllers/project.controller.ts ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
+const error_handler_1 = __webpack_require__(/*! @errors/error-handler */ "./src/errors/error-handler.ts");
+const inject_types_1 = __webpack_require__(/*! @ioc/inject-types */ "./src/ioc/inject-types.ts");
+const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
+let ProjectController = class ProjectController {
+    constructor(_projectService) {
+        this._projectService = _projectService;
+    }
+    listByCompany(req, res, next) {
+        const companyId = req.params.companyId;
+        let filters = {};
+        if (req.query.hasOwnProperty("skip"))
+            filters.skip = +req.query.skip;
+        if (req.query.hasOwnProperty("take"))
+            filters.take = +req.query.take;
+        this._projectService.listByCompany(filters, req.decoded.id, companyId).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'list', 'ProjectController');
+        });
+    }
+    insert(req, res, next) {
+        let prjDto = Object.assign(new dtos_1.ProjectCreateDto(), req.body);
+        prjDto.userId = req.decoded.id;
+        this._projectService.add(prjDto).then((createdId) => {
+            return this._projectService.find(createdId, req.decoded.id);
+        }).then((result) => {
+            return res.status(201).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'insert', 'ProjectController');
+        });
+    }
+    find(req, res, next) {
+        const id = +req.params.id;
+        this._projectService.find(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'find', 'ProjectController');
+        });
+    }
+    update(req, res, next) {
+        const id = req.params.id;
+        const prjDto = Object.assign(new dtos_1.ProjectCreateDto(), req.body);
+        this._projectService.update(id, prjDto, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'update', 'ProjectController');
+        });
+    }
+    delete(req, res, next) {
+        const id = +req.params.id;
+        this._projectService.delete(id, req.decoded.id).then(() => {
+            return res.status(200).json({
+                success: true
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'delete', 'ProjectController');
+        });
+    }
+    assignProjectManager(req, res, next) {
+        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'assignProjectManager', 'ProjectController');
+    }
+    start(req, res, next) {
+        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'start', 'ProjectController');
+    }
+    pause(req, res, next) {
+        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'ProjectController');
+    }
+    getMembers(req, res, next) {
+        const id = +req.params.id;
+        this._projectService.getMembers(id, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'getMembers', 'ProjectController');
+        });
+    }
+    addMember(req, res, next) {
+        const id = +req.params.id;
+        let prjRgDto = Object.assign(new dtos_1.ProjectUserRegisterDto(), req.body);
+        this._projectService.addMember(id, prjRgDto).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'addMember', 'ProjectController');
+        });
+    }
+};
+ProjectController = __decorate([
+    inversify_1.injectable(),
+    __param(0, inversify_1.inject(inject_types_1.InjectTypes.Service.PROJECT)),
+    __metadata("design:paramtypes", [Object])
+], ProjectController);
+exports.ProjectController = ProjectController;
+
+
+/***/ }),
+
 /***/ "./src/@controllers/question.controller.ts":
 /*!*************************************************!*\
   !*** ./src/@controllers/question.controller.ts ***!
@@ -624,194 +760,6 @@ QuestionController = __decorate([
     __metadata("design:paramtypes", [Object])
 ], QuestionController);
 exports.QuestionController = QuestionController;
-
-
-/***/ }),
-
-/***/ "./src/@controllers/root-project.controller.ts":
-/*!*****************************************************!*\
-  !*** ./src/@controllers/root-project.controller.ts ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
-const error_handler_1 = __webpack_require__(/*! @errors/error-handler */ "./src/errors/error-handler.ts");
-const inject_types_1 = __webpack_require__(/*! @ioc/inject-types */ "./src/ioc/inject-types.ts");
-const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
-let RootProjectController = class RootProjectController {
-    constructor(_rootProjectService) {
-        this._rootProjectService = _rootProjectService;
-    }
-    listByCompany(req, res, next) {
-        const companyId = req.params.companyId;
-        let filters = {};
-        if (req.query.hasOwnProperty("skip"))
-            filters.skip = +req.query.skip;
-        if (req.query.hasOwnProperty("take"))
-            filters.take = +req.query.take;
-        this._rootProjectService.listByCompany(filters, req.decoded.id, companyId).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'list', 'RootProjectController');
-        });
-    }
-    insert(req, res, next) {
-        let prjDto = Object.assign(new dtos_1.RootProjectCreateDto(), req.body);
-        prjDto.userId = req.decoded.id;
-        this._rootProjectService.add(prjDto).then((createdId) => {
-            return this._rootProjectService.find(createdId, req.decoded.id);
-        }).then((result) => {
-            return res.status(201).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'insert', 'RootProjectController');
-        });
-    }
-    find(req, res, next) {
-        const id = +req.params.id;
-        this._rootProjectService.find(id, req.decoded.id).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'find', 'RootProjectController');
-        });
-    }
-    update(req, res, next) {
-        const id = req.params.id;
-        const prjDto = Object.assign(new dtos_1.RootProjectCreateDto(), req.body);
-        this._rootProjectService.update(id, prjDto, req.decoded.id).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'update', 'RootProjectController');
-        });
-    }
-    delete(req, res, next) {
-        const id = +req.params.id;
-        this._rootProjectService.delete(id, req.decoded.id).then(() => {
-            return res.status(200).json({
-                success: true
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'delete', 'RootProjectController');
-        });
-    }
-    assignRootProjectManager(req, res, next) {
-        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'assignRootProjectManager', 'RootProjectController');
-    }
-    start(req, res, next) {
-        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'start', 'RootProjectController');
-    }
-    pause(req, res, next) {
-        return error_handler_1.ErrorHandler.handleErrorResponses(new app_error_1.AppError('AppError', 'Method Not Implemented', 501), res, 'stop', 'RootProjectController');
-    }
-    getMembers(req, res, next) {
-        const id = +req.params.id;
-        this._rootProjectService.getMembers(id, req.decoded.id).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'getMembers', 'RootProjectController');
-        });
-    }
-    addMember(req, res, next) {
-        const id = +req.params.id;
-        let prjRgDto = Object.assign(new dtos_1.RootProjectUserRegisterDto(), req.body);
-        this._rootProjectService.addMember(id, prjRgDto).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'addMember', 'RootProjectController');
-        });
-    }
-};
-RootProjectController = __decorate([
-    inversify_1.injectable(),
-    __param(0, inversify_1.inject(inject_types_1.InjectTypes.Service.ROOTPROJECT)),
-    __metadata("design:paramtypes", [Object])
-], RootProjectController);
-exports.RootProjectController = RootProjectController;
-
-
-/***/ }),
-
-/***/ "./src/@controllers/sub-project.controller.ts":
-/*!****************************************************!*\
-  !*** ./src/@controllers/sub-project.controller.ts ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-const error_handler_1 = __webpack_require__(/*! @errors/error-handler */ "./src/errors/error-handler.ts");
-const inject_types_1 = __webpack_require__(/*! @ioc/inject-types */ "./src/ioc/inject-types.ts");
-let SubProjectController = class SubProjectController {
-    constructor(_subProjectService) {
-        this._subProjectService = _subProjectService;
-    }
-    find(req, res, next) {
-        const id = +req.params.id;
-        this._subProjectService.find(id, req.decoded.id).then((result) => {
-            return res.status(200).json({
-                success: true,
-                data: result
-            });
-        }).catch((error) => {
-            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'find', 'SubProjectController');
-        });
-    }
-};
-SubProjectController = __decorate([
-    inversify_1.injectable(),
-    __param(0, inversify_1.inject(inject_types_1.InjectTypes.Service.SUB_PROJECT)),
-    __metadata("design:paramtypes", [Object])
-], SubProjectController);
-exports.SubProjectController = SubProjectController;
 
 
 /***/ }),
@@ -1359,10 +1307,6 @@ var abstract_status_repository_1 = __webpack_require__(/*! ./abstract-status.rep
 exports.AbstractStatusRepository = abstract_status_repository_1.AbstractStatusRepository;
 var status_template_repository_1 = __webpack_require__(/*! ./status-template.repository */ "./src/@repository/concrete/status-template.repository.ts");
 exports.StatusTemplateRepository = status_template_repository_1.StatusTemplateRepository;
-var sub_project_repository_1 = __webpack_require__(/*! ./sub-project.repository */ "./src/@repository/concrete/sub-project.repository.ts");
-exports.SubProjectRepository = sub_project_repository_1.SubProjectRepository;
-var root_project_repository_1 = __webpack_require__(/*! ./root-project.repository */ "./src/@repository/concrete/root-project.repository.ts");
-exports.RootProjectRepository = root_project_repository_1.RootProjectRepository;
 
 
 /***/ }),
@@ -1651,65 +1595,6 @@ exports.QuestionRepository = QuestionRepository;
 
 /***/ }),
 
-/***/ "./src/@repository/concrete/root-project.repository.ts":
-/*!*************************************************************!*\
-  !*** ./src/@repository/concrete/root-project.repository.ts ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
-const root_project_entity_1 = __webpack_require__(/*! ./../../entities/root-project.entity */ "./src/entities/root-project.entity.ts");
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-let RootProjectRepository = class RootProjectRepository extends repository_base_1.RepositoryBase {
-    constructor() {
-        super(root_project_entity_1.RootProjectEntity);
-    }
-    // listByFiltersByCompany(filters: RootProjectFilter, companyId: number): Promise<RootProjectEntity[]> {
-    //   let query = getManager().createQueryBuilder(RootProjectEntity, "project")
-    //     .leftJoinAndSelect("project.managers", "manager")
-    //     .where("project.companyId =:companyId", { companyId: companyId })
-    //   query = query.orderBy("project.id", "DESC");
-    //   if (filters.take !== undefined) {
-    //     query = query.take(filters.take);
-    //     if (filters.skip !== undefined) query = query.skip(filters.skip);
-    //   }
-    //   return query.orderBy("project.id", "DESC").getMany();
-    // }
-    findForDetails(id) {
-        let query = typeorm_1.getManager().createQueryBuilder(root_project_entity_1.RootProjectEntity, "rtp").select(["rtp.id", "rtp.title", "rtp.description"])
-            .where("rtp.id =:id", { id: id })
-            .leftJoin("rtp.company", "company").addSelect(["company.id", "company.name", "company.description"])
-            .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
-            .leftJoin("rtp.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
-            .leftJoinAndSelect("rtp.baseProject", "base")
-            .leftJoinAndSelect("base.statuses", "status");
-        return query.getOne();
-    }
-};
-RootProjectRepository = __decorate([
-    inversify_1.injectable(),
-    __metadata("design:paramtypes", [])
-], RootProjectRepository);
-exports.RootProjectRepository = RootProjectRepository;
-
-
-/***/ }),
-
 /***/ "./src/@repository/concrete/status-template.repository.ts":
 /*!****************************************************************!*\
   !*** ./src/@repository/concrete/status-template.repository.ts ***!
@@ -1780,68 +1665,6 @@ StatusRepository = __decorate([
     __metadata("design:paramtypes", [])
 ], StatusRepository);
 exports.StatusRepository = StatusRepository;
-
-
-/***/ }),
-
-/***/ "./src/@repository/concrete/sub-project.repository.ts":
-/*!************************************************************!*\
-  !*** ./src/@repository/concrete/sub-project.repository.ts ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
-const sub_project_entity_1 = __webpack_require__(/*! ./../../entities/sub-project.entity */ "./src/entities/sub-project.entity.ts");
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-let SubProjectRepository = class SubProjectRepository extends repository_base_1.RepositoryBase {
-    constructor() {
-        super(sub_project_entity_1.SubProjectEntity);
-    }
-    findForDetails(id) {
-        let query = typeorm_1.getManager().createQueryBuilder(sub_project_entity_1.SubProjectEntity, "rtp").select(["rtp.id",])
-            .where("rtp.id =:id", { id: id })
-            // .leftJoin("rtp.company", "company").addSelect(["company.id", "company.name", "company.description"])
-            // .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
-            // .leftJoin("rtp.creator", "creator").addSelect(["creator.id", "creator.name", "creator.surname", "creator.username"])
-            .leftJoinAndSelect("rtp.baseProject", "base")
-            .leftJoinAndSelect("base.statuses", "status")
-            .leftJoinAndSelect("rtp.assignedTask", "asgtsk")
-            .leftJoinAndSelect("asgtsk.project", "pp")
-            .leftJoinAndSelect("pp.subProject", "pps")
-            .leftJoinAndSelect("pp.rootProject", "ppr");
-        return query.getOne();
-    }
-    findAncestor(id) {
-        let query = typeorm_1.getManager().createQueryBuilder(sub_project_entity_1.SubProjectEntity, "rtp").select(["rtp.id",])
-            .where("rtp.id =:id", { id: id })
-            .leftJoinAndSelect("rtp.baseProject", "base")
-            .leftJoinAndSelect("rtp.assignedTask", "asgtsk")
-            .leftJoinAndSelect("asgtsk.project", "pp")
-            .leftJoinAndSelect("pp.subProject", "pps")
-            .leftJoinAndSelect("pp.rootProject", "ppr");
-        return query.getOne();
-    }
-};
-SubProjectRepository = __decorate([
-    inversify_1.injectable(),
-    __metadata("design:paramtypes", [])
-], SubProjectRepository);
-exports.SubProjectRepository = SubProjectRepository;
 
 
 /***/ }),
@@ -1940,7 +1763,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_base_1 = __webpack_require__(/*! ./base/repository.base */ "./src/@repository/concrete/base/repository.base.ts");
-const task_entity_1 = __webpack_require__(/*! ./../../entities/task.entity */ "./src/entities/task.entity.ts");
+const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
 const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
 const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
@@ -1966,10 +1789,7 @@ let TaskRepository = class TaskRepository extends repository_base_1.RepositoryBa
                 query = query.skip(filters.skip);
         }
         query = query
-            .leftJoin("task.comments", "comment").addSelect(["comment.id"])
-            .leftJoinAndSelect("task.subProject", "sbp")
-            .leftJoinAndSelect("sbp.baseProject", "bsp")
-            .leftJoinAndSelect("bsp.tasks", "sbts");
+            .leftJoin("task.comments", "comment").addSelect(["comment.id"]);
         return query.orderBy("task.id", "DESC").getMany();
     }
     findForDetails(id) {
@@ -1982,12 +1802,7 @@ let TaskRepository = class TaskRepository extends repository_base_1.RepositoryBa
             .leftJoin("comment.creator", "commentCreator").addSelect(["commentCreator.id", "commentCreator.name", "commentCreator.surname", "commentCreator.username"])
             .leftJoin("task.fromIssue", "fromIssue").addSelect(["fromIssue.id", "fromIssue.title", "fromIssue.description"])
             .leftJoinAndSelect("task.project", "project")
-            .leftJoinAndSelect("project.subProject", "pps")
-            .leftJoinAndSelect("project.rootProject", "ppr")
-            .leftJoin("task.status", "status").addSelect(["status.id", "status.title", "status.description"])
-            .leftJoinAndSelect("task.subProject", "sbp")
-            .leftJoinAndSelect("sbp.baseProject", "bsp")
-            .leftJoinAndSelect("bsp.tasks", "sbts");
+            .leftJoin("task.status", "status").addSelect(["status.id", "status.title", "status.description"]);
         return query.getOne();
     }
 };
@@ -2225,25 +2040,23 @@ exports.CompanyRoutes = CompanyRoutes;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_routes_1 = __webpack_require__(/*! ./user.routes */ "./src/@routes/user.routes.ts");
-const root_project_routes_1 = __webpack_require__(/*! ./root-project.routes */ "./src/@routes/root-project.routes.ts");
 const company_routes_1 = __webpack_require__(/*! ./company.routes */ "./src/@routes/company.routes.ts");
 const task_routes_1 = __webpack_require__(/*! ./task.routes */ "./src/@routes/task.routes.ts");
 const comment_routes_1 = __webpack_require__(/*! ./comment.routes */ "./src/@routes/comment.routes.ts");
 const question_routes_1 = __webpack_require__(/*! ./question.routes */ "./src/@routes/question.routes.ts");
 const answer_routes_1 = __webpack_require__(/*! ./answer.routes */ "./src/@routes/answer.routes.ts");
 const issue_routes_1 = __webpack_require__(/*! ./issue.routes */ "./src/@routes/issue.routes.ts");
-const sub_project_routes_1 = __webpack_require__(/*! ./sub-project.routes */ "./src/@routes/sub-project.routes.ts");
+const project_routes_1 = __webpack_require__(/*! ./project.routes */ "./src/@routes/project.routes.ts");
 class RouteBinder {
     static configureRoutes(app) {
         task_routes_1.TaskRoutes.configureRoutes(app);
         comment_routes_1.CommentRoutes.configureRoutes(app);
         user_routes_1.UserRoutes.configureRoutes(app);
         company_routes_1.CompanyRoutes.configureRoutes(app);
-        root_project_routes_1.RootProjectRoutes.configureRoutes(app);
+        project_routes_1.ProjectRoutes.configureRoutes(app);
         question_routes_1.QuestionRoutes.configureRoutes(app);
         answer_routes_1.AnswerRoutes.configureRoutes(app);
         issue_routes_1.IssueRoutes.configureRoutes(app);
-        sub_project_routes_1.SubProjectRoutes.configureRoutes(app);
     }
 }
 exports.RouteBinder = RouteBinder;
@@ -2288,6 +2101,54 @@ exports.IssueRoutes = IssueRoutes;
 
 /***/ }),
 
+/***/ "./src/@routes/project.routes.ts":
+/*!***************************************!*\
+  !*** ./src/@routes/project.routes.ts ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
+const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
+const _middlewares_1 = __webpack_require__(/*! @middlewares */ "./src/middlewares/index.ts");
+const _middlewares_2 = __webpack_require__(/*! @middlewares */ "./src/middlewares/index.ts");
+const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
+const project_controller_1 = __webpack_require__(/*! @controllers/project.controller */ "./src/@controllers/project.controller.ts");
+class ProjectRoutes {
+    static configureRoutes(app) {
+        const root = "/api/projects"; //TODO rootProjects yap
+        const ctrl = _ioc_1.IOC.container.get(project_controller_1.ProjectController);
+        //verilen companyId'ye gore projeleri getirir
+        app.route(root + '/company/:companyId')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.listByCompany(req, res, next));
+        app.route(root + '/:id')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.find(req, res, next));
+        app.route(root + '/')
+            .post(_middlewares_1.validationMiddleware(dtos_1.ProjectCreateDto), _middlewares_2.authorize, (req, res, next) => ctrl.insert(req, res, next));
+        app.route(root + '/:id')
+            .put(_middlewares_1.validationMiddleware(dtos_1.ProjectUpdateDto), _middlewares_2.authorize, (req, res, next) => ctrl.update(req, res, next));
+        app.route(root + '/:id')
+            .delete(_middlewares_2.authorize, (req, res, next) => ctrl.delete(req, res, next));
+        app.route(root + '/:id/assignProjectManager')
+            .put(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.assignProjectManager(req, res, next));
+        app.route(root + '/:id/addMember')
+            .post(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.addMember(req, res, next));
+        app.route(root + '/:id/members')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.getMembers(req, res, next));
+        app.route(root + '/:id/start')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.start(req, res, next));
+        app.route(root + '/:id/pause')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.pause(req, res, next));
+    }
+}
+exports.ProjectRoutes = ProjectRoutes;
+
+
+/***/ }),
+
 /***/ "./src/@routes/question.routes.ts":
 /*!****************************************!*\
   !*** ./src/@routes/question.routes.ts ***!
@@ -2321,81 +2182,6 @@ class QuestionRoutes {
     }
 }
 exports.QuestionRoutes = QuestionRoutes;
-
-
-/***/ }),
-
-/***/ "./src/@routes/root-project.routes.ts":
-/*!********************************************!*\
-  !*** ./src/@routes/root-project.routes.ts ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
-const _middlewares_1 = __webpack_require__(/*! @middlewares */ "./src/middlewares/index.ts");
-const _middlewares_2 = __webpack_require__(/*! @middlewares */ "./src/middlewares/index.ts");
-const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const root_project_controller_1 = __webpack_require__(/*! @controllers/root-project.controller */ "./src/@controllers/root-project.controller.ts");
-class RootProjectRoutes {
-    static configureRoutes(app) {
-        const root = "/api/projects"; //TODO rootProjects yap
-        const ctrl = _ioc_1.IOC.container.get(root_project_controller_1.RootProjectController);
-        //verilen companyId'ye gore projeleri getirir
-        app.route(root + '/company/:companyId')
-            .get(_middlewares_2.authorize, (req, res, next) => ctrl.listByCompany(req, res, next));
-        app.route(root + '/:id')
-            .get(_middlewares_2.authorize, (req, res, next) => ctrl.find(req, res, next));
-        app.route(root + '/')
-            .post(_middlewares_1.validationMiddleware(dtos_1.ProjectCreateDto), _middlewares_2.authorize, (req, res, next) => ctrl.insert(req, res, next));
-        app.route(root + '/:id')
-            .put(_middlewares_1.validationMiddleware(dtos_1.ProjectUpdateDto), _middlewares_2.authorize, (req, res, next) => ctrl.update(req, res, next));
-        app.route(root + '/:id')
-            .delete(_middlewares_2.authorize, (req, res, next) => ctrl.delete(req, res, next));
-        app.route(root + '/:id/assignProjectManager')
-            .put(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.assignRootProjectManager(req, res, next));
-        app.route(root + '/:id/addMember')
-            .post(_middlewares_1.validationMiddleware(dtos_1.ProjectAssignManagerDto), _middlewares_2.authorize, (req, res, next) => ctrl.addMember(req, res, next));
-        app.route(root + '/:id/members')
-            .get(_middlewares_2.authorize, (req, res, next) => ctrl.getMembers(req, res, next));
-        app.route(root + '/:id/start')
-            .get(_middlewares_2.authorize, (req, res, next) => ctrl.start(req, res, next));
-        app.route(root + '/:id/pause')
-            .get(_middlewares_2.authorize, (req, res, next) => ctrl.pause(req, res, next));
-    }
-}
-exports.RootProjectRoutes = RootProjectRoutes;
-
-
-/***/ }),
-
-/***/ "./src/@routes/sub-project.routes.ts":
-/*!*******************************************!*\
-  !*** ./src/@routes/sub-project.routes.ts ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-__webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-const _middlewares_1 = __webpack_require__(/*! @middlewares */ "./src/middlewares/index.ts");
-const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const sub_project_controller_1 = __webpack_require__(/*! @controllers/sub-project.controller */ "./src/@controllers/sub-project.controller.ts");
-class SubProjectRoutes {
-    static configureRoutes(app) {
-        const root = "/api/subprojects";
-        const ctrl = _ioc_1.IOC.container.get(sub_project_controller_1.SubProjectController);
-        app.route(root + '/:id')
-            .get(_middlewares_1.authorize, (req, res, next) => ctrl.find(req, res, next));
-    }
-}
-exports.SubProjectRoutes = SubProjectRoutes;
 
 
 /***/ }),
@@ -2690,6 +2476,7 @@ const membership_request_entity_1 = __webpack_require__(/*! @entities/membership
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
 const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
+const project_tree_item_dto_1 = __webpack_require__(/*! @models/project-tree-item.dto */ "./src/_models/project-tree-item.dto.ts");
 let CompanyService = class CompanyService {
     constructor(_companyRepository, _companyMembershipRepository, _membershipRequestRepository, _statusTemplateRepository, _abstractStatusRepository) {
         this._companyRepository = _companyRepository;
@@ -2715,7 +2502,7 @@ let CompanyService = class CompanyService {
             let companyEns = yield this._companyRepository.listByFiltersAndUser(filters, requestorId);
             companyEns.map((cmp) => {
                 let companyDto = Object.assign(new dtos_1.CompanyListDto(), cmp, { rootProjects: undefined, users: undefined });
-                companyDto.projectCount = cmp.rootProjects.length;
+                companyDto.projectCount = cmp.projects.length;
                 companyDto.userCount = cmp.members.length;
                 companyDtos.push(companyDto);
             });
@@ -2729,7 +2516,7 @@ let CompanyService = class CompanyService {
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company not found.', 404);
             let companyDto = Object.assign(new dtos_1.CompanyDetailDto(), companyEn, { projects: undefined, users: undefined });
-            companyDto.projectCount = companyEn.rootProjects.length;
+            companyDto.projectCount = companyEn.projects.length;
             companyDto.userCount = companyEn.members.length;
             return Promise.resolve(companyDto);
         });
@@ -2850,14 +2637,46 @@ let CompanyService = class CompanyService {
     showTree(companyId) {
         return __awaiter(this, void 0, void 0, function* () {
             let trees = yield this._companyRepository.getTree(companyId);
-            console.log("TREE", trees);
-            for (let i = 0; i < trees.length; i++) {
-                let x = Object.assign({}, trees[i]);
-                console.log(i);
-                console.log(x);
+            let treeFlatList = [];
+            for (let i = 0; i < trees[0].length; i++) {
+                let x = Object.assign(new project_tree_item_dto_1.ProjectTreeItem(), trees[0][i]);
+                treeFlatList.push(x);
             }
-            Promise.resolve(trees);
+            let roots = treeFlatList.filter(r => r.parentId === null);
+            for (let i in roots) {
+                roots[i].children = this.getNestedChildren(treeFlatList, roots[i].id);
+            }
+            let nw = roots.map((item) => {
+                return Object.assign({}, {
+                    label: item.title,
+                    data: item.id,
+                    expandedIcon: "fa fa-folder-open",
+                    collapsedIcon: "fa fa-folder",
+                    children: item.children,
+                });
+            });
+            return Promise.resolve(nw);
         });
+    }
+    getNestedChildren(array, parentId) {
+        let out = [];
+        for (let i in array) {
+            if (array[i].parentId == parentId) {
+                let children = this.getNestedChildren(array, array[i].id);
+                if (children.length) {
+                    array[i].children = children;
+                }
+                out.push({
+                    label: array[i].title,
+                    data: array[i].id,
+                    expandedIcon: "fa fa-folder-open",
+                    collapsedIcon: "fa fa-folder",
+                    children: array[i].children
+                });
+                // out.push(array[i])
+            }
+        }
+        return out;
     }
 };
 CompanyService = __decorate([
@@ -2894,14 +2713,12 @@ var comment_service_1 = __webpack_require__(/*! ./comment.service */ "./src/@ser
 exports.CommentService = comment_service_1.CommentService;
 var answer_service_1 = __webpack_require__(/*! ./answer.service */ "./src/@services/concrete/answer.service.ts");
 exports.AnswerService = answer_service_1.AnswerService;
-var root_project_service_1 = __webpack_require__(/*! ./root-project.service */ "./src/@services/concrete/root-project.service.ts");
-exports.RootProjectService = root_project_service_1.RootProjectService;
 var task_service_1 = __webpack_require__(/*! ./task.service */ "./src/@services/concrete/task.service.ts");
 exports.TaskService = task_service_1.TaskService;
 var company_service_1 = __webpack_require__(/*! ./company.service */ "./src/@services/concrete/company.service.ts");
 exports.CompanyService = company_service_1.CompanyService;
-var sub_project_service_1 = __webpack_require__(/*! ./sub-project.service */ "./src/@services/concrete/sub-project.service.ts");
-exports.SubProjectService = sub_project_service_1.SubProjectService;
+var project_service_1 = __webpack_require__(/*! ./project.service */ "./src/@services/concrete/project.service.ts");
+exports.ProjectService = project_service_1.ProjectService;
 
 
 /***/ }),
@@ -2996,6 +2813,186 @@ exports.IssueService = IssueService;
 
 /***/ }),
 
+/***/ "./src/@services/concrete/project.service.ts":
+/*!***************************************************!*\
+  !*** ./src/@services/concrete/project.service.ts ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
+const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
+const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
+const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
+const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
+const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
+const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
+let ProjectService = class ProjectService {
+    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository) {
+        this._projectRepository = _projectRepository;
+        this._statusRepository = _statusRepository;
+        this._companyRepository = _companyRepository;
+        this._companyMembershipRepository = _companyMembershipRepository;
+        this._projectMembershipRepository = _projectMembershipRepository;
+    }
+    //Yalnızca sahibi ekleyebilir
+    add(model) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let companyEn = yield this._companyRepository.findOne(model.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            console.log("Owner:", companyEn.ownerId);
+            console.log("Model:", model.userId);
+            if (companyEn.ownerId !== model.userId)
+                throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 403);
+            let prjEn;
+            let uow = new uow_1.Uow();
+            yield uow.start();
+            try {
+                prjEn = new project_entity_1.ProjectEntity();
+                prjEn.companyId = model.companyId;
+                prjEn.creatorId = model.userId;
+                prjEn.title = model.title;
+                prjEn.description = model.description;
+                prjEn.createdAt = new Date();
+                prjEn.lastUpdated = new Date();
+                prjEn = yield this._projectRepository.insert(prjEn, uow.getManager());
+                yield uow.commit();
+            }
+            catch (err) {
+                yield uow.rollback();
+                throw err;
+            }
+            finally {
+                yield uow.release();
+            }
+            return Promise.resolve(prjEn.id);
+        });
+    }
+    //sadece ayni sirkettekiler erisebilir
+    listByCompany(filters, requestorId, companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let projectDtos = [];
+            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
+            if (!memberEn)
+                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
+            let projects = yield this._projectRepository.listByFiltersByCompany(filters, companyId);
+            projects.map((prj) => {
+                let projectDto = Object.assign(new dtos_1.ProjectListDto(), prj);
+                projectDtos.push(projectDto);
+            });
+            return Promise.resolve(projectDtos);
+        });
+    }
+    //sadece ayni sirkettekiler erisebilir
+    find(id, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let rtpEn = yield this._projectRepository.findForDetails(id);
+            if (!rtpEn)
+                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
+            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: rtpEn.company.id } });
+            if (!memberEn && rtpEn.company.owner.id !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
+            let prjDto = Object.assign(new dtos_1.ProjectDetailDto(), rtpEn);
+            return Promise.resolve(prjDto);
+        });
+    }
+    //yalnızca sirket sahibi izinlidir
+    update(id, model, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let updatedProject;
+            let oldProject = yield this._projectRepository.findById(id);
+            if (!oldProject)
+                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
+            const companyEn = yield this._companyRepository.findOne(oldProject.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You can not update this project', 403);
+            updatedProject = Object.assign(oldProject, model);
+            yield this._projectRepository.update(id, updatedProject);
+            return Promise.resolve(updatedProject);
+        });
+    }
+    //yalnızca sirket sahibi izinlidir
+    delete(id, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let projectEntity = yield this._projectRepository.findById(id);
+            if (!projectEntity)
+                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
+            const companyEn = yield this._companyRepository.findOne(projectEntity.companyId, { relations: [] });
+            if (!companyEn)
+                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
+            if (companyEn.ownerId !== requestorId)
+                throw new app_error_1.AppError('AppError', 'You can not delete this project', 403);
+            yield this._projectRepository.delete(id);
+            return Promise.resolve();
+        });
+    }
+    getMembers(id, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userDtos = [];
+            let projectMbshipEns;
+            projectMbshipEns = yield this._projectMembershipRepository.list({ where: { projectId: id }, relations: ["user"] });
+            for (let i = 0; i < projectMbshipEns.length; i++) {
+                let userDto = new dtos_1.UserSummaryDto();
+                userDto.id = projectMbshipEns[i].user.id;
+                userDto.name = projectMbshipEns[i].user.name;
+                userDto.surname = projectMbshipEns[i].user.surname;
+                userDtos.push(userDto);
+            }
+            return Promise.resolve(userDtos);
+        });
+    }
+    //Todo projenin bolunduğu şirketin üyesi mi diye kontrol edilecek. Yetkli kontrolü yapılacak
+    addMember(id, model) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let prjMbshipEn = new project_membership_entity_1.ProjectMembershipEntity();
+            prjMbshipEn.userId = model.userId;
+            // prjMbshipEn.projectId = id;
+            prjMbshipEn.createdAt = new Date();
+            yield this._projectMembershipRepository.insert(prjMbshipEn);
+            return Promise.resolve();
+        });
+    }
+};
+ProjectService = __decorate([
+    inversify_1.injectable(),
+    __param(0, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT)),
+    __param(1, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS)),
+    __param(2, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY)),
+    __param(3, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
+    __param(4, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+], ProjectService);
+exports.ProjectService = ProjectService;
+
+
+/***/ }),
+
 /***/ "./src/@services/concrete/question.service.ts":
 /*!****************************************************!*\
   !*** ./src/@services/concrete/question.service.ts ***!
@@ -3086,279 +3083,6 @@ exports.QuestionService = QuestionService;
 
 /***/ }),
 
-/***/ "./src/@services/concrete/root-project.service.ts":
-/*!********************************************************!*\
-  !*** ./src/@services/concrete/root-project.service.ts ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
-const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
-const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
-const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
-const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
-const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
-const root_project_entity_1 = __webpack_require__(/*! @entities/root-project.entity */ "./src/entities/root-project.entity.ts");
-const _models_1 = __webpack_require__(/*! @models */ "./src/_models/index.ts");
-let RootProjectService = class RootProjectService {
-    constructor(_rootProjectRepository, _projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository) {
-        this._rootProjectRepository = _rootProjectRepository;
-        this._projectRepository = _projectRepository;
-        this._statusRepository = _statusRepository;
-        this._companyRepository = _companyRepository;
-        this._companyMembershipRepository = _companyMembershipRepository;
-        this._projectMembershipRepository = _projectMembershipRepository;
-    }
-    //Yalnızca sahibi ekleyebilir
-    add(model) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let companyEn = yield this._companyRepository.findOne(model.companyId, { relations: [] });
-            if (!companyEn)
-                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
-            console.log("Owner:", companyEn.ownerId);
-            console.log("Model:", model.userId);
-            if (companyEn.ownerId !== model.userId)
-                throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 403);
-            let prjEn;
-            let rtpEn;
-            let uow = new uow_1.Uow();
-            yield uow.start();
-            try {
-                prjEn = new project_entity_1.ProjectEntity();
-                prjEn.projectType = _enums_1.ProjectTypes.ROOT;
-                prjEn = yield this._projectRepository.insert(prjEn, uow.getManager());
-                rtpEn = new root_project_entity_1.RootProjectEntity();
-                rtpEn.baseProjectId = prjEn.id;
-                rtpEn.companyId = model.companyId;
-                rtpEn.userId = model.userId;
-                rtpEn.title = model.title;
-                rtpEn.description = model.description;
-                rtpEn.createdAt = new Date();
-                rtpEn.lastUpdated = new Date();
-                rtpEn = yield this._rootProjectRepository.insert(rtpEn, uow.getManager());
-                yield uow.commit();
-            }
-            catch (err) {
-                yield uow.rollback();
-                throw err;
-            }
-            finally {
-                yield uow.release();
-            }
-            return Promise.resolve(rtpEn.id);
-        });
-    }
-    //sadece ayni sirkettekiler erisebilir
-    listByCompany(filters, requestorId, companyId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let projectDtos = [];
-            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
-            if (!memberEn)
-                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
-            let projects = yield this._projectRepository.listByFiltersByCompany(filters, companyId);
-            projects.map((prj) => {
-                let projectDto = Object.assign(new dtos_1.ProjectListDto(), prj);
-                projectDtos.push(projectDto);
-            });
-            return Promise.resolve(projectDtos);
-        });
-    }
-    //sadece ayni sirkettekiler erisebilir
-    find(id, requestorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let rtpEn = yield this._rootProjectRepository.findForDetails(id);
-            if (!rtpEn)
-                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: rtpEn.company.id } });
-            if (!memberEn && rtpEn.company.owner.id !== requestorId)
-                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
-            let prjDto = Object.assign(new dtos_1.ProjectDetailDto(), rtpEn);
-            return Promise.resolve(prjDto);
-        });
-    }
-    //yalnızca sirket sahibi izinlidir
-    update(id, model, requestorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let updatedProject;
-            let oldProject = yield this._projectRepository.findById(id);
-            if (!oldProject)
-                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            const companyEn = yield this._companyRepository.findOne(oldProject.companyId, { relations: [] });
-            if (!companyEn)
-                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
-            if (companyEn.ownerId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'You can not update this project', 403);
-            updatedProject = Object.assign(oldProject, model);
-            yield this._projectRepository.update(id, updatedProject);
-            return Promise.resolve(updatedProject);
-        });
-    }
-    //yalnızca sirket sahibi izinlidir
-    delete(id, requestorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let projectEntity = yield this._projectRepository.findById(id);
-            if (!projectEntity)
-                throw new app_error_1.AppError('AppError', 'Project not found.', 404);
-            const companyEn = yield this._companyRepository.findOne(projectEntity.companyId, { relations: [] });
-            if (!companyEn)
-                throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
-            if (companyEn.ownerId !== requestorId)
-                throw new app_error_1.AppError('AppError', 'You can not delete this project', 403);
-            yield this._projectRepository.delete(id);
-            return Promise.resolve();
-        });
-    }
-    getMembers(id, requestorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let userDtos = [];
-            let projectMbshipEns;
-            projectMbshipEns = yield this._projectMembershipRepository.list({ where: { projectId: id }, relations: ["user"] });
-            for (let i = 0; i < projectMbshipEns.length; i++) {
-                let userDto = new dtos_1.UserSummaryDto();
-                userDto.id = projectMbshipEns[i].user.id;
-                userDto.name = projectMbshipEns[i].user.name;
-                userDto.surname = projectMbshipEns[i].user.surname;
-                userDtos.push(userDto);
-            }
-            return Promise.resolve(userDtos);
-        });
-    }
-    //Todo projenin bolunduğu şirketin üyesi mi diye kontrol edilecek. Yetkli kontrolü yapılacak
-    addMember(id, model) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let prjMbshipEn = new project_membership_entity_1.ProjectMembershipEntity();
-            prjMbshipEn.userId = model.userId;
-            // prjMbshipEn.projectId = id;
-            prjMbshipEn.createdAt = new Date();
-            yield this._projectMembershipRepository.insert(prjMbshipEn);
-            return Promise.resolve();
-        });
-    }
-    getTree(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let tr = new _models_1.TreeExplorerItem();
-            let root = yield this._rootProjectRepository.findOne(id, null);
-            tr.label = root.title;
-            tr.data = root.baseProjectId;
-            tr.expandedIcon = "fa fa-folder-open";
-            tr.collapsedIcon = "fa fa-folder";
-            yield this._projectRepository.populateChilds();
-            return Promise.resolve(new _models_1.TreeExplorerItem());
-        });
-    }
-};
-RootProjectService = __decorate([
-    inversify_1.injectable(),
-    __param(0, inversify_1.inject(_ioc_1.InjectTypes.Repository.ROOT_PROJECT)),
-    __param(1, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT)),
-    __param(2, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS)),
-    __param(3, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY)),
-    __param(4, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
-    __param(5, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
-], RootProjectService);
-exports.RootProjectService = RootProjectService;
-
-
-/***/ }),
-
-/***/ "./src/@services/concrete/sub-project.service.ts":
-/*!*******************************************************!*\
-  !*** ./src/@services/concrete/sub-project.service.ts ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
-const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
-const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
-let SubProjectService = class SubProjectService {
-    constructor(_subProjectRepository) {
-        this._subProjectRepository = _subProjectRepository;
-    }
-    find(id, requestorId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let sbpEn = yield this._subProjectRepository.findForDetails(id);
-            if (!sbpEn)
-                throw new app_error_1.AppError('AppError', 'Sub Project not found.', 404);
-            // const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: rtpEn.company.id } });
-            // if (!memberEn && rtpEn.company.owner.id !== requestorId)
-            //   throw new AppError('AppError', 'You are not part of this company', 403);
-            // let prjDto: ProjectDetailDto = Object.assign(new ProjectDetailDto(), rtpEn);
-            // sbpEn.assignedTask.
-            yield this.populateAncestors(sbpEn);
-            return Promise.resolve(sbpEn);
-        });
-    }
-    populateAncestors(sbp) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (sbp.assignedTask.project.projectType === _enums_1.ProjectTypes.ROOT)
-                return;
-            sbp.assignedTask.project.subProject = yield this._subProjectRepository.findAncestor(sbp.assignedTask.project.subProject.id);
-            this.populateAncestors(sbp.assignedTask.project.subProject);
-        });
-    }
-};
-SubProjectService = __decorate([
-    inversify_1.injectable(),
-    __param(0, inversify_1.inject(_ioc_1.InjectTypes.Repository.SUB_PROJECT)),
-    __metadata("design:paramtypes", [Object])
-], SubProjectService);
-exports.SubProjectService = SubProjectService;
-
-
-/***/ }),
-
 /***/ "./src/@services/concrete/task.service.ts":
 /*!************************************************!*\
   !*** ./src/@services/concrete/task.service.ts ***!
@@ -3395,12 +3119,14 @@ const app_error_1 = __webpack_require__(/*! ../../errors/app-error */ "./src/err
 const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
 const task_entity_1 = __webpack_require__(/*! @entities/task.entity */ "./src/entities/task.entity.ts");
 const task_assignment_entity_1 = __webpack_require__(/*! @entities/task-assignment.entity */ "./src/entities/task-assignment.entity.ts");
-const _enums_1 = __webpack_require__(/*! @enums */ "./src/enums/index.ts");
 let TaskService = class TaskService {
     constructor(_taskRepository, _projectRepository, _taskAssignmentRepository) {
         this._taskRepository = _taskRepository;
         this._projectRepository = _projectRepository;
         this._taskAssignmentRepository = _taskAssignmentRepository;
+    }
+    convertToProject(id, requestorId) {
+        throw new Error("Method not implemented.");
     }
     //TODO kullanıcıyı göreve atama işlemi transactionda olacak.
     add(model) {
@@ -3414,7 +3140,6 @@ let TaskService = class TaskService {
             let taskEn = Object.assign(new task_entity_1.TaskEntity(), model);
             taskEn.createdAt = new Date();
             taskEn.lastUpdated = new Date();
-            taskEn.type = _enums_1.TaskTypes.BASIC;
             //TODO max değeri getirip +1ini al
             taskEn.code = 45;
             let inserted = yield this._taskRepository.insert(taskEn);
@@ -3446,10 +3171,6 @@ let TaskService = class TaskService {
             tasks.map((tsk) => {
                 let taskDto = Object.assign(new dtos_1.TaskListDto(), tsk, { comments: undefined });
                 taskDto.commentCount = tsk.comments.length;
-                if (tsk.type === _enums_1.TaskTypes.SUBPROJECT && tsk.subProject) {
-                    taskDto.subTaskCount = tsk.subProject.baseProject.tasks.length;
-                    taskDto.subProject.baseProject.tasks = undefined;
-                }
                 taskDtos.push(taskDto);
             });
             return Promise.resolve(taskDtos);
@@ -4140,7 +3861,8 @@ var issue_summary_dto_1 = __webpack_require__(/*! ./issue/issue-summary.dto */ "
 exports.IssueSummaryDto = issue_summary_dto_1.IssueSummaryDto;
 var project_update_dto_1 = __webpack_require__(/*! ./project/project-update.dto */ "./src/_models/dtos/project/project-update.dto.ts");
 exports.ProjectUpdateDto = project_update_dto_1.ProjectUpdateDto;
-// export { ProjectCreateDto } from './project/project-create.dto';
+var project_create_dto_1 = __webpack_require__(/*! ./project/project-create.dto */ "./src/_models/dtos/project/project-create.dto.ts");
+exports.ProjectCreateDto = project_create_dto_1.ProjectCreateDto;
 var project_detail_dto_1 = __webpack_require__(/*! ./project/project-detail.dto */ "./src/_models/dtos/project/project-detail.dto.ts");
 exports.ProjectDetailDto = project_detail_dto_1.ProjectDetailDto;
 var project_list_dto_1 = __webpack_require__(/*! ./project/project-list.dto */ "./src/_models/dtos/project/project-list.dto.ts");
@@ -4151,8 +3873,6 @@ var project_assign_manager_dto_1 = __webpack_require__(/*! ./project/project-ass
 exports.ProjectAssignManagerDto = project_assign_manager_dto_1.ProjectAssignManagerDto;
 var project_user_register_dto_1 = __webpack_require__(/*! ./project/project-user-register.dto */ "./src/_models/dtos/project/project-user-register.dto.ts");
 exports.ProjectUserRegisterDto = project_user_register_dto_1.ProjectUserRegisterDto;
-var root_project_create_dto_1 = __webpack_require__(/*! ./root-project/root-project-create.dto */ "./src/_models/dtos/root-project/root-project-create.dto.ts");
-exports.RootProjectCreateDto = root_project_create_dto_1.RootProjectCreateDto;
 var question_update_dto_1 = __webpack_require__(/*! ./question/question-update.dto */ "./src/_models/dtos/question/question-update.dto.ts");
 exports.QuestionUpdateDto = question_update_dto_1.QuestionUpdateDto;
 var question_create_dto_1 = __webpack_require__(/*! ./question/question-create.dto */ "./src/_models/dtos/question/question-create.dto.ts");
@@ -4332,6 +4052,45 @@ __decorate([
     __metadata("design:type", Number)
 ], ProjectAssignManagerDto.prototype, "userId", void 0);
 exports.ProjectAssignManagerDto = ProjectAssignManagerDto;
+
+
+/***/ }),
+
+/***/ "./src/_models/dtos/project/project-create.dto.ts":
+/*!********************************************************!*\
+  !*** ./src/_models/dtos/project/project-create.dto.ts ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
+class ProjectCreateDto {
+}
+__decorate([
+    class_validator_1.IsString(),
+    __metadata("design:type", String)
+], ProjectCreateDto.prototype, "title", void 0);
+__decorate([
+    class_validator_1.IsString(),
+    __metadata("design:type", String)
+], ProjectCreateDto.prototype, "description", void 0);
+__decorate([
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], ProjectCreateDto.prototype, "companyId", void 0);
+exports.ProjectCreateDto = ProjectCreateDto;
 
 
 /***/ }),
@@ -4574,45 +4333,6 @@ __decorate([
     __metadata("design:type", String)
 ], QuestionUpdateDto.prototype, "content", void 0);
 exports.QuestionUpdateDto = QuestionUpdateDto;
-
-
-/***/ }),
-
-/***/ "./src/_models/dtos/root-project/root-project-create.dto.ts":
-/*!******************************************************************!*\
-  !*** ./src/_models/dtos/root-project/root-project-create.dto.ts ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const class_validator_1 = __webpack_require__(/*! class-validator */ "class-validator");
-class RootProjectCreateDto {
-}
-__decorate([
-    class_validator_1.IsString(),
-    __metadata("design:type", String)
-], RootProjectCreateDto.prototype, "title", void 0);
-__decorate([
-    class_validator_1.IsString(),
-    __metadata("design:type", String)
-], RootProjectCreateDto.prototype, "description", void 0);
-__decorate([
-    class_validator_1.IsNumber(),
-    __metadata("design:type", Number)
-], RootProjectCreateDto.prototype, "companyId", void 0);
-exports.RootProjectCreateDto = RootProjectCreateDto;
 
 
 /***/ }),
@@ -4945,38 +4665,19 @@ exports.UserSummaryDto = UserSummaryDto;
 
 /***/ }),
 
-/***/ "./src/_models/index.ts":
-/*!******************************!*\
-  !*** ./src/_models/index.ts ***!
-  \******************************/
+/***/ "./src/_models/project-tree-item.dto.ts":
+/*!**********************************************!*\
+  !*** ./src/_models/project-tree-item.dto.ts ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tree_explorer_item_model_1 = __webpack_require__(/*! ./tree-explorer-item.model */ "./src/_models/tree-explorer-item.model.ts");
-exports.TreeExplorerItem = tree_explorer_item_model_1.TreeExplorerItem;
-
-
-/***/ }),
-
-/***/ "./src/_models/tree-explorer-item.model.ts":
-/*!*************************************************!*\
-  !*** ./src/_models/tree-explorer-item.model.ts ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-class TreeExplorerItem {
-    constructor() {
-        this.children = [];
-    }
+class ProjectTreeItem {
 }
-exports.TreeExplorerItem = TreeExplorerItem;
+exports.ProjectTreeItem = ProjectTreeItem;
 
 
 /***/ }),
@@ -5121,7 +4822,6 @@ const task_label_entity_1 = __webpack_require__(/*! @entities/task-label.entity 
 const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
 const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
-const project_folder_entity_1 = __webpack_require__(/*! @entities/project-folder.entity */ "./src/entities/project-folder.entity.ts");
 exports.dbOptions = {
     type: "mysql",
     host: "localhost",
@@ -5148,7 +4848,6 @@ exports.dbOptions = {
         abstract_status_entity_1.AbstractStatusEntity,
         status_template_entity_1.StatusTemplateEntity,
         task_label_entity_1.TaskLabelEntity,
-        project_folder_entity_1.ProjectFolderEntity
     ],
     synchronize: true,
 };
@@ -5696,74 +5395,6 @@ exports.MembershipRequestEntity = MembershipRequestEntity;
 
 /***/ }),
 
-/***/ "./src/entities/project-folder.entity.ts":
-/*!***********************************************!*\
-  !*** ./src/entities/project-folder.entity.ts ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = __webpack_require__(/*! typeorm */ "typeorm");
-const company_entity_1 = __webpack_require__(/*! @entities/company.entity */ "./src/entities/company.entity.ts");
-const project_entity_1 = __webpack_require__(/*! ./project.entity */ "./src/entities/project.entity.ts");
-let ProjectFolderEntity = class ProjectFolderEntity {
-};
-__decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
-    __metadata("design:type", Number)
-], ProjectFolderEntity.prototype, "id", void 0);
-__decorate([
-    typeorm_1.Column({
-        length: 300
-    }),
-    __metadata("design:type", String)
-], ProjectFolderEntity.prototype, "title", void 0);
-__decorate([
-    typeorm_1.Column("int", { nullable: true }),
-    __metadata("design:type", Number)
-], ProjectFolderEntity.prototype, "rootProjectId", void 0);
-__decorate([
-    typeorm_1.OneToOne(type => project_entity_1.ProjectEntity, bs => bs.rootFolder),
-    typeorm_1.JoinColumn({ name: "rootProjectId" }),
-    __metadata("design:type", project_entity_1.ProjectEntity)
-], ProjectFolderEntity.prototype, "rootProject", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => project_entity_1.ProjectEntity, prj => prj.projectFolder),
-    __metadata("design:type", Array)
-], ProjectFolderEntity.prototype, "projects", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], ProjectFolderEntity.prototype, "companyId", void 0);
-__decorate([
-    typeorm_1.ManyToOne(type => company_entity_1.CompanyEntity, company => company.projects),
-    typeorm_1.JoinColumn({ name: "companyId" }),
-    __metadata("design:type", company_entity_1.CompanyEntity)
-], ProjectFolderEntity.prototype, "company", void 0);
-ProjectFolderEntity = __decorate([
-    typeorm_1.Entity("project_folder")
-], ProjectFolderEntity);
-exports.ProjectFolderEntity = ProjectFolderEntity;
-//                                              ROOT FOLDER
-//                                              ROOT PROJECT
-//                              PROJECT                             PROJECT
-//                PROJECT               PROJECT         PROJECT                 PROJECT
-
-
-/***/ }),
-
 /***/ "./src/entities/project-manager.entity.ts":
 /*!************************************************!*\
   !*** ./src/entities/project-manager.entity.ts ***!
@@ -5909,10 +5540,7 @@ const user_entity_1 = __webpack_require__(/*! ./user.entity */ "./src/entities/u
 const project_membership_entity_1 = __webpack_require__(/*! ./project-membership.entity */ "./src/entities/project-membership.entity.ts");
 const project_manager_entity_1 = __webpack_require__(/*! ./project-manager.entity */ "./src/entities/project-manager.entity.ts");
 const question_entity_1 = __webpack_require__(/*! ./question.entity */ "./src/entities/question.entity.ts");
-const project_folder_entity_1 = __webpack_require__(/*! ./project-folder.entity */ "./src/entities/project-folder.entity.ts");
-let ProjectEntity = ProjectEntity_1 = 
-// @Tree("closure-table")
-class ProjectEntity {
+let ProjectEntity = ProjectEntity_1 = class ProjectEntity {
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -5963,16 +5591,12 @@ __decorate([
 __decorate([
     typeorm_1.Column("int", { nullable: true }),
     __metadata("design:type", Number)
-], ProjectEntity.prototype, "firstParentId", void 0);
+], ProjectEntity.prototype, "statusId", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => ProjectEntity_1, pr => pr.descendants),
-    typeorm_1.JoinColumn({ name: "firstParentId" }),
-    __metadata("design:type", ProjectEntity)
-], ProjectEntity.prototype, "firstParent", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => ProjectEntity_1, prj => prj.firstParent),
-    __metadata("design:type", Array)
-], ProjectEntity.prototype, "descendants", void 0);
+    typeorm_1.ManyToOne(type => status_entity_1.StatusEntity, status => status.projects),
+    typeorm_1.JoinColumn({ name: "statusId" }),
+    __metadata("design:type", status_entity_1.StatusEntity)
+], ProjectEntity.prototype, "status", void 0);
 __decorate([
     typeorm_1.Column("int", { nullable: true }),
     __metadata("design:type", Number)
@@ -5982,10 +5606,6 @@ __decorate([
     typeorm_1.JoinColumn({ name: "parentId" }),
     __metadata("design:type", ProjectEntity)
 ], ProjectEntity.prototype, "parent", void 0);
-__decorate([
-    typeorm_1.OneToMany(type => project_folder_entity_1.ProjectFolderEntity, pf => pf.rootProject),
-    __metadata("design:type", Array)
-], ProjectEntity.prototype, "rootFolder", void 0);
 __decorate([
     typeorm_1.OneToMany(type => issue_entity_1.IssueEntity, issue => issue.project),
     __metadata("design:type", Array)
@@ -6012,7 +5632,6 @@ __decorate([
 ], ProjectEntity.prototype, "questions", void 0);
 ProjectEntity = ProjectEntity_1 = __decorate([
     typeorm_1.Entity("project")
-    // @Tree("closure-table")
 ], ProjectEntity);
 exports.ProjectEntity = ProjectEntity;
 
@@ -6094,79 +5713,6 @@ QuestionEntity = __decorate([
     typeorm_1.Entity("question")
 ], QuestionEntity);
 exports.QuestionEntity = QuestionEntity;
-
-
-/***/ }),
-
-/***/ "./src/entities/root-project.entity.ts":
-/*!*********************************************!*\
-  !*** ./src/entities/root-project.entity.ts ***!
-  \*********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// import { IssueEntity } from '@entities/issue.entity';
-// import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, OneToOne } from "typeorm";
-// import { UserEntity } from '@entities/user.entity';
-// import { CompanyEntity } from "@entities/company.entity";
-// import { ProjectManagerEntity } from '@entities/project-manager.entity';
-// import { ProjectMembershipEntity } from '@entities/project-membership.entity';
-// import { ProjectEntity } from './project.entity';
-// import { QuestionEntity } from './question.entity';
-// @Entity("root_project")
-// export class RootProjectEntity {
-//
-//   @PrimaryGeneratedColumn()
-//   id: number;
-//
-//   @Column({
-//     length: 100
-//   })
-//   title: string;
-//
-//   @Column("int")
-//   baseProjectId: number;
-//   @OneToOne(type => ProjectEntity, bs => bs.rootProject)
-//   @JoinColumn({ name: "baseProjectId" })
-//   baseProject: ProjectEntity;
-//
-//   @Column({
-//     length: 100
-//   })
-//   description: string;
-//
-//   @OneToMany(type => IssueEntity, issue => issue.project)
-//   issues: IssueEntity[];
-//
-//   @Column("int")
-//   companyId: number;
-//   @ManyToOne(type => CompanyEntity, company => company.rootProjects)
-//   @JoinColumn({ name: "companyId" })
-//   company: CompanyEntity;
-//
-//   @Column("int")
-//   userId: number;
-//   @ManyToOne(type => UserEntity, user => user.createdRootProjects)
-//   @JoinColumn({ name: "userId" })
-//   creator: UserEntity;
-//
-//   @Column()
-//   createdAt: Date;
-//
-//   @Column()
-//   lastUpdated: Date;
-//
-//   @OneToMany(type => ProjectMembershipEntity, pms => pms.rootProject)
-//   members: ProjectMembershipEntity[];
-//
-//   @OneToMany(type => ProjectManagerEntity, prm => prm.project)
-//   managers: ProjectManagerEntity[];
-//
-//   @OneToMany(type => QuestionEntity, question => question.rootProject)
-//   questions: QuestionEntity[];
-//
-//
-// }
 
 
 /***/ }),
@@ -6298,6 +5844,10 @@ __decorate([
     __metadata("design:type", Array)
 ], StatusEntity.prototype, "tasks", void 0);
 __decorate([
+    typeorm_1.OneToMany(type => project_entity_1.ProjectEntity, prj => prj.status),
+    __metadata("design:type", Array)
+], StatusEntity.prototype, "projects", void 0);
+__decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
 ], StatusEntity.prototype, "creatorId", void 0);
@@ -6327,40 +5877,6 @@ StatusEntity = __decorate([
     typeorm_1.Entity("status")
 ], StatusEntity);
 exports.StatusEntity = StatusEntity;
-
-
-/***/ }),
-
-/***/ "./src/entities/sub-project.entity.ts":
-/*!********************************************!*\
-  !*** ./src/entities/sub-project.entity.ts ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// import { Entity, PrimaryGeneratedColumn, OneToOne, Column, JoinColumn } from "typeorm";
-// import { TaskEntity } from "@entities/task.entity";
-// import { ProjectEntity } from "./project.entity";
-//
-// @Entity("sub_project")
-// export class SubProjectEntity {
-//
-//   @PrimaryGeneratedColumn()
-//   id: number;
-//
-//   @Column("int")
-//   assignedTaskId: number;
-//   @OneToOne(type => TaskEntity, task => task.subProject)
-//   @JoinColumn({ name: "assignedTaskId" })
-//   assignedTask: TaskEntity;
-//
-//   @Column("int")
-//   baseProjectId: number;
-//   @OneToOne(type => ProjectEntity, bs => bs.subProject)
-//   @JoinColumn({ name: "baseProjectId" })
-//   baseProject: ProjectEntity;
-//
-// }
 
 
 /***/ }),
@@ -6522,10 +6038,6 @@ __decorate([
     }),
     __metadata("design:type", String)
 ], TaskEntity.prototype, "description", void 0);
-__decorate([
-    typeorm_1.Column("int"),
-    __metadata("design:type", Number)
-], TaskEntity.prototype, "type", void 0);
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
@@ -6740,156 +6252,6 @@ exports.UserEntity = UserEntity;
 
 /***/ }),
 
-/***/ "./src/enums/base-status.enum.ts":
-/*!***************************************!*\
-  !*** ./src/enums/base-status.enum.ts ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var BaseStatus;
-(function (BaseStatus) {
-    BaseStatus[BaseStatus["PLANNINING"] = 0] = "PLANNINING";
-    BaseStatus[BaseStatus["NOT_STARTED"] = 1] = "NOT_STARTED";
-    BaseStatus[BaseStatus["IN_PROGRESS"] = 2] = "IN_PROGRESS";
-    BaseStatus[BaseStatus["FINISHED"] = 3] = "FINISHED";
-})(BaseStatus = exports.BaseStatus || (exports.BaseStatus = {}));
-
-
-/***/ }),
-
-/***/ "./src/enums/company-roles.enum.ts":
-/*!*****************************************!*\
-  !*** ./src/enums/company-roles.enum.ts ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var CompanyRoles;
-(function (CompanyRoles) {
-    CompanyRoles[CompanyRoles["ADMIN"] = 0] = "ADMIN";
-    CompanyRoles[CompanyRoles["MODERATOR"] = 1] = "MODERATOR";
-})(CompanyRoles = exports.CompanyRoles || (exports.CompanyRoles = {}));
-
-
-/***/ }),
-
-/***/ "./src/enums/index.ts":
-/*!****************************!*\
-  !*** ./src/enums/index.ts ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var project_auth_types_enum_1 = __webpack_require__(/*! ./project-auth-types.enum */ "./src/enums/project-auth-types.enum.ts");
-exports.ProjectAuthTypes = project_auth_types_enum_1.ProjectAuthTypes;
-var company_roles_enum_1 = __webpack_require__(/*! ./company-roles.enum */ "./src/enums/company-roles.enum.ts");
-exports.CompanyRoles = company_roles_enum_1.CompanyRoles;
-var base_status_enum_1 = __webpack_require__(/*! ./base-status.enum */ "./src/enums/base-status.enum.ts");
-exports.BaseStatus = base_status_enum_1.BaseStatus;
-var task_types_enum_1 = __webpack_require__(/*! ./task-types.enum */ "./src/enums/task-types.enum.ts");
-exports.TaskTypes = task_types_enum_1.TaskTypes;
-var task_priorities_enum_1 = __webpack_require__(/*! ./task-priorities.enum */ "./src/enums/task-priorities.enum.ts");
-exports.TaskPriorities = task_priorities_enum_1.TaskPriorities;
-var project_types_enum_1 = __webpack_require__(/*! ./project-types.enum */ "./src/enums/project-types.enum.ts");
-exports.ProjectTypes = project_types_enum_1.ProjectTypes;
-
-
-/***/ }),
-
-/***/ "./src/enums/project-auth-types.enum.ts":
-/*!**********************************************!*\
-  !*** ./src/enums/project-auth-types.enum.ts ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ProjectAuthTypes;
-(function (ProjectAuthTypes) {
-    ProjectAuthTypes[ProjectAuthTypes["ADMIN"] = 0] = "ADMIN";
-    ProjectAuthTypes[ProjectAuthTypes["MANAGER"] = 1] = "MANAGER";
-    ProjectAuthTypes[ProjectAuthTypes["USER"] = 3] = "USER";
-})(ProjectAuthTypes = exports.ProjectAuthTypes || (exports.ProjectAuthTypes = {}));
-
-
-/***/ }),
-
-/***/ "./src/enums/project-types.enum.ts":
-/*!*****************************************!*\
-  !*** ./src/enums/project-types.enum.ts ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ProjectTypes;
-(function (ProjectTypes) {
-    ProjectTypes[ProjectTypes["ROOT"] = 0] = "ROOT";
-    ProjectTypes[ProjectTypes["SUB"] = 1] = "SUB";
-})(ProjectTypes = exports.ProjectTypes || (exports.ProjectTypes = {}));
-
-
-/***/ }),
-
-/***/ "./src/enums/task-priorities.enum.ts":
-/*!*******************************************!*\
-  !*** ./src/enums/task-priorities.enum.ts ***!
-  \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TaskPriorities;
-(function (TaskPriorities) {
-    TaskPriorities[TaskPriorities["EXTREMELY_LOW"] = 0] = "EXTREMELY_LOW";
-    TaskPriorities[TaskPriorities["ULTRA_LOW"] = 1] = "ULTRA_LOW";
-    TaskPriorities[TaskPriorities["VERY_LOW"] = 2] = "VERY_LOW";
-    TaskPriorities[TaskPriorities["LOW"] = 3] = "LOW";
-    TaskPriorities[TaskPriorities["MEDIUM"] = 4] = "MEDIUM";
-    TaskPriorities[TaskPriorities["HIGH"] = 5] = "HIGH";
-    TaskPriorities[TaskPriorities["VERY_HIGH"] = 6] = "VERY_HIGH";
-    TaskPriorities[TaskPriorities["ULTRA_HIGH"] = 7] = "ULTRA_HIGH";
-    TaskPriorities[TaskPriorities["EXTREMELY_HIGH"] = 8] = "EXTREMELY_HIGH";
-})(TaskPriorities = exports.TaskPriorities || (exports.TaskPriorities = {}));
-
-
-/***/ }),
-
-/***/ "./src/enums/task-types.enum.ts":
-/*!**************************************!*\
-  !*** ./src/enums/task-types.enum.ts ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var TaskTypes;
-(function (TaskTypes) {
-    TaskTypes[TaskTypes["BASIC"] = 0] = "BASIC";
-    TaskTypes[TaskTypes["SUBPROJECT"] = 1] = "SUBPROJECT";
-})(TaskTypes = exports.TaskTypes || (exports.TaskTypes = {}));
-
-
-/***/ }),
-
 /***/ "./src/errors/app-error.ts":
 /*!*********************************!*\
   !*** ./src/errors/app-error.ts ***!
@@ -7061,8 +6423,6 @@ var InjectTypes;
         Repository["ABSTRACT_STATUS"] = "AbstractStatusRepository";
         Repository["STATUS_TEMPLATE"] = "StatusTemplateRepository";
         Repository["PROJECT_MANAGER"] = "ProjectManagerRepository";
-        Repository["SUB_PROJECT"] = "SubProjectRepository";
-        Repository["ROOT_PROJECT"] = "RootProjectEntity";
     })(Repository = InjectTypes.Repository || (InjectTypes.Repository = {}));
     let Service;
     (function (Service) {
@@ -7070,11 +6430,10 @@ var InjectTypes;
         Service["COMMENT"] = "CommentService";
         Service["COMPANY"] = "CompanyService";
         Service["ISSUE"] = "IssueService";
-        Service["ROOTPROJECT"] = "RootProjectService";
         Service["QUESTION"] = "QuestionService";
         Service["TASK"] = "TaskService";
         Service["USER"] = "UserService";
-        Service["SUB_PROJECT"] = "SubProjectService";
+        Service["PROJECT"] = "ProjectService";
     })(Service = InjectTypes.Service || (InjectTypes.Service = {}));
 })(InjectTypes = exports.InjectTypes || (exports.InjectTypes = {}));
 
@@ -7096,7 +6455,7 @@ const answer_controller_1 = __webpack_require__(/*! @controllers/answer.controll
 const comment_controller_1 = __webpack_require__(/*! @controllers/comment.controller */ "./src/@controllers/comment.controller.ts");
 const company_controller_1 = __webpack_require__(/*! @controllers/company.controller */ "./src/@controllers/company.controller.ts");
 const issue_controller_1 = __webpack_require__(/*! @controllers/issue.controller */ "./src/@controllers/issue.controller.ts");
-const root_project_controller_1 = __webpack_require__(/*! @controllers/root-project.controller */ "./src/@controllers/root-project.controller.ts");
+const project_controller_1 = __webpack_require__(/*! @controllers/project.controller */ "./src/@controllers/project.controller.ts");
 const question_controller_1 = __webpack_require__(/*! @controllers/question.controller */ "./src/@controllers/question.controller.ts");
 const task_controller_1 = __webpack_require__(/*! @controllers/task.controller */ "./src/@controllers/task.controller.ts");
 const user_controller_1 = __webpack_require__(/*! @controllers/user.controller */ "./src/@controllers/user.controller.ts");
@@ -7105,7 +6464,6 @@ const concrete_2 = __webpack_require__(/*! @services/concrete */ "./src/@service
 const inversify_1 = __webpack_require__(/*! inversify */ "inversify");
 __webpack_require__(/*! reflect-metadata */ "reflect-metadata");
 const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
-const sub_project_controller_1 = __webpack_require__(/*! @controllers/sub-project.controller */ "./src/@controllers/sub-project.controller.ts");
 var IOC;
 (function (IOC) {
     IOC.container = new inversify_1.Container();
@@ -7124,7 +6482,7 @@ var IOC;
             .bind(issue_controller_1.IssueController)
             .toSelf();
         IOC.container
-            .bind(root_project_controller_1.RootProjectController)
+            .bind(project_controller_1.ProjectController)
             .toSelf();
         IOC.container
             .bind(question_controller_1.QuestionController)
@@ -7134,9 +6492,6 @@ var IOC;
             .toSelf();
         IOC.container
             .bind(user_controller_1.UserController)
-            .toSelf();
-        IOC.container
-            .bind(sub_project_controller_1.SubProjectController)
             .toSelf();
         // REPOSITORIES
         IOC.container
@@ -7193,12 +6548,6 @@ var IOC;
         IOC.container
             .bind(_ioc_1.InjectTypes.Repository.PROJECT_MANAGER)
             .to(concrete_1.ProjectManagerRepository);
-        IOC.container
-            .bind(_ioc_1.InjectTypes.Repository.SUB_PROJECT)
-            .to(concrete_1.SubProjectRepository);
-        IOC.container
-            .bind(_ioc_1.InjectTypes.Repository.ROOT_PROJECT)
-            .to(concrete_1.RootProjectRepository);
         // SERVICES
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.ANSWER)
@@ -7213,8 +6562,8 @@ var IOC;
             .bind(_ioc_1.InjectTypes.Service.ISSUE)
             .to(concrete_2.IssueService);
         IOC.container
-            .bind(_ioc_1.InjectTypes.Service.ROOTPROJECT)
-            .to(concrete_2.RootProjectService);
+            .bind(_ioc_1.InjectTypes.Service.PROJECT)
+            .to(concrete_2.ProjectService);
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.QUESTION)
             .to(concrete_2.QuestionService);
@@ -7224,9 +6573,6 @@ var IOC;
         IOC.container
             .bind(_ioc_1.InjectTypes.Service.USER)
             .to(concrete_2.UserService);
-        IOC.container
-            .bind(_ioc_1.InjectTypes.Service.SUB_PROJECT)
-            .to(concrete_2.SubProjectService);
         return IOC.container;
     }
     IOC.configureContainer = configureContainer;

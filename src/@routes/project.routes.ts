@@ -4,12 +4,12 @@ import { ProjectUpdateDto, ProjectCreateDto, ProjectAssignManagerDto } from '@mo
 import { validationMiddleware } from '@middlewares';
 import { authorize } from '@middlewares';
 import { IOC } from '@ioc';
-import { RootProjectController } from '@controllers/root-project.controller';
+import { ProjectController } from '@controllers/project.controller';
 
-export class RootProjectRoutes {
+export class ProjectRoutes {
   public static configureRoutes(app: express.Application): void {
     const root = "/api/projects"; //TODO rootProjects yap
-    const ctrl = IOC.container.get(RootProjectController);
+    const ctrl = IOC.container.get(ProjectController);
 
     //verilen companyId'ye gore projeleri getirir
     app.route(root + '/company/:companyId')
@@ -28,7 +28,7 @@ export class RootProjectRoutes {
       .delete(authorize, (req, res, next) => ctrl.delete(req, res, next));
 
     app.route(root + '/:id/assignProjectManager')
-      .put(validationMiddleware(ProjectAssignManagerDto), authorize, (req, res, next) => ctrl.assignRootProjectManager(req, res, next));
+      .put(validationMiddleware(ProjectAssignManagerDto), authorize, (req, res, next) => ctrl.assignProjectManager(req, res, next));
 
     app.route(root + '/:id/addMember')
       .post(validationMiddleware(ProjectAssignManagerDto), authorize, (req, res, next) => ctrl.addMember(req, res, next));

@@ -4,7 +4,7 @@ import { AnswerController } from '@controllers/answer.controller';
 import { CommentController } from '@controllers/comment.controller';
 import { CompanyController } from '@controllers/company.controller';
 import { IssueController } from '@controllers/issue.controller';
-import { RootProjectController } from '@controllers/root-project.controller';
+import { ProjectController } from '@controllers/project.controller';
 import { QuestionController } from '@controllers/question.controller';
 import { TaskController } from '@controllers/task.controller';
 import { UserController } from '@controllers/user.controller';
@@ -27,8 +27,6 @@ import {
   IStatusTemplateRepository,
   IAbstractStatusRepository,
   IProjectManagerRepository,
-  ISubProjectRepository,
-  IRootProjectRepository
 } from '@repositories/abstract';
 
 import {
@@ -50,8 +48,6 @@ import {
   StatusTemplateRepository,
   AbstractStatusRepository,
   ProjectManagerRepository,
-  SubProjectRepository,
-  RootProjectRepository
 } from '@repositories/concrete';
 
 import {
@@ -59,11 +55,10 @@ import {
   CommentService,
   CompanyService,
   IssueService,
-  RootProjectService,
   QuestionService,
   TaskService,
   UserService,
-  SubProjectService,
+  ProjectService,
 } from '@services/concrete';
 
 import {
@@ -71,18 +66,16 @@ import {
   ICommentService,
   ICompanyService,
   IIssueService,
-  IRootProjectService,
   IQuestionService,
   ITaskService,
   IUserService,
-  ISubProjectService,
+  IProjectService
 } from '@services/abstract';
 
 import { Container } from 'inversify';
 
 import 'reflect-metadata';
 import { InjectTypes } from '@ioc';
-import { SubProjectController } from '@controllers/sub-project.controller';
 
 export module IOC {
   export const container = new Container();
@@ -108,7 +101,7 @@ export module IOC {
       .toSelf();
 
     container
-      .bind<RootProjectController>(RootProjectController)
+      .bind<ProjectController>(ProjectController)
       .toSelf();
 
     container
@@ -122,11 +115,6 @@ export module IOC {
     container
       .bind<UserController>(UserController)
       .toSelf();
-
-      container
-        .bind<SubProjectController>(SubProjectController)
-        .toSelf();
-
 
     // REPOSITORIES
 
@@ -202,15 +190,6 @@ export module IOC {
       .bind<IProjectManagerRepository>(InjectTypes.Repository.PROJECT_MANAGER)
       .to(ProjectManagerRepository)
 
-    container
-      .bind<ISubProjectRepository>(InjectTypes.Repository.SUB_PROJECT)
-      .to(SubProjectRepository)
-
-    container
-      .bind<IRootProjectRepository>(InjectTypes.Repository.ROOT_PROJECT)
-      .to(RootProjectRepository)
-
-
     // SERVICES
 
 
@@ -231,8 +210,8 @@ export module IOC {
       .to(IssueService);
 
     container
-      .bind<IRootProjectService>(InjectTypes.Service.ROOTPROJECT)
-      .to(RootProjectService);
+      .bind<IProjectService>(InjectTypes.Service.PROJECT)
+      .to(ProjectService);
 
     container
       .bind<IQuestionService>(InjectTypes.Service.QUESTION)
@@ -245,10 +224,6 @@ export module IOC {
     container
       .bind<IUserService>(InjectTypes.Service.USER)
       .to(UserService);
-
-    container
-      .bind<ISubProjectService>(InjectTypes.Service.SUB_PROJECT)
-      .to(SubProjectService);
 
     return container;
   }
