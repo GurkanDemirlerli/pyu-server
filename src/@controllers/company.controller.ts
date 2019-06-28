@@ -128,4 +128,28 @@ export class CompanyController {
     });
   }
 
+  statusTemplates(req: Request, res: Response, next: NextFunction) {
+    const companyId: number = +req.params.id;
+    this._companyService.getstatusTemplates(companyId).then((result) => {
+      return res.status(200).json({
+        success: true,
+        data: result
+      });
+    }).catch((error: Error) => {
+      return ErrorHandler.handleErrorResponses(error, res, 'statusTemplates', 'CompanyController');
+    });
+  }
+
+  getMembers(req: Request, res: Response, next: NextFunction) {
+    const companyId: number = +req.params.id;
+    this._companyService.getMembers(companyId).then((result) => {
+      return res.status(200).json({
+        success: true,
+        data: result
+      });
+    }).catch((error: Error) => {
+      return ErrorHandler.handleErrorResponses(error, res, 'getMembers', 'CompanyController');
+    });
+  }
+
 }

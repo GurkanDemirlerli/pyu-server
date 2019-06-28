@@ -71,7 +71,7 @@ export class TaskService implements ITaskService {
   async find(id: number, requestorId: number): Promise<TaskDetailDto> {
     let taskEn: TaskEntity = await this._taskRepository.findForDetails(id);
     if (!taskEn) throw new AppError('AppError', 'Task not found.', 404);
-    let taskDto: TaskDetailDto = Object.assign(new TaskDetailDto(), taskEn, { projects: undefined, users: undefined });
+    let taskDto: TaskDetailDto = Object.assign(new TaskDetailDto(), taskEn, {  users: undefined });
     return Promise.resolve(taskDto);
   }
 

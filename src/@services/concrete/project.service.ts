@@ -1,7 +1,7 @@
 import { IProjectService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
-import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository } from "@repositories/abstract";
+import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository, IStatusTemplateRepository } from "@repositories/abstract";
 import { ProjectListDto, ProjectDetailDto, ProjectUpdateDto, UserSummaryDto, ProjectUserRegisterDto, ProjectCreateDto } from "@models/dtos";
 import { ProjectEntity } from "@entities/project.entity";
 import { ProjectFilter } from "@models/filters";
@@ -22,7 +22,9 @@ export class ProjectService implements IProjectService {
     @inject(InjectTypes.Repository.STATUS) private readonly _statusRepository: IStatusRepository,
     @inject(InjectTypes.Repository.COMPANY) private readonly _companyRepository: ICompanyRepository,
     @inject(InjectTypes.Repository.COMPANY_MEMBERSHIP) private readonly _companyMembershipRepository: ICompanyMembershipRepository,
-    @inject(InjectTypes.Repository.PROJECT_MEMBERSHIP) private readonly _projectMembershipRepository: IProjectMembershipRepository
+    @inject(InjectTypes.Repository.PROJECT_MEMBERSHIP) private readonly _projectMembershipRepository: IProjectMembershipRepository,
+    @inject(InjectTypes.Repository.STATUS_TEMPLATE) private readonly _statusTemplateRepository: IStatusTemplateRepository
+
   ) { }
 
   //Yalnızca sahibi ekleyebilir
@@ -32,8 +34,8 @@ export class ProjectService implements IProjectService {
       throw new AppError('AppError', 'Company Not Found', 404);
 
     console.log("Owner:", companyEn.ownerId);
-    console.log("Model:", model.userId)
-    if (companyEn.ownerId !== model.userId)
+    console.log("Model:", model.creatorId)
+    if (companyEn.ownerId !== model.creatorId)
       throw new AppError('AppError', 'You can not add a new project to company which is not yours', 403);
     let prjEn: ProjectEntity;
     let uow = new Uow();
@@ -41,12 +43,39 @@ export class ProjectService implements IProjectService {
     try {
       prjEn = new ProjectEntity();
       prjEn.companyId = model.companyId;
-      prjEn.creatorId = model.userId;
+      prjEn.creatorId = model.creatorId;
       prjEn.title = model.title;
       prjEn.description = model.description;
       prjEn.createdAt = new Date();
       prjEn.lastUpdated = new Date();
+      prjEn.prefix = model.prefix;
+      if (model.parentId && model.statusId) {
+        prjEn.parentId = model.parentId;
+        prjEn.statusId = model.statusId;
+      } else if (!model.parentId && !model.statusId) {
+        //First Parent
+      } else {
+        //TODO bu kontrol middleware'da yapılacak
+        throw new AppError('AppError', 'Bad project model', 422);
+      }
+      //TODO status template de ekle
       prjEn = await this._projectRepository.insert(prjEn, uow.getManager());
+
+      let sTempEn = await this._statusTemplateRepository.findOne(model.templateId, { relations: ["statuses"] });
+
+      for (let i = 0; i < sTempEn.statuses.length; i++) {
+        const abs = sTempEn.statuses[i];
+        let st = new StatusEntity();
+        st.baseStatus = abs.baseStatus;
+        st.createdAt = new Date();
+        st.creatorId = model.creatorId;
+        st.description = "desc";
+        st.lastUpdated = new Date();
+        st.order = abs.order;
+        st.projectId = prjEn.id;
+        st.title = abs.title;
+        st = await this._statusRepository.insert(st, uow.getManager());
+      }
 
       await uow.commit();
     } catch (err) { await uow.rollback(); throw err; } finally { await uow.release(); }
@@ -56,14 +85,21 @@ export class ProjectService implements IProjectService {
   //sadece ayni sirkettekiler erisebilir
   async listByCompany(filters: ProjectFilter, requestorId: number, companyId: number): Promise<ProjectListDto[]> {
     let projectDtos: ProjectListDto[] = [];
-    const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
-    if (!memberEn)
-      throw new AppError('AppError', 'You are not part of this company', 403);
+    // const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
+    // if (!memberEn && memberEn.company.owner.id !== requestorId)
+    //   throw new AppError('AppError', 'You are not part of this company', 403);
     let projects = await this._projectRepository.listByFiltersByCompany(filters, companyId);
     projects.map((prj) => {
       let projectDto = Object.assign(new ProjectListDto(), prj);
       projectDtos.push(projectDto);
     });
+    return Promise.resolve(projectDtos);
+  }
+
+  async list(filters: ProjectFilter, requestorId: number): Promise<ProjectListDto[]> {
+    let projectDtos: ProjectListDto[] = [];
+
+
     return Promise.resolve(projectDtos);
   }
 

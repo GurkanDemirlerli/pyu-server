@@ -11,4 +11,5 @@ export interface IProjectService {
   delete(id: number, requestorId: number): Promise<void>;
   getMembers(id: number, requestorId: number): Promise<UserSummaryDto[]>;
   addMember(id: number, model: ProjectUserRegisterDto): Promise<void>;
+  list(filters: ProjectFilter, requestorId: number): Promise<ProjectListDto[]>;
 }

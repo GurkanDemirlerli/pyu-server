@@ -2,7 +2,7 @@ import { ICompanyService } from "@services/abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "@ioc";
 import { ICompanyRepository, ICompanyMembershipRepository, IMembershipRequestRepository, IStatusTemplateRepository, IAbstractStatusRepository } from "@repositories/abstract";
-import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from "@models/dtos";
+import { CompanyCreateDto, CompanyListDto, CompanyDetailDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto, UserSummaryDto } from "@models/dtos";
 import { CompanyEntity } from "@entities/company.entity";
 import { CompanyFilter } from "@models/filters";
 import { AppError } from "@errors/app-error";
@@ -166,7 +166,7 @@ export class CompanyService implements ICompanyService {
     }
 
     let nw = roots.map((item) => {
-    return Object.assign({}, {
+      return Object.assign({}, {
         label: item.title,
         data: item.id,
         expandedIcon: "fa fa-folder-open",
@@ -176,6 +176,20 @@ export class CompanyService implements ICompanyService {
     });
 
     return Promise.resolve(nw);
+  }
+
+  async getMembers(companyId:number):Promise<any>{
+    let userDtos: UserSummaryDto[] = [];
+    let cmpMbshipEns: CompanyMembershipEntity[];
+    cmpMbshipEns = await this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
+    for (let i = 0; i < cmpMbshipEns.length; i++) {
+      let userDto = new UserSummaryDto();
+      userDto.id = cmpMbshipEns[i].user.id;
+      userDto.name = cmpMbshipEns[i].user.name;
+      userDto.surname = cmpMbshipEns[i].user.surname;
+      userDtos.push(userDto);
+    }
+    return Promise.resolve(userDtos);
   }
 
   private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
@@ -193,11 +207,15 @@ export class CompanyService implements ICompanyService {
           collapsedIcon: "fa fa-folder",
           children: array[i].children
         })
-        // out.push(array[i])
       }
     }
 
     return out;
+  }
+
+  async getstatusTemplates(companyId: number): Promise<any> {
+    let sTempEn = await this._statusTemplateRepository.list({ where: { companyId: companyId } });
+    return Promise.resolve(sTempEn);
   }
 
 }

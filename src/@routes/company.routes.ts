@@ -41,5 +41,10 @@ export class CompanyRoutes {
     app.route(root + '/:id/showTree')
       .get(authorize, (req, res, next) => ctrl.showTree(req, res, next));
 
+    app.route(root + '/:id/statusTemplates')
+      .get(authorize, (req, res, next) => ctrl.statusTemplates(req, res, next));
+
+    app.route(root + '/:id/getMembers')
+      .get(authorize, (req, res, next) => ctrl.getMembers(req, res, next));
   }
 }

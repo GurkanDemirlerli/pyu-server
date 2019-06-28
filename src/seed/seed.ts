@@ -265,6 +265,16 @@ export class SeedDatabase {
     td = await this._abstractStatusRepository.insert(td);
     bscST.statuses.push(td);
 
+    let ip = new AbstractStatusEntity();
+    ip.baseStatus = BaseStatus.IN_PROGRESS;
+    ip.title = "In Progress";
+    ip.description = "desc";
+    ip.createdAt = new Date();
+    ip.order = 0;
+    ip.templateId = bscST.id;
+    ip = await this._abstractStatusRepository.insert(ip);
+    bscST.statuses.push(ip);
+
     let dn = new AbstractStatusEntity();
     dn.baseStatus = BaseStatus.FINISHED;
     dn.title = "Done";
@@ -321,7 +331,24 @@ export class SeedDatabase {
     lv1_pA_1.prefix = 'PRE';
     lv1_pA_1.title = faker.lorem.words(2);
     lv1_pA_1.parentId = lv0_pA.id;
+    lv1_pA_1.statuses = [];
+    lv1_pA_1.tasks = [];
     lv1_pA_1 = await this._projectRepository.insert(lv1_pA_1);
+
+    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
+      const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
+      let st = new StatusEntity();
+      st.baseStatus = abs.baseStatus;
+      st.createdAt = new Date();
+      st.creatorId = this.grkn.id;
+      st.description = "desc";
+      st.lastUpdated = new Date();
+      st.order = abs.order;
+      st.projectId = lv1_pA_1.id;
+      st.title = abs.title;
+      st = await this._statusRepository.insert(st);
+      lv1_pA_1.statuses.push(st);
+    }
 
     this.grkn.ownedCompanies[0].projects.push(lv1_pA_1);
     this.grkn.ownedCompanies[0].projects[0].children = [];
@@ -338,7 +365,24 @@ export class SeedDatabase {
     lv1_pA_2.prefix = 'PRE';
     lv1_pA_2.title = faker.lorem.words(2);
     lv1_pA_2.parentId = lv0_pA.id;
+    lv1_pA_2.statuses = [];
+    lv1_pA_2.tasks = [];
     lv1_pA_2 = await this._projectRepository.insert(lv1_pA_2);
+
+    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
+      const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
+      let st = new StatusEntity();
+      st.baseStatus = abs.baseStatus;
+      st.createdAt = new Date();
+      st.creatorId = this.grkn.id;
+      st.description = "desc";
+      st.lastUpdated = new Date();
+      st.order = abs.order;
+      st.projectId = lv1_pA_2.id;
+      st.title = abs.title;
+      st = await this._statusRepository.insert(st);
+      lv1_pA_2.statuses.push(st);
+    }
 
     this.grkn.ownedCompanies[0].projects.push(lv1_pA_2);
     this.grkn.ownedCompanies[0].projects[0].children.push(lv1_pA_2);
@@ -352,7 +396,24 @@ export class SeedDatabase {
     lv1_pA_3.prefix = 'PRE';
     lv1_pA_3.title = faker.lorem.words(2);
     lv1_pA_3.parentId = lv0_pA.id;
+    lv1_pA_3.statuses = [];
+    lv1_pA_3.tasks = [];
     lv1_pA_3 = await this._projectRepository.insert(lv1_pA_3);
+
+    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
+      const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
+      let st = new StatusEntity();
+      st.baseStatus = abs.baseStatus;
+      st.createdAt = new Date();
+      st.creatorId = this.grkn.id;
+      st.description = "desc";
+      st.lastUpdated = new Date();
+      st.order = abs.order;
+      st.projectId = lv1_pA_3.id;
+      st.title = abs.title;
+      st = await this._statusRepository.insert(st);
+      lv1_pA_3.statuses.push(st);
+    }
 
     this.grkn.ownedCompanies[0].projects.push(lv1_pA_3);
     this.grkn.ownedCompanies[0].projects[0].children.push(lv1_pA_3);
@@ -366,49 +427,29 @@ export class SeedDatabase {
     lv2_pA_1_1.prefix = 'PRE';
     lv2_pA_1_1.title = faker.lorem.words(2);
     lv2_pA_1_1.parentId = lv1_pA_1.id;
+    lv2_pA_1_1.statuses = [];
+    lv2_pA_1_1.tasks = [];
     lv2_pA_1_1 = await this._projectRepository.insert(lv2_pA_1_1);
+
+    for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[1].statuses.length; i++) {
+      const abs = this.grkn.ownedCompanies[0].statusTemplates[1].statuses[i];
+      let st = new StatusEntity();
+      st.baseStatus = abs.baseStatus;
+      st.createdAt = new Date();
+      st.creatorId = this.grkn.id;
+      st.description = "desc";
+      st.lastUpdated = new Date();
+      st.order = abs.order;
+      st.projectId = lv2_pA_1_1.id;
+      st.title = abs.title;
+      st = await this._statusRepository.insert(st);
+      lv2_pA_1_1.statuses.push(st);
+    }
 
     this.grkn.ownedCompanies[0].projects.push(lv2_pA_1_1);
     this.grkn.ownedCompanies[0].projects[0].children[0].children = [];
     this.grkn.ownedCompanies[0].projects[0].children[0].children.push(lv2_pA_1_1);
   }
-
-  // public async addRootProjects() {
-  //   this.grkn.ownedCompanies[0].projects = [];
-  //
-  //   let lv1 = new ProjectEntity();
-  //   lv1 = await this._projectRepository.insert(lv1);
-  //   lv1.statuses = [];
-  //   lv1.tasks = [];
-  //   // lv1.
-  //
-  //   let krCP = new RootProjectEntity();
-  //   krCP.companyId = this.grkn.ownedCompanies[0].id;
-  //   krCP.createdAt = new Date();
-  //   krCP.description = "desc";
-  //   krCP.lastUpdated = new Date();
-  //   krCP.title = "Character Crating";
-  //   krCP.userId = this.grkn.id;
-  //   krCP.baseProjectId = krP.id;
-  //   krCP = await this._rootProjectRepository.insert(krCP);
-  //   krCP.baseProject = krP;
-  //
-  //   for (let i = 0; i < this.grkn.ownedCompanies[0].statusTemplates[0].statuses.length; i++) {
-  //     const abs = this.grkn.ownedCompanies[0].statusTemplates[0].statuses[i];
-  //     let st = new StatusEntity();
-  //     st.baseStatus = abs.baseStatus;
-  //     st.createdAt = new Date();
-  //     st.creatorId = this.grkn.id;
-  //     st.description = "desc";
-  //     st.lastUpdated = new Date();
-  //     st.order = abs.order;
-  //     st.projectId = krCP.baseProject.id;
-  //     st.title = abs.title;
-  //     st = await this._statusRepository.insert(st);
-  //     krCP.baseProject.statuses.push(st);
-  //   }
-  //   this.grkn.ownedCompanies[0].rootProjects.push(krCP);
-  // }
 
   public async assignUsersToProject() {
     for (let i = 0; i < this.grkn.ownedCompanies[0].members.length; i++) {
@@ -448,6 +489,30 @@ export class SeedDatabase {
       tsk = await this._taskRepository.insert(tsk);
       this.grkn.ownedCompanies[0].projects[0].tasks.push(tsk);
       this.codeSequence++;
+    }
+
+    let projects = this.grkn.ownedCompanies[0].projects;
+
+    for (let i = 0; i < projects.length; i++) {
+      let project = projects[i];
+      if (project.id === 1) continue;
+      for (let i = 0; i < 10; i++) {
+        let stind = Math.floor(Math.random() * (project.statuses.length));
+        let prio = Math.floor(Math.random() * 9);
+        let tsk = new TaskEntity();
+        tsk.creatorId = this.grkn.id;
+        tsk.title = faker.name.jobTitle();
+        tsk.description = faker.lorem.words(4);
+        tsk.projectId = project.id;
+        tsk.statusId = project.statuses[stind].id;
+        tsk.createdAt = new Date();
+        tsk.lastUpdated = new Date();
+        tsk.code = this.codeSequence;
+        tsk.priority = prio;
+        tsk = await this._taskRepository.insert(tsk);
+        project.tasks.push(tsk);
+        this.codeSequence++;
+      }
     }
   }
 

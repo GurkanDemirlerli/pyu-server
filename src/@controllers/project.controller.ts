@@ -14,6 +14,25 @@ export class ProjectController {
     @inject(InjectTypes.Service.PROJECT) private readonly _projectService: IProjectService
   ) { }
 
+  list(req: Request, res: Response, next: NextFunction) {
+
+    let filters: ProjectFilter = {};
+    if (req.query.hasOwnProperty("projectId")) filters.projectId = +req.query.projectId;
+    if (req.query.hasOwnProperty("statusId")) filters.statusId = +req.query.statusId;
+    if (req.query.hasOwnProperty("skip")) filters.skip = +req.query.skip;
+    if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
+
+    this._projectService.list(filters, req.decoded.id).then((result) => {
+      return res.status(200).json({
+        success: true,
+        data: result
+      });
+    }).catch((error: Error) => {
+      return ErrorHandler.handleErrorResponses(error, res, 'list', 'TaskController');
+    });
+  }
+
+
   listByCompany(req: Request, res: Response, next: NextFunction) {
     const companyId: number = req.params.companyId;
     let filters: ProjectFilter = {};
@@ -33,7 +52,7 @@ export class ProjectController {
   insert(req: Request, res: Response, next: NextFunction) {
 
     let prjDto: ProjectCreateDto = Object.assign(new ProjectCreateDto(), req.body);
-    prjDto.userId = req.decoded.id;
+    prjDto.creatorId = req.decoded.id;
     this._projectService.add(prjDto).then((createdId) => {
       return this._projectService.find(createdId, req.decoded.id);
     }).then((result) => {

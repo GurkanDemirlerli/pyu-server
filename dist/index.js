@@ -418,6 +418,28 @@ let CompanyController = class CompanyController {
             return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'showTree', 'CompanyController');
         });
     }
+    statusTemplates(req, res, next) {
+        const companyId = +req.params.id;
+        this._companyService.getstatusTemplates(companyId).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'statusTemplates', 'CompanyController');
+        });
+    }
+    getMembers(req, res, next) {
+        const companyId = +req.params.id;
+        this._companyService.getMembers(companyId).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'getMembers', 'CompanyController');
+        });
+    }
 };
 CompanyController = __decorate([
     inversify_1.injectable(),
@@ -559,6 +581,25 @@ let ProjectController = class ProjectController {
     constructor(_projectService) {
         this._projectService = _projectService;
     }
+    list(req, res, next) {
+        let filters = {};
+        if (req.query.hasOwnProperty("projectId"))
+            filters.projectId = +req.query.projectId;
+        if (req.query.hasOwnProperty("statusId"))
+            filters.statusId = +req.query.statusId;
+        if (req.query.hasOwnProperty("skip"))
+            filters.skip = +req.query.skip;
+        if (req.query.hasOwnProperty("take"))
+            filters.take = +req.query.take;
+        this._projectService.list(filters, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error) => {
+            return error_handler_1.ErrorHandler.handleErrorResponses(error, res, 'list', 'TaskController');
+        });
+    }
     listByCompany(req, res, next) {
         const companyId = req.params.companyId;
         let filters = {};
@@ -577,7 +618,7 @@ let ProjectController = class ProjectController {
     }
     insert(req, res, next) {
         let prjDto = Object.assign(new dtos_1.ProjectCreateDto(), req.body);
-        prjDto.userId = req.decoded.id;
+        prjDto.creatorId = req.decoded.id;
         this._projectService.add(prjDto).then((createdId) => {
             return this._projectService.find(createdId, req.decoded.id);
         }).then((result) => {
@@ -1537,7 +1578,7 @@ let ProjectRepository = class ProjectRepository extends repository_base_1.Reposi
         return query.orderBy("project.id", "DESC").getMany();
     }
     findForDetails(id) {
-        let query = typeorm_1.getManager().createQueryBuilder(project_entity_1.ProjectEntity, "project").select(["project.id", "project.title", "project.description"])
+        let query = typeorm_1.getManager().createQueryBuilder(project_entity_1.ProjectEntity, "project").select(["project.id", "project.title", "project.description", "project.parentId"])
             .where("project.id =:id", { id: id })
             .leftJoin("project.company", "company").addSelect(["company.id", "company.name", "company.description"])
             .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])
@@ -2022,6 +2063,10 @@ class CompanyRoutes {
             .post(_middlewares_1.validationMiddleware(dtos_1.AddStatusTemplateDto), _middlewares_2.authorize, (req, res, next) => ctrl.addStatusTemplate(req, res, next));
         app.route(root + '/:id/showTree')
             .get(_middlewares_2.authorize, (req, res, next) => ctrl.showTree(req, res, next));
+        app.route(root + '/:id/statusTemplates')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.statusTemplates(req, res, next));
+        app.route(root + '/:id/getMembers')
+            .get(_middlewares_2.authorize, (req, res, next) => ctrl.getMembers(req, res, next));
     }
 }
 exports.CompanyRoutes = CompanyRoutes;
@@ -2658,6 +2703,21 @@ let CompanyService = class CompanyService {
             return Promise.resolve(nw);
         });
     }
+    getMembers(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userDtos = [];
+            let cmpMbshipEns;
+            cmpMbshipEns = yield this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
+            for (let i = 0; i < cmpMbshipEns.length; i++) {
+                let userDto = new dtos_1.UserSummaryDto();
+                userDto.id = cmpMbshipEns[i].user.id;
+                userDto.name = cmpMbshipEns[i].user.name;
+                userDto.surname = cmpMbshipEns[i].user.surname;
+                userDtos.push(userDto);
+            }
+            return Promise.resolve(userDtos);
+        });
+    }
     getNestedChildren(array, parentId) {
         let out = [];
         for (let i in array) {
@@ -2673,10 +2733,15 @@ let CompanyService = class CompanyService {
                     collapsedIcon: "fa fa-folder",
                     children: array[i].children
                 });
-                // out.push(array[i])
             }
         }
         return out;
+    }
+    getstatusTemplates(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let sTempEn = yield this._statusTemplateRepository.list({ where: { companyId: companyId } });
+            return Promise.resolve(sTempEn);
+        });
     }
 };
 CompanyService = __decorate([
@@ -2848,15 +2913,17 @@ const _ioc_1 = __webpack_require__(/*! @ioc */ "./src/ioc/index.ts");
 const dtos_1 = __webpack_require__(/*! @models/dtos */ "./src/_models/dtos/index.ts");
 const project_entity_1 = __webpack_require__(/*! @entities/project.entity */ "./src/entities/project.entity.ts");
 const app_error_1 = __webpack_require__(/*! @errors/app-error */ "./src/errors/app-error.ts");
+const status_entity_1 = __webpack_require__(/*! @entities/status.entity */ "./src/entities/status.entity.ts");
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 const project_membership_entity_1 = __webpack_require__(/*! @entities/project-membership.entity */ "./src/entities/project-membership.entity.ts");
 let ProjectService = class ProjectService {
-    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository) {
+    constructor(_projectRepository, _statusRepository, _companyRepository, _companyMembershipRepository, _projectMembershipRepository, _statusTemplateRepository) {
         this._projectRepository = _projectRepository;
         this._statusRepository = _statusRepository;
         this._companyRepository = _companyRepository;
         this._companyMembershipRepository = _companyMembershipRepository;
         this._projectMembershipRepository = _projectMembershipRepository;
+        this._statusTemplateRepository = _statusTemplateRepository;
     }
     //Yalnızca sahibi ekleyebilir
     add(model) {
@@ -2865,8 +2932,8 @@ let ProjectService = class ProjectService {
             if (!companyEn)
                 throw new app_error_1.AppError('AppError', 'Company Not Found', 404);
             console.log("Owner:", companyEn.ownerId);
-            console.log("Model:", model.userId);
-            if (companyEn.ownerId !== model.userId)
+            console.log("Model:", model.creatorId);
+            if (companyEn.ownerId !== model.creatorId)
                 throw new app_error_1.AppError('AppError', 'You can not add a new project to company which is not yours', 403);
             let prjEn;
             let uow = new uow_1.Uow();
@@ -2874,12 +2941,39 @@ let ProjectService = class ProjectService {
             try {
                 prjEn = new project_entity_1.ProjectEntity();
                 prjEn.companyId = model.companyId;
-                prjEn.creatorId = model.userId;
+                prjEn.creatorId = model.creatorId;
                 prjEn.title = model.title;
                 prjEn.description = model.description;
                 prjEn.createdAt = new Date();
                 prjEn.lastUpdated = new Date();
+                prjEn.prefix = model.prefix;
+                if (model.parentId && model.statusId) {
+                    prjEn.parentId = model.parentId;
+                    prjEn.statusId = model.statusId;
+                }
+                else if (!model.parentId && !model.statusId) {
+                    //First Parent
+                }
+                else {
+                    //TODO bu kontrol middleware'da yapılacak
+                    throw new app_error_1.AppError('AppError', 'Bad project model', 422);
+                }
+                //TODO status template de ekle
                 prjEn = yield this._projectRepository.insert(prjEn, uow.getManager());
+                let sTempEn = yield this._statusTemplateRepository.findOne(model.templateId, { relations: ["statuses"] });
+                for (let i = 0; i < sTempEn.statuses.length; i++) {
+                    const abs = sTempEn.statuses[i];
+                    let st = new status_entity_1.StatusEntity();
+                    st.baseStatus = abs.baseStatus;
+                    st.createdAt = new Date();
+                    st.creatorId = model.creatorId;
+                    st.description = "desc";
+                    st.lastUpdated = new Date();
+                    st.order = abs.order;
+                    st.projectId = prjEn.id;
+                    st.title = abs.title;
+                    st = yield this._statusRepository.insert(st, uow.getManager());
+                }
                 yield uow.commit();
             }
             catch (err) {
@@ -2896,14 +2990,20 @@ let ProjectService = class ProjectService {
     listByCompany(filters, requestorId, companyId) {
         return __awaiter(this, void 0, void 0, function* () {
             let projectDtos = [];
-            const memberEn = yield this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
-            if (!memberEn)
-                throw new app_error_1.AppError('AppError', 'You are not part of this company', 403);
+            // const memberEn: CompanyMembershipEntity = await this._companyMembershipRepository.findOne(null, { where: { userId: requestorId, companyId: companyId } });
+            // if (!memberEn && memberEn.company.owner.id !== requestorId)
+            //   throw new AppError('AppError', 'You are not part of this company', 403);
             let projects = yield this._projectRepository.listByFiltersByCompany(filters, companyId);
             projects.map((prj) => {
                 let projectDto = Object.assign(new dtos_1.ProjectListDto(), prj);
                 projectDtos.push(projectDto);
             });
+            return Promise.resolve(projectDtos);
+        });
+    }
+    list(filters, requestorId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let projectDtos = [];
             return Promise.resolve(projectDtos);
         });
     }
@@ -2986,7 +3086,8 @@ ProjectService = __decorate([
     __param(2, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY)),
     __param(3, inversify_1.inject(_ioc_1.InjectTypes.Repository.COMPANY_MEMBERSHIP)),
     __param(4, inversify_1.inject(_ioc_1.InjectTypes.Repository.PROJECT_MEMBERSHIP)),
-    __metadata("design:paramtypes", [Object, Object, Object, Object, Object])
+    __param(5, inversify_1.inject(_ioc_1.InjectTypes.Repository.STATUS_TEMPLATE)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object])
 ], ProjectService);
 exports.ProjectService = ProjectService;
 
@@ -3181,7 +3282,7 @@ let TaskService = class TaskService {
             let taskEn = yield this._taskRepository.findForDetails(id);
             if (!taskEn)
                 throw new app_error_1.AppError('AppError', 'Task not found.', 404);
-            let taskDto = Object.assign(new dtos_1.TaskDetailDto(), taskEn, { projects: undefined, users: undefined });
+            let taskDto = Object.assign(new dtos_1.TaskDetailDto(), taskEn, { users: undefined });
             return Promise.resolve(taskDto);
         });
     }
@@ -4087,10 +4188,19 @@ __decorate([
     __metadata("design:type", String)
 ], ProjectCreateDto.prototype, "description", void 0);
 __decorate([
+    class_validator_1.IsString(),
+    __metadata("design:type", String)
+], ProjectCreateDto.prototype, "prefix", void 0);
+__decorate([
     class_validator_1.IsNumber(),
     __metadata("design:type", Number)
 ], ProjectCreateDto.prototype, "companyId", void 0);
+__decorate([
+    class_validator_1.IsNumber(),
+    __metadata("design:type", Number)
+], ProjectCreateDto.prototype, "templateId", void 0);
 exports.ProjectCreateDto = ProjectCreateDto;
+//TODO validationları düzelt
 
 
 /***/ }),
