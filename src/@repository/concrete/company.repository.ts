@@ -53,7 +53,7 @@ export class CompanyRepository extends RepositoryBase<CompanyEntity> implements 
     return query;
   }
 
-
+  //TODO sql injectiona dikkat
   getTree(companyId: number) {
     console.log("CMPID", companyId);
     // return getManager().query("getProjectTree @companyId='" + companyId + "'");

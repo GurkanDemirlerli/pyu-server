@@ -1283,6 +1283,7 @@ let CompanyRepository = class CompanyRepository extends repository_base_1.Reposi
         let query = typeorm_1.getManager().createQueryBuilder().relation(company_entity_1.CompanyEntity, "users").of(companyId).add(userId);
         return query;
     }
+    //TODO sql injectiona dikkat
     getTree(companyId) {
         console.log("CMPID", companyId);
         // return getManager().query("getProjectTree @companyId='" + companyId + "'");
@@ -2169,7 +2170,8 @@ const membership_request_entity_1 = __webpack_require__(/*! @entities/membership
 const uow_1 = __webpack_require__(/*! @repositories/uow */ "./src/@repository/uow.ts");
 const status_template_entity_1 = __webpack_require__(/*! @entities/status-template.entity */ "./src/entities/status-template.entity.ts");
 const abstract_status_entity_1 = __webpack_require__(/*! @entities/abstract-status.entity */ "./src/entities/abstract-status.entity.ts");
-const project_tree_item_dto_1 = __webpack_require__(/*! @models/project-tree-item.dto */ "./src/_models/project-tree-item.dto.ts");
+const project_tree_1 = __webpack_require__(/*! @models/project-tree */ "./src/_models/project-tree.ts");
+const _ = __webpack_require__(/*! lodash */ "lodash");
 let CompanyService = class CompanyService {
     constructor(_companyRepository, _companyMembershipRepository, _membershipRequestRepository, _statusTemplateRepository, _abstractStatusRepository) {
         this._companyRepository = _companyRepository;
@@ -2332,25 +2334,135 @@ let CompanyService = class CompanyService {
             let trees = yield this._companyRepository.getTree(companyId);
             let treeFlatList = [];
             for (let i = 0; i < trees[0].length; i++) {
-                let x = Object.assign(new project_tree_item_dto_1.ProjectTreeItem(), trees[0][i]);
+                let x = Object.assign(new project_tree_1.ProjectTreeItem(), trees[0][i]);
                 treeFlatList.push(x);
             }
-            let roots = treeFlatList.filter(r => r.parentId === null);
-            for (let i in roots) {
-                roots[i].children = this.getNestedChildren(treeFlatList, roots[i].id);
-            }
-            let nw = roots.map((item) => {
-                return Object.assign({}, {
-                    label: item.title,
-                    data: item.id,
-                    expandedIcon: "fa fa-folder-open",
-                    collapsedIcon: "fa fa-folder",
-                    children: item.children,
-                });
-            });
-            return Promise.resolve(nw);
+            let ppl = this.populateTreeItems(treeFlatList);
+            let objP = this.makeObjects(ppl);
+            // return Promise.resolve(objP);
+            let roots = objP.filter(r => r.statusId === null);
+            let lasts = this.getNestedTree(objP, null);
+            // for (let i in roots) {
+            // 	lasts[i] = { ...roots[i] }
+            // 	lasts[i].statuses = [];
+            // 	lasts[i] = this.getNestedTree(objP, roots[i]);
+            // }
+            return Promise.resolve(lasts);
+            // let nw = roots.map((item) => {
+            // 	return Object.assign({}, {
+            // 		label: item.title,
+            // 		data: item.id,
+            // 		expandedIcon: "fa fa-folder-open",
+            // 		collapsedIcon: "fa fa-folder",
+            // 		children: item.children,
+            // 	});
+            // });
+            // return Promise.resolve(nw);
         });
     }
+    populateTreeItems(flatList) {
+        let prGroup = _.groupBy(flatList, 'project_id');
+        for (let prKey in prGroup) {
+            prGroup[prKey] = _.groupBy(prGroup[prKey], 'project_status_id');
+        }
+        return prGroup;
+    }
+    makeObjects(populated) {
+        let objs = [];
+        for (let prKey in populated) {
+            let prj = {};
+            prj.id = null;
+            prj.statuses = [];
+            for (let stKey in populated[prKey]) {
+                let st = {};
+                st.id = null;
+                st.tasks = [];
+                for (let tsKey in populated[prKey][stKey]) {
+                    let it = populated[prKey][stKey][tsKey];
+                    let ts = {};
+                    if (it.task_id !== null) {
+                        ts.id = it.project_status_task_id;
+                        ts.title = it.project_status_task_title;
+                    }
+                    if (st.id === null) {
+                        st.id = it.project_status_id;
+                        st.title = it.project_status_title;
+                    }
+                    if (ts.id !== null)
+                        st.tasks.push(ts);
+                    if (prj.id === null) {
+                        prj.id = it.project_id;
+                        prj.title = it.project_title;
+                        prj.statusId = it.project_statusId;
+                    }
+                }
+                if (st.id !== null)
+                    prj.statuses.push(st);
+            }
+            objs.push(prj);
+        }
+        return objs;
+    }
+    // private getNestedTree(array, root) {
+    // 	let out = [];
+    // 	for (let i in array) {
+    // 		//TODO düzelt ifden önce findindex kullan öyle ife gir hazır veri olsun
+    // 		let ind = _.findIndex(root.statuses, (x: any) => x.id === array[i].statusId);
+    // 		if (ind > -1) {
+    // 			let projects = this.getNestedTree(array, array[i]);
+    // 			if (projects.length) {
+    // 				console.log("RRR",root);
+    // 				array[i].statuses[ind].projects = projects;
+    // 				// console.log("ST LOG", array[i].statuses)
+    // 			}
+    // 			out.push(array[i]);
+    // 		}
+    // 	}
+    // 	return out;
+    // }
+    // private getNestedTree(projects: ProjectTreeItem[], statusId: number) {
+    // 	let out = [];
+    // 	for (let i in projects) {
+    // 		for (let st in projects[i].statuses) {
+    // 			if (projects[i].id == statusId) {
+    // 				let ch = this.getNestedTree(projects, projects[i].statuses[st].id);
+    // 				if (ch.length) {
+    // 					projects[i].statuses[st].projects = ch;
+    // 				}
+    // 				out.push()
+    // 			}
+    // 		}
+    // 	}
+    // 	return out;
+    // }
+    getNestedTree(projects, statusId) {
+        let out = [];
+        for (let i in projects) {
+            if (projects[i].statusId == statusId) {
+                for (let st in projects[i].statuses) {
+                    let children = this.getNestedTree(projects, projects[i].statuses[st].id);
+                    if (children.length) {
+                        projects[i].statuses[st].projects = children;
+                    }
+                }
+                out.push(projects[i]);
+            }
+        }
+        return out;
+    }
+    // private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
+    // 	let out = []
+    // 	for (let i in array) {
+    // 		if (array[i].parentId == parentId) {
+    // 			let children = this.getNestedChildren(array, array[i].id)
+    // 			if (children.length) {
+    // 				array[i].children = children
+    // 			}
+    // 			out.push(array[i]);
+    // 		}
+    // 	}
+    // 	return out;
+    // }
     getMembers(companyId) {
         return __awaiter(this, void 0, void 0, function* () {
             let userDtos = [];
@@ -2365,25 +2477,6 @@ let CompanyService = class CompanyService {
             }
             return Promise.resolve(userDtos);
         });
-    }
-    getNestedChildren(array, parentId) {
-        let out = [];
-        for (let i in array) {
-            if (array[i].parentId == parentId) {
-                let children = this.getNestedChildren(array, array[i].id);
-                if (children.length) {
-                    array[i].children = children;
-                }
-                out.push({
-                    label: array[i].title,
-                    data: array[i].id,
-                    expandedIcon: "fa fa-folder-open",
-                    collapsedIcon: "fa fa-folder",
-                    children: array[i].children
-                });
-            }
-        }
-        return out;
     }
     getstatusTemplates(companyId) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -4423,10 +4516,10 @@ exports.UserSummaryDto = UserSummaryDto;
 
 /***/ }),
 
-/***/ "./src/_models/project-tree-item.dto.ts":
-/*!**********************************************!*\
-  !*** ./src/_models/project-tree-item.dto.ts ***!
-  \**********************************************/
+/***/ "./src/_models/project-tree.ts":
+/*!*************************************!*\
+  !*** ./src/_models/project-tree.ts ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4436,6 +4529,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class ProjectTreeItem {
 }
 exports.ProjectTreeItem = ProjectTreeItem;
+class StatusTreeItem {
+}
+exports.StatusTreeItem = StatusTreeItem;
+class TaskTreeItem {
+}
+exports.TaskTreeItem = TaskTreeItem;
 
 
 /***/ }),
@@ -6939,6 +7038,17 @@ module.exports = require("inversify");
 /***/ (function(module, exports) {
 
 module.exports = require("jsonwebtoken");
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("lodash");
 
 /***/ }),
 
