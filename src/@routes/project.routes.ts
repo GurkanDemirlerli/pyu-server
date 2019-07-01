@@ -19,6 +19,9 @@ export class ProjectRoutes {
       .get(authorize, (req, res, next) => ctrl.find(req, res, next));
 
     app.route(root + '/')
+      .get(authorize, (req, res, next) => ctrl.list(req, res, next));
+
+    app.route(root + '/')
       .post(validationMiddleware(ProjectCreateDto), authorize, (req, res, next) => ctrl.insert(req, res, next));
 
     app.route(root + '/:id')

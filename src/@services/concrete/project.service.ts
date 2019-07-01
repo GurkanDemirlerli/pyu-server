@@ -98,8 +98,11 @@ export class ProjectService implements IProjectService {
 
   async list(filters: ProjectFilter, requestorId: number): Promise<ProjectListDto[]> {
     let projectDtos: ProjectListDto[] = [];
-
-
+    let projects = await this._projectRepository.listByFilters(filters);
+    projects.map((prj) => {
+      let projectDto = Object.assign(new ProjectListDto(), prj);
+      projectDtos.push(projectDto);
+    });
     return Promise.resolve(projectDtos);
   }
 

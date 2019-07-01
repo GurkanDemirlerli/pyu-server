@@ -44,7 +44,6 @@ export class CompanyService implements ICompanyService {
 		private readonly _abstractStatusRepository: IAbstractStatusRepository,
 	) { }
 
-
 	//Herkes topluluk oluşturabilir. Daha sonra sayı sınırı ekle.
 	async add(model: CompanyCreateDto): Promise<number> {
 		let companyEn: CompanyEntity = Object.assign(new CompanyEntity(), model);
@@ -182,31 +181,36 @@ export class CompanyService implements ICompanyService {
 		}
 		let ppl = this.populateTreeItems(treeFlatList);
 		let objP = this.makeObjects(ppl);
-		// return Promise.resolve(objP);
-		let roots = objP.filter(r => r.statusId === null);
 		let lasts = this.getNestedTree(objP, null);
-		// for (let i in roots) {
-		// 	lasts[i] = { ...roots[i] }
-		// 	lasts[i].statuses = [];
-		// 	lasts[i] = this.getNestedTree(objP, roots[i]);
-		// }
-		this.convertToTreeView(lasts[0]);
 		let arr = [];
-		arr[0] =lasts[0];
 
+		//TODO sadece ilk eleman geliyor tüm elemanları çevir
+		for (let i in lasts) {
+			this.convertToTreeView(lasts[i]);
+			arr[i] = lasts[i];
+		}
 		return Promise.resolve(arr);
-		// let nw = roots.map((item) => {
-		// 	return Object.assign({}, {
-		// 		label: item.title,
-		// 		data: item.id,
-		// 		expandedIcon: "fa fa-folder-open",
-		// 		collapsedIcon: "fa fa-folder",
-		// 		children: item.children,
-		// 	});
-		// });
-
-		// return Promise.resolve(nw);
 	}
+
+	async getMembers(companyId: number): Promise<any> {
+		let userDtos: UserSummaryDto[] = [];
+		let cmpMbshipEns: CompanyMembershipEntity[];
+		cmpMbshipEns = await this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
+		for (let i = 0; i < cmpMbshipEns.length; i++) {
+			let userDto = new UserSummaryDto();
+			userDto.id = cmpMbshipEns[i].user.id;
+			userDto.name = cmpMbshipEns[i].user.name;
+			userDto.surname = cmpMbshipEns[i].user.surname;
+			userDtos.push(userDto);
+		}
+		return Promise.resolve(userDtos);
+	}
+
+	async getstatusTemplates(companyId: number): Promise<any> {
+		let sTempEn = await this._statusTemplateRepository.list({ where: { companyId: companyId } });
+		return Promise.resolve(sTempEn);
+	}
+
 	private convertToTreeView(project) {
 		for (let st in project.statuses) {
 			for (let pr in project.statuses[st].projects) {
@@ -300,78 +304,4 @@ export class CompanyService implements ICompanyService {
 		}
 		return objs;
 	}
-
-	// private getNestedTree(array, root) {
-	// 	let out = [];
-	// 	for (let i in array) {
-
-	// 		//TODO düzelt ifden önce findindex kullan öyle ife gir hazır veri olsun
-	// 		let ind = _.findIndex(root.statuses, (x: any) => x.id === array[i].statusId);
-	// 		if (ind > -1) {
-	// 			let projects = this.getNestedTree(array, array[i]);
-	// 			if (projects.length) {
-	// 				console.log("RRR",root);
-	// 				array[i].statuses[ind].projects = projects;
-	// 				// console.log("ST LOG", array[i].statuses)
-	// 			}
-	// 			out.push(array[i]);
-	// 		}
-	// 	}
-	// 	return out;
-	// }
-
-	// private getNestedTree(projects: ProjectTreeItem[], statusId: number) {
-	// 	let out = [];
-	// 	for (let i in projects) {
-	// 		for (let st in projects[i].statuses) {
-	// 			if (projects[i].id == statusId) {
-	// 				let ch = this.getNestedTree(projects, projects[i].statuses[st].id);
-	// 				if (ch.length) {
-	// 					projects[i].statuses[st].projects = ch;
-	// 				}
-	// 				out.push()
-	// 			}
-	// 		}
-	// 	}
-	// 	return out;
-	// }
-
-
-
-	// private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
-	// 	let out = []
-	// 	for (let i in array) {
-	// 		if (array[i].parentId == parentId) {
-	// 			let children = this.getNestedChildren(array, array[i].id)
-	// 			if (children.length) {
-	// 				array[i].children = children
-	// 			}
-	// 			out.push(array[i]);
-	// 		}
-	// 	}
-
-	// 	return out;
-	// }
-
-	async getMembers(companyId: number): Promise<any> {
-		let userDtos: UserSummaryDto[] = [];
-		let cmpMbshipEns: CompanyMembershipEntity[];
-		cmpMbshipEns = await this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
-		for (let i = 0; i < cmpMbshipEns.length; i++) {
-			let userDto = new UserSummaryDto();
-			userDto.id = cmpMbshipEns[i].user.id;
-			userDto.name = cmpMbshipEns[i].user.name;
-			userDto.surname = cmpMbshipEns[i].user.surname;
-			userDtos.push(userDto);
-		}
-		return Promise.resolve(userDtos);
-	}
-
-
-
-	async getstatusTemplates(companyId: number): Promise<any> {
-		let sTempEn = await this._statusTemplateRepository.list({ where: { companyId: companyId } });
-		return Promise.resolve(sTempEn);
-	}
-
 }

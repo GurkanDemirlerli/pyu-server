@@ -44,15 +44,6 @@ export class ProjectEntity {
   @OneToMany(type => ProjectEntity, prj => prj.parent)
   children: ProjectEntity[];
 
-  // @Column("int", { nullable: true })
-  // firstParentId: number;
-  // @ManyToOne(type => ProjectEntity, pr => pr.descendants)
-  // @JoinColumn({ name: "firstParentId" })
-  // firstParent: ProjectEntity;
-  //
-  // @OneToMany(type => ProjectEntity, prj => prj.firstParent)
-  // descendants: ProjectEntity[];
-
   @Column("int", { nullable: true })
   statusId: number;
   @ManyToOne(type => StatusEntity, status => status.projects)

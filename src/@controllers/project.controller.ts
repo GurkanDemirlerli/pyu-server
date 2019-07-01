@@ -17,7 +17,7 @@ export class ProjectController {
   list(req: Request, res: Response, next: NextFunction) {
 
     let filters: ProjectFilter = {};
-    if (req.query.hasOwnProperty("projectId")) filters.projectId = +req.query.projectId;
+    if (req.query.hasOwnProperty("projectId")) filters.parentId = +req.query.parentId;
     if (req.query.hasOwnProperty("statusId")) filters.statusId = +req.query.statusId;
     if (req.query.hasOwnProperty("skip")) filters.skip = +req.query.skip;
     if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
@@ -31,7 +31,6 @@ export class ProjectController {
       return ErrorHandler.handleErrorResponses(error, res, 'list', 'TaskController');
     });
   }
-
 
   listByCompany(req: Request, res: Response, next: NextFunction) {
     const companyId: number = req.params.companyId;

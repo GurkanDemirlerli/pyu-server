@@ -25,6 +25,21 @@ export class ProjectRepository extends RepositoryBase<ProjectEntity> implements 
     return query.orderBy("project.id", "DESC").getMany();
   }
 
+
+  listByFilters(filters: ProjectFilter): Promise<ProjectEntity[]> {
+    let query = getManager().createQueryBuilder(ProjectEntity, "project")
+      .leftJoinAndSelect("project.managers", "manager")
+    if (filters.parentId !== undefined) query = query.andWhere("project.parentId =:projectId", { projectId: filters.parentId });
+    if (filters.statusId !== undefined) query = query.andWhere("project.statusId =:statusId", { statusId: filters.statusId });
+
+    query = query.orderBy("project.id", "DESC");
+    if (filters.take !== undefined) {
+      query = query.take(filters.take);
+      if (filters.skip !== undefined) query = query.skip(filters.skip);
+    }
+    return query.orderBy("project.id", "DESC").getMany();
+  }
+
   findForDetails(id: number): Promise<ProjectEntity> {
     let query = getManager().createQueryBuilder(ProjectEntity, "project").select(["project.id", "project.title", "project.description", "project.parentId"])
       .where("project.id =:id", { id: id })
@@ -35,11 +50,11 @@ export class ProjectRepository extends RepositoryBase<ProjectEntity> implements 
     return query.getOne();
   }
 
-//   getRootProjects(companyId: number) {
-//     let query = getManager().getTreeRepository(ProjectEntity).findDescendantsTree(
-//
-//   });
-// }
+  //   getRootProjects(companyId: number) {
+  //     let query = getManager().getTreeRepository(ProjectEntity).findDescendantsTree(
+  //
+  //   });
+  // }
 }
 
 

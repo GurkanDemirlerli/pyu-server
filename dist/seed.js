@@ -584,7 +584,7 @@ let ProjectController = class ProjectController {
     list(req, res, next) {
         let filters = {};
         if (req.query.hasOwnProperty("projectId"))
-            filters.projectId = +req.query.projectId;
+            filters.parentId = +req.query.parentId;
         if (req.query.hasOwnProperty("statusId"))
             filters.statusId = +req.query.statusId;
         if (req.query.hasOwnProperty("skip"))
@@ -1578,6 +1578,21 @@ let ProjectRepository = class ProjectRepository extends repository_base_1.Reposi
         }
         return query.orderBy("project.id", "DESC").getMany();
     }
+    listByFilters(filters) {
+        let query = typeorm_1.getManager().createQueryBuilder(project_entity_1.ProjectEntity, "project")
+            .leftJoinAndSelect("project.managers", "manager");
+        if (filters.parentId !== undefined)
+            query = query.andWhere("project.parentId =:projectId", { projectId: filters.parentId });
+        if (filters.statusId !== undefined)
+            query = query.andWhere("project.statusId =:statusId", { statusId: filters.statusId });
+        query = query.orderBy("project.id", "DESC");
+        if (filters.take !== undefined) {
+            query = query.take(filters.take);
+            if (filters.skip !== undefined)
+                query = query.skip(filters.skip);
+        }
+        return query.orderBy("project.id", "DESC").getMany();
+    }
     findForDetails(id) {
         let query = typeorm_1.getManager().createQueryBuilder(project_entity_1.ProjectEntity, "project").select(["project.id", "project.title", "project.description", "project.parentId"])
             .where("project.id =:id", { id: id })
@@ -2339,28 +2354,35 @@ let CompanyService = class CompanyService {
             }
             let ppl = this.populateTreeItems(treeFlatList);
             let objP = this.makeObjects(ppl);
-            // return Promise.resolve(objP);
-            let roots = objP.filter(r => r.statusId === null);
             let lasts = this.getNestedTree(objP, null);
-            // for (let i in roots) {
-            // 	lasts[i] = { ...roots[i] }
-            // 	lasts[i].statuses = [];
-            // 	lasts[i] = this.getNestedTree(objP, roots[i]);
-            // }
-            this.convertToTreeView(lasts[0]);
             let arr = [];
-            arr[0] = lasts[0];
+            //TODO sadece ilk eleman geliyor tüm elemanları çevir
+            for (let i in lasts) {
+                this.convertToTreeView(lasts[i]);
+                arr[i] = lasts[i];
+            }
             return Promise.resolve(arr);
-            // let nw = roots.map((item) => {
-            // 	return Object.assign({}, {
-            // 		label: item.title,
-            // 		data: item.id,
-            // 		expandedIcon: "fa fa-folder-open",
-            // 		collapsedIcon: "fa fa-folder",
-            // 		children: item.children,
-            // 	});
-            // });
-            // return Promise.resolve(nw);
+        });
+    }
+    getMembers(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let userDtos = [];
+            let cmpMbshipEns;
+            cmpMbshipEns = yield this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
+            for (let i = 0; i < cmpMbshipEns.length; i++) {
+                let userDto = new dtos_1.UserSummaryDto();
+                userDto.id = cmpMbshipEns[i].user.id;
+                userDto.name = cmpMbshipEns[i].user.name;
+                userDto.surname = cmpMbshipEns[i].user.surname;
+                userDtos.push(userDto);
+            }
+            return Promise.resolve(userDtos);
+        });
+    }
+    getstatusTemplates(companyId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let sTempEn = yield this._statusTemplateRepository.list({ where: { companyId: companyId } });
+            return Promise.resolve(sTempEn);
         });
     }
     convertToTreeView(project) {
@@ -2451,72 +2473,6 @@ let CompanyService = class CompanyService {
             objs.push(prj);
         }
         return objs;
-    }
-    // private getNestedTree(array, root) {
-    // 	let out = [];
-    // 	for (let i in array) {
-    // 		//TODO düzelt ifden önce findindex kullan öyle ife gir hazır veri olsun
-    // 		let ind = _.findIndex(root.statuses, (x: any) => x.id === array[i].statusId);
-    // 		if (ind > -1) {
-    // 			let projects = this.getNestedTree(array, array[i]);
-    // 			if (projects.length) {
-    // 				console.log("RRR",root);
-    // 				array[i].statuses[ind].projects = projects;
-    // 				// console.log("ST LOG", array[i].statuses)
-    // 			}
-    // 			out.push(array[i]);
-    // 		}
-    // 	}
-    // 	return out;
-    // }
-    // private getNestedTree(projects: ProjectTreeItem[], statusId: number) {
-    // 	let out = [];
-    // 	for (let i in projects) {
-    // 		for (let st in projects[i].statuses) {
-    // 			if (projects[i].id == statusId) {
-    // 				let ch = this.getNestedTree(projects, projects[i].statuses[st].id);
-    // 				if (ch.length) {
-    // 					projects[i].statuses[st].projects = ch;
-    // 				}
-    // 				out.push()
-    // 			}
-    // 		}
-    // 	}
-    // 	return out;
-    // }
-    // private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
-    // 	let out = []
-    // 	for (let i in array) {
-    // 		if (array[i].parentId == parentId) {
-    // 			let children = this.getNestedChildren(array, array[i].id)
-    // 			if (children.length) {
-    // 				array[i].children = children
-    // 			}
-    // 			out.push(array[i]);
-    // 		}
-    // 	}
-    // 	return out;
-    // }
-    getMembers(companyId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let userDtos = [];
-            let cmpMbshipEns;
-            cmpMbshipEns = yield this._companyMembershipRepository.list({ where: { companyId: companyId }, relations: ["user"] });
-            for (let i = 0; i < cmpMbshipEns.length; i++) {
-                let userDto = new dtos_1.UserSummaryDto();
-                userDto.id = cmpMbshipEns[i].user.id;
-                userDto.name = cmpMbshipEns[i].user.name;
-                userDto.surname = cmpMbshipEns[i].user.surname;
-                userDtos.push(userDto);
-            }
-            return Promise.resolve(userDtos);
-        });
-    }
-    getstatusTemplates(companyId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let sTempEn = yield this._statusTemplateRepository.list({ where: { companyId: companyId } });
-            return Promise.resolve(sTempEn);
-        });
     }
 };
 CompanyService = __decorate([
@@ -2779,6 +2735,11 @@ let ProjectService = class ProjectService {
     list(filters, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
             let projectDtos = [];
+            let projects = yield this._projectRepository.listByFilters(filters);
+            projects.map((prj) => {
+                let projectDto = Object.assign(new dtos_1.ProjectListDto(), prj);
+                projectDtos.push(projectDto);
+            });
             return Promise.resolve(projectDtos);
         });
     }
