@@ -2699,7 +2699,10 @@ let CompanyService = class CompanyService {
             // 	lasts[i].statuses = [];
             // 	lasts[i] = this.getNestedTree(objP, roots[i]);
             // }
-            return Promise.resolve(lasts);
+            this.convertToTreeView(lasts[0]);
+            let arr = [];
+            arr[0] = lasts[0];
+            return Promise.resolve(arr);
             // let nw = roots.map((item) => {
             // 	return Object.assign({}, {
             // 		label: item.title,
@@ -2711,6 +2714,52 @@ let CompanyService = class CompanyService {
             // });
             // return Promise.resolve(nw);
         });
+    }
+    convertToTreeView(project) {
+        for (let st in project.statuses) {
+            for (let pr in project.statuses[st].projects) {
+                this.convertToTreeView(project.statuses[st].projects[pr]);
+            }
+            project.statuses[st].children = project.statuses[st].projects;
+            for (let ts in project.statuses[st].tasks) {
+                project.statuses[st].tasks[ts].label = project.statuses[st].tasks[ts].title;
+                project.statuses[st].tasks[ts].icon = "fa fa-file-image-o";
+                project.statuses[st].tasks[ts].data = 2;
+            }
+            if (project.statuses[st].projects === undefined) {
+                project.statuses[st].children = [...project.statuses[st].tasks];
+            }
+            else {
+                project.statuses[st].children = [...project.statuses[st].projects, ...project.statuses[st].tasks];
+            }
+            project.statuses[st].projects = undefined;
+            project.statuses[st].tasks = undefined;
+            project.statuses[st].label = project.statuses[st].title;
+            project.statuses[st].expandedIcon = "fa fa-folder-open";
+            project.statuses[st].collapsedIcon = "fa fa-folder";
+            project.statuses[st].data = 1;
+        }
+        project.label = project.title;
+        project.expandedIcon = "fa fa-folder-open";
+        project.collapsedIcon = "fa fa-folder";
+        project.data = 0;
+        project.children = project.statuses;
+        project.statuses = undefined;
+    }
+    getNestedTree(projects, statusId) {
+        let out = [];
+        for (let i in projects) {
+            if (projects[i].statusId == statusId) {
+                for (let st in projects[i].statuses) {
+                    let children = this.getNestedTree(projects, projects[i].statuses[st].id);
+                    if (children.length) {
+                        projects[i].statuses[st].projects = children;
+                    }
+                }
+                out.push(projects[i]);
+            }
+        }
+        return out;
     }
     populateTreeItems(flatList) {
         let prGroup = _.groupBy(flatList, 'project_id');
@@ -2787,21 +2836,6 @@ let CompanyService = class CompanyService {
     // 	}
     // 	return out;
     // }
-    getNestedTree(projects, statusId) {
-        let out = [];
-        for (let i in projects) {
-            if (projects[i].statusId == statusId) {
-                for (let st in projects[i].statuses) {
-                    let children = this.getNestedTree(projects, projects[i].statuses[st].id);
-                    if (children.length) {
-                        projects[i].statuses[st].projects = children;
-                    }
-                }
-                out.push(projects[i]);
-            }
-        }
-        return out;
-    }
     // private getNestedChildren(array: ProjectTreeItem[], parentId: number) {
     // 	let out = []
     // 	for (let i in array) {
