@@ -41,7 +41,7 @@ export class ProjectRepository extends RepositoryBase<ProjectEntity> implements 
   }
 
   findForDetails(id: number): Promise<ProjectEntity> {
-    let query = getManager().createQueryBuilder(ProjectEntity, "project").select(["project.id", "project.title", "project.description", "project.parentId"])
+    let query = getManager().createQueryBuilder(ProjectEntity, "project").select(["project.id", "project.title", "project.description", "project.parentId", "project.statusId","project.prefix"])
       .where("project.id =:id", { id: id })
       .leftJoin("project.company", "company").addSelect(["company.id", "company.name", "company.description"])
       .leftJoin("company.owner", "companyOwner").addSelect(["companyOwner.id", "companyOwner.name", "companyOwner.surname", "companyOwner.username"])

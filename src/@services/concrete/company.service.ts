@@ -219,8 +219,9 @@ export class CompanyService implements ICompanyService {
 			project.statuses[st].children = project.statuses[st].projects;
 			for (let ts in project.statuses[st].tasks) {
 				project.statuses[st].tasks[ts].label = project.statuses[st].tasks[ts].title;
-				project.statuses[st].tasks[ts].icon = "fa fa-file-image-o";
+				project.statuses[st].tasks[ts].icon = "fas fa-wrench";
 				project.statuses[st].tasks[ts].data = 2;
+				project.statuses[st].tasks[ts].styleClass = "node-task";
 
 			}
 			if (project.statuses[st].projects === undefined) {
@@ -231,15 +232,17 @@ export class CompanyService implements ICompanyService {
 			project.statuses[st].projects = undefined;
 			project.statuses[st].tasks = undefined;
 			project.statuses[st].label = project.statuses[st].title;
-			project.statuses[st].expandedIcon = "fa fa-folder-open";
-			project.statuses[st].collapsedIcon = "fa fa-folder";
+			// project.statuses[st].expandedIcon = "fas fa-caret-down";
+			// project.statuses[st].collapsedIcon = "fas fa-caret-right";
 			project.statuses[st].data = 1;
+			project.statuses[st].styleClass = "node-status";
 
 		}
 		project.label = project.title;
 		project.expandedIcon = "fa fa-folder-open";
 		project.collapsedIcon = "fa fa-folder";
 		project.data = 0;
+		project.styleClass = "node-project";
 		project.children = project.statuses;
 		project.statuses = undefined;
 	}
