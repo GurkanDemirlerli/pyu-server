@@ -1,10 +1,10 @@
-import { IssueEntity } from '@entities/issue.entity';
-import { ProjectEntity } from '@entities/project.entity';
+import { IssueEntity } from './issue.entity';
+import { ProjectEntity } from './project.entity';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable, OneToOne } from "typeorm";
-import { CommentEntity } from '@entities/comment.entity';
-import { UserEntity } from '@entities/user.entity';
-import { StatusEntity } from '@entities/status.entity';
-import { TaskAssignmentEntity } from '@entities/task-assignment.entity';
+import { CommentEntity } from './comment.entity';
+import { UserEntity } from './user.entity';
+import { StatusEntity } from './status.entity';
+import { TaskAssignmentEntity } from './task-assignment.entity';
 import { TaskLabelEntity } from './task-label.entity';
 @Entity("task")
 export class TaskEntity {

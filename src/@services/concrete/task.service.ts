@@ -1,13 +1,12 @@
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "../../ioc";
 import { AppError } from '../../errors/app-error';
-import { ITaskRepository, IProjectRepository, ITaskAssignmentRepository } from "@repositories/abstract";
-import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto, TaskStatusUpdateDto } from "@models/dtos";
-import { TaskFilter } from "@models/filters/task-filter";
-import { ITaskService } from "@services/abstract/i-task.service";
-import { TaskEntity } from "@entities/task.entity";
-import { TaskAssignmentEntity } from "@entities/task-assignment.entity";
-import { TaskTypes } from "@enums";
+import { ITaskRepository, IProjectRepository, ITaskAssignmentRepository } from "../../@repository/abstract";
+import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto, TaskStatusUpdateDto } from "../../_models/dtos";
+import { TaskFilter } from "../../_models/filters/task-filter";
+import { ITaskService } from "../abstract/i-task.service";
+import { TaskEntity } from "../../entities/task.entity";
+import { TaskAssignmentEntity } from "../../entities/task-assignment.entity";
 
 
 @injectable()

@@ -1,6 +1,6 @@
-import { CompanyCreateDto, CompanyUpdateDto, CompanyDetailDto, CompanyListDto, CompanyUserRegisterDto, AddStatusTemplateDto, UserSummaryDto } from "@models/dtos";
-import { CompanyFilter } from "@models/filters";
-import { CompanyEntity } from "@entities/company.entity";
+import { CompanyCreateDto, CompanyUpdateDto, CompanyDetailDto, CompanyListDto, CompanyUserRegisterDto, AddStatusTemplateDto, UserSummaryDto } from "../../_models/dtos";
+import { CompanyFilter } from "../../_models/filters";
+import { CompanyEntity } from "../../entities/company.entity";
 
 export interface ICompanyService {
     add(model: CompanyCreateDto): Promise<number>;

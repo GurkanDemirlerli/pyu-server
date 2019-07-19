@@ -3,7 +3,7 @@
   "ignore": [".git", "node_modules/**/node_modules"],
   "verbose": true,
   "execMap":{
-    "ts":"node --inspect=1923 --require ts-node/register"
+    "ts":"node -r tsconfig-paths/register --inspect=1923 --require ts-node/register"
   },
   "watch": ["src/**/*"],
   "env": {

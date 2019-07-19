@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { TaskEntity } from "@entities/task.entity";
+import { TaskEntity } from "./task.entity";
 import { LabelEntity } from "./label.entity";
 
 @Entity("task_label")

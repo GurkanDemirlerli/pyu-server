@@ -1,3 +1,4 @@
+// import 'module-alias/register';
 import * as bodyParser from 'body-parser';
 import * as compression from 'compression';
 import * as cors from 'cors';
@@ -9,9 +10,9 @@ import * as methodOverride from 'method-override';
 import * as morgan from 'morgan';
 import * as path from 'path';
 import { createConnection } from "typeorm";
-import { RouteBinder } from '@routes'
-import { IOC } from '@ioc';
-import * as appConfig from "@common/app-config";
+import { RouteBinder } from './@routes'
+import { IOC } from './ioc';
+import * as appConfig from "./common/app-config";
 // import { logger } from './services';
 import 'reflect-metadata';
 /**
@@ -60,8 +61,8 @@ export class Server {
      */
     public config() {
         // add static paths
+        console.log(process.env.DUMMY_TEXT);
         this.app.use(express.static(path.join(__dirname, 'public')));
-
         // mount logger
         // this.app.use(morgan('tiny', {
         //   stream: {
@@ -94,7 +95,7 @@ export class Server {
         // error handling
         this.app.use(errorHandler());
 
-        createConnection(appConfig.dbOptions).then(async connection => {
+        createConnection(appConfig).then(async connection => {
             console.log("SERVER STARTED")
 
 

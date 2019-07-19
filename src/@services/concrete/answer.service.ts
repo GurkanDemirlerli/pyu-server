@@ -1,11 +1,11 @@
-import { IAnswerService } from "@services/abstract";
+import { IAnswerService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
-import { IAnswerRepository } from "@repositories/abstract";
-import { AnswerCreateDto, AnswerListDto, AnswerDetailDto, AnswerUpdateDto } from "@models/dtos";
-import { AnswerEntity } from "@entities/answer.entity";
-import { AnswerFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
+import { InjectTypes } from "../../ioc";
+import { IAnswerRepository } from "../../@repository/abstract";
+import { AnswerCreateDto, AnswerListDto, AnswerDetailDto, AnswerUpdateDto } from "../../_models/dtos";
+import { AnswerEntity } from "../../entities/answer.entity";
+import { AnswerFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
 
 @injectable()
 export class AnswerService implements IAnswerService {

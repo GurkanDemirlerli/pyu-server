@@ -1,13 +1,13 @@
 import 'module-alias/register';
 
-import { AnswerController } from '@controllers/answer.controller';
-import { CommentController } from '@controllers/comment.controller';
-import { CompanyController } from '@controllers/company.controller';
-import { IssueController } from '@controllers/issue.controller';
-import { ProjectController } from '@controllers/project.controller';
-import { QuestionController } from '@controllers/question.controller';
-import { TaskController } from '@controllers/task.controller';
-import { UserController } from '@controllers/user.controller';
+import { AnswerController } from '../@controllers/answer.controller';
+import { CommentController } from '../@controllers/comment.controller';
+import { CompanyController } from '../@controllers/company.controller';
+import { IssueController } from '../@controllers/issue.controller';
+import { ProjectController } from '../@controllers/project.controller';
+import { QuestionController } from '../@controllers/question.controller';
+import { TaskController } from '../@controllers/task.controller';
+import { UserController } from '../@controllers/user.controller';
 import {
   IAnswerRepository,
   ICommentRepository,
@@ -27,7 +27,7 @@ import {
   IStatusTemplateRepository,
   IAbstractStatusRepository,
   IProjectManagerRepository,
-} from '@repositories/abstract';
+} from '../@repository/abstract';
 
 import {
   AnswerRepository,
@@ -48,7 +48,7 @@ import {
   StatusTemplateRepository,
   AbstractStatusRepository,
   ProjectManagerRepository,
-} from '@repositories/concrete';
+} from '../@repository/concrete';
 
 import {
   AnswerService,
@@ -59,7 +59,7 @@ import {
   TaskService,
   UserService,
   ProjectService,
-} from '@services/concrete';
+} from '../@services/concrete';
 
 import {
   IAnswerService,
@@ -70,12 +70,12 @@ import {
   ITaskService,
   IUserService,
   IProjectService
-} from '@services/abstract';
+} from '../@services/abstract';
 
 import { Container } from 'inversify';
 
 import 'reflect-metadata';
-import { InjectTypes } from '@ioc';
+import { InjectTypes } from './inject-types';
 
 export module IOC {
   export const container = new Container();

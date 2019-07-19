@@ -1,10 +1,10 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { CommentCreateDto, CommentUpdateDto } from "@models/dtos";
-import { ICommentService } from "@services/abstract";
-import { CommentFilter } from "@models/filters/comment-filter";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
+import { CommentCreateDto, CommentUpdateDto } from "../_models/dtos";
+import { ICommentService } from "../@services/abstract";
+import { CommentFilter } from "../_models/filters/comment-filter";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc/inject-types";
 
 @injectable()
 export class CommentController {

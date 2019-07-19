@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, OneToMany, Column, OneToOne, ManyToOne, JoinColumn, Tree, TreeChildren, TreeParent, } from "typeorm";
-import { TaskEntity } from "@entities/task.entity";
-import { StatusEntity } from "@entities/status.entity";
+import { TaskEntity } from "./task.entity";
+import { StatusEntity } from "./status.entity";
 import { IssueEntity } from "./issue.entity";
 import { CompanyEntity } from "./company.entity";
 import { UserEntity } from "./user.entity";

@@ -1,6 +1,6 @@
-import { QuestionCreateDto, QuestionUpdateDto, QuestionDetailDto, QuestionListDto } from "@models/dtos";
-import { QuestionFilter } from "@models/filters";
-import { QuestionEntity } from "@entities/question.entity";
+import { QuestionCreateDto, QuestionUpdateDto, QuestionDetailDto, QuestionListDto } from "../../_models/dtos";
+import { QuestionFilter } from "../../_models/filters";
+import { QuestionEntity } from "../../entities/question.entity";
 
 export interface IQuestionService {
     add(model: QuestionCreateDto): Promise<number>;

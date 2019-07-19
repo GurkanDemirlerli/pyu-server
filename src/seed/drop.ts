@@ -3,7 +3,7 @@ import * as appConfig from "./../common/app-config";
 
 console.log("Veritabanı sil Çalıştırıldı.");
 
-const config = Object.assign(appConfig.dbOptions, { synchronize: undefined });
+const config = Object.assign(appConfig, { synchronize: undefined });
 
  createConnection(config).then(async connection => {
     connection.dropDatabase().then(() => {

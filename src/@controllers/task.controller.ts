@@ -1,11 +1,11 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { TaskCreateDto, TaskUpdateDto, TaskStatusUpdateDto } from "@models/dtos";
-import { ITaskService } from "@services/abstract";
-import { TaskFilter } from "@models/filters/task-filter";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc";
-import { AppError } from "@errors/app-error";
+import { TaskCreateDto, TaskUpdateDto, TaskStatusUpdateDto } from "../_models/dtos";
+import { ITaskService } from "../@services/abstract";
+import { TaskFilter } from "../_models/filters/task-filter";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc";
+import { AppError } from "../errors/app-error";
 
 @injectable()
 export class TaskController {
@@ -21,8 +21,8 @@ export class TaskController {
     if (req.query.hasOwnProperty("createdBy")) filters.createdBy = +req.query.createdBy;
     if (req.query.hasOwnProperty("projectId")) filters.projectId = +req.query.projectId;
     if (req.query.hasOwnProperty("status")) filters.status = +req.query.status;
-    if (req.query.hasOwnProperty("skip")) filters.skip = +req.query.skip;
-    if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
+    // if (req.query.hasOwnProperty("skip")) filters.skip = +req.query.skip;
+    // if (req.query.hasOwnProperty("take")) filters.take = +req.query.take;
 
     this._taskService.list(filters, req.decoded.id).then((result) => {
       return res.status(200).json({

@@ -5,5 +5,4 @@ export { ICommentService } from './i-comment.service';
 export { IAnswerService } from './i-answer.service';
 export { ITaskService } from './i-task.service';
 export { ICompanyService } from './i-company.service';
-export { IAuthService } from './i-auth.service';
 export { IProjectService } from './i-project.service';

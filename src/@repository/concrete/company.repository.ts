@@ -4,7 +4,7 @@ import { ICompanyRepository } from "../abstract/i-company.repository";
 import { CompanyEntity } from "./../../entities/company.entity";
 import { injectable } from "inversify";
 import 'reflect-metadata';
-import { CompanyFilter } from '@models/filters';
+import { CompanyFilter } from '../../_models/filters';
 @injectable()
 export class CompanyRepository extends RepositoryBase<CompanyEntity> implements ICompanyRepository {
   constructor() {

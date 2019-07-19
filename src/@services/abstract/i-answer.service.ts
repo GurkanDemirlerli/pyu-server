@@ -1,6 +1,6 @@
-import { AnswerCreateDto, AnswerUpdateDto, AnswerDetailDto, AnswerListDto } from "@models/dtos";
-import { AnswerFilter } from "@models/filters";
-import { AnswerEntity } from "@entities/answer.entity";
+import { AnswerCreateDto, AnswerUpdateDto, AnswerDetailDto, AnswerListDto } from "../../_models/dtos";
+import { AnswerFilter } from "../../_models/filters";
+import { AnswerEntity } from "../../entities/answer.entity";
 
 export interface IAnswerService {
     add(model: AnswerCreateDto): Promise<number>;

@@ -1,11 +1,11 @@
-import { ICommentService } from "@services/abstract";
+import { ICommentService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
-import { ICommentRepository } from "@repositories/abstract";
-import { CommentCreateDto, CommentListDto, CommentDetailDto, CommentUpdateDto } from "@models/dtos";
-import { CommentEntity } from "@entities/comment.entity";
-import { CommentFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
+import { InjectTypes } from "../../ioc";
+import { ICommentRepository } from "../../@repository/abstract";
+import { CommentCreateDto, CommentListDto, CommentDetailDto, CommentUpdateDto } from "../../_models/dtos";
+import { CommentEntity } from "../../entities/comment.entity";
+import { CommentFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
 
 @injectable()
 export class CommentService implements ICommentService {

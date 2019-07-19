@@ -1,6 +1,6 @@
-import { ProjectCreateDto, ProjectUpdateDto, ProjectDetailDto, ProjectListDto, UserSummaryDto, ProjectUserRegisterDto } from "@models/dtos";
-import { ProjectFilter } from "@models/filters";
-import { ProjectEntity } from "@entities/project.entity";
+import { ProjectCreateDto, ProjectUpdateDto, ProjectDetailDto, ProjectListDto, UserSummaryDto, ProjectUserRegisterDto } from "../../_models/dtos";
+import { ProjectFilter } from "../../_models/filters";
+import { ProjectEntity } from "../../entities/project.entity";
 
 export interface IProjectService {
   add(model: ProjectCreateDto): Promise<number>;

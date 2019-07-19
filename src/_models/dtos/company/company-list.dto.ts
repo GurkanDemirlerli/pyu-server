@@ -1,4 +1,4 @@
-import { UserSummaryDto } from "@models/dtos";
+import { UserSummaryDto } from "..";
 
 export class CompanyListDto {
     id: number;

@@ -2,11 +2,13 @@
   "name": "pyu-server",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "./src/index.ts",
   "scripts": {
-    "start": "webpack",
-    "watch": "nodemon  --inspect=1923 && node ./dist/index.js",
-    "seed": "node ./dist/drop.js && node ./dist/seed.js"
+    "start": "node --inspect=1923 -r tsconfig-paths/register -r ts-node/register ./src/index.ts",
+    "start:watch": "nodemon",
+    "seed": "node ./dist/drop.js && node ./dist/seed.js",
+    "build": "tsc",
+    "typeorm:cli": "ts-node ./node_modules/typeorm/cli -f ./src/common/app-config.ts"
   },
   "author": "",
   "license": "ISC",
@@ -18,6 +20,7 @@
     "compression": "^1.7.4",
     "config": "^3.0.1",
     "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
     "errorhandler": "^1.5.0",
     "express": "^4.16.4",
     "express-status-monitor": "^1.2.3",
@@ -62,6 +65,7 @@
     "ts-jest": "^24.0.2",
     "ts-loader": "^6.0.0",
     "ts-node-dev": "^1.0.0-pre.32",
+    "tsconfig-paths": "^3.8.0",
     "tslint": "^5.15.0",
     "typescript": "^3.4.1",
     "webpack": "^4.31.0",

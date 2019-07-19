@@ -1,11 +1,11 @@
-import { IIssueService } from "@services/abstract";
+import { IIssueService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
-import { IIssueRepository } from "@repositories/abstract";
-import { IssueCreateDto, IssueListDto, IssueDetailDto, IssueUpdateDto } from "@models/dtos";
-import { IssueEntity } from "@entities/issue.entity";
-import { IssueFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
+import { InjectTypes } from "../../ioc";
+import { IIssueRepository } from "../../@repository/abstract";
+import { IssueCreateDto, IssueListDto, IssueDetailDto, IssueUpdateDto } from "../../_models/dtos";
+import { IssueEntity } from "../../entities/issue.entity";
+import { IssueFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
 
 @injectable()
 export class IssueService implements IIssueService {

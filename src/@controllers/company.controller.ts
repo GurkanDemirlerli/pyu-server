@@ -1,10 +1,10 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
-import { CompanyFilter } from "@models/filters";
-import { ICompanyService } from "@services/abstract";
-import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from "@models/dtos";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc/inject-types";
+import { CompanyFilter } from "../_models/filters";
+import { ICompanyService } from "../@services/abstract";
+import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from "../_models/dtos";
 
 @injectable()
 export class CompanyController {

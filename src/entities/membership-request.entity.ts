@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
-import { UserEntity } from '@entities/user.entity';
-import { CompanyEntity } from "@entities/company.entity";
+import { UserEntity } from './user.entity';
+import { CompanyEntity } from "./company.entity";
 
 @Entity("membership_request")
 export class MembershipRequestEntity {

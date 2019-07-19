@@ -1,11 +1,11 @@
-import { IQuestionService } from "@services/abstract";
+import { IQuestionService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
-import { IQuestionRepository } from "@repositories/abstract";
-import { QuestionCreateDto, QuestionListDto, QuestionDetailDto, QuestionUpdateDto } from "@models/dtos";
-import { QuestionEntity } from "@entities/question.entity";
-import { QuestionFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
+import { InjectTypes } from "../../ioc";
+import { IQuestionRepository } from "../../@repository/abstract";
+import { QuestionCreateDto, QuestionListDto, QuestionDetailDto, QuestionUpdateDto } from "../../_models/dtos";
+import { QuestionEntity } from "../../entities/question.entity";
+import { QuestionFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
 
 @injectable()
 export class QuestionService implements IQuestionService {

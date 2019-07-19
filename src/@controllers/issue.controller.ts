@@ -1,10 +1,10 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { IssueCreateDto, IssueUpdateDto } from "@models/dtos";
-import { IIssueService } from "@services/abstract";
-import { IssueFilter } from "@models/filters/issue-filter";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
+import { IssueCreateDto, IssueUpdateDto } from "../_models/dtos";
+import { IIssueService } from "../@services/abstract";
+import { IssueFilter } from "../_models/filters/issue-filter";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc/inject-types";
 
 @injectable()
 export class IssueController {

@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, JoinColumn, ManyToMany, JoinTable } from "typeorm";
-import { UserEntity } from '@entities/user.entity';
-import { CompanyMembershipEntity } from "@entities/company-membership.entity";
-import { MembershipRequestEntity } from "@entities/membership-request.entity";
+import { UserEntity } from './user.entity';
+import { CompanyMembershipEntity } from "./company-membership.entity";
+import { MembershipRequestEntity } from "./membership-request.entity";
 import { StatusTemplateEntity } from "./status-template.entity";
 import { ProjectEntity } from "./project.entity";
 @Entity("company")

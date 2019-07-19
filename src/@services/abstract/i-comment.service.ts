@@ -1,6 +1,6 @@
-import { CommentCreateDto, CommentUpdateDto, CommentDetailDto, CommentListDto } from "@models/dtos";
-import { CommentFilter } from "@models/filters";
-import { CommentEntity } from "@entities/comment.entity";
+import { CommentCreateDto, CommentUpdateDto, CommentDetailDto, CommentListDto } from "../../_models/dtos";
+import { CommentFilter } from "../../_models/filters";
+import { CommentEntity } from "../../entities/comment.entity";
 
 export interface ICommentService {
     add(model: CommentCreateDto): Promise<number>;

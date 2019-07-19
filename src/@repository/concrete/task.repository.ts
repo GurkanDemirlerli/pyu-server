@@ -1,10 +1,10 @@
 import { RepositoryBase } from './base/repository.base';
 import { ITaskRepository } from "../abstract/i-task.repository";
-import { TaskEntity } from "@entities/task.entity";
+import { TaskEntity } from "../../entities/task.entity";
 import { injectable } from "inversify";
 import 'reflect-metadata';
 import { getManager } from 'typeorm';
-import { TaskFilter } from '@models/filters/task-filter';
+import { TaskFilter } from '../../_models/filters/task-filter';
 @injectable()
 export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskRepository {
   constructor() {
@@ -23,10 +23,10 @@ export class TaskRepository extends RepositoryBase<TaskEntity> implements ITaskR
     if (filters.status !== undefined) query = query.andWhere("task.statusId =:statusId", { statusId: filters.status });
 
     query = query.orderBy("task.id", "DESC");
-    if (filters.take !== undefined) {
-      query = query.take(filters.take);
-      if (filters.skip !== undefined) query = query.skip(filters.skip);
-    }
+    // if (filters.take !== undefined) {
+    //   query = query.take(filters.take);
+    //   if (filters.skip !== undefined) query = query.skip(filters.skip);
+    // }
     query = query
       .leftJoin("task.comments", "comment").addSelect(["comment.id"])
 

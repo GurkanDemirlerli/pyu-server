@@ -1,9 +1,9 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { RegisterDto, LoginDto } from "@models/dtos";
-import { IUserService } from "@services/abstract";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
+import { RegisterDto, LoginDto } from "../_models/dtos";
+import { IUserService } from "../@services/abstract";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc/inject-types";
 
 @injectable()
 export class UserController {
@@ -25,6 +25,10 @@ export class UserController {
     }
 
     public async login(req: Request, res: Response, next: NextFunction) {
+        // return res.status(200).json({
+        //     success: true,
+        //     data: "safasfs"
+        // });
         let loginDto: LoginDto = Object.assign(new LoginDto(), req.body);
         this._userService.login(loginDto).then((user) => {
             return res.status(200).json({

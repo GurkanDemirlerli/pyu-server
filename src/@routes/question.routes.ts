@@ -1,10 +1,10 @@
 import * as express from 'express';
 import 'reflect-metadata';
-import { QuestionUpdateDto, QuestionCreateDto } from '@models/dtos';
-import { validationMiddleware } from '@middlewares';
-import { authorize } from '@middlewares';
-import { IOC } from '@ioc';
-import { QuestionController } from '@controllers/question.controller';
+import { QuestionUpdateDto, QuestionCreateDto } from '../_models/dtos';
+import { validationMiddleware } from '../middlewares';
+import { authorize } from '../middlewares';
+import { IOC } from '../ioc';
+import { QuestionController } from '../@controllers/question.controller';
 
 export class QuestionRoutes {
     public static configureRoutes(app: express.Application): void {

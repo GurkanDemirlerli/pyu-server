@@ -1,5 +1,7 @@
+import 'reflect-metadata';
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import { StatusTemplateEntity } from "./status-template.entity";
+
 @Entity("abstract_status")
 export class AbstractStatusEntity {
 

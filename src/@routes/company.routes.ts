@@ -1,10 +1,10 @@
 import * as express from 'express';
 import 'reflect-metadata';
-import { validationMiddleware } from '@middlewares';
-import { authorize } from '@middlewares';
-import { IOC } from '@ioc';
-import { CompanyController } from '@controllers/company.controller';
-import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from '@models/dtos';
+import { validationMiddleware } from '../middlewares';
+import { authorize } from '../middlewares';
+import { IOC } from '../ioc';
+import { CompanyController } from '../@controllers/company.controller';
+import { CompanyCreateDto, CompanyUpdateDto, CompanyUserRegisterDto, AddStatusTemplateDto } from '../_models/dtos';
 
 export class CompanyRoutes {
   public static configureRoutes(app: express.Application): void {

@@ -4,7 +4,7 @@ import { IProjectRepository } from "../abstract/i-project.repository";
 import { ProjectEntity } from "./../../entities/project.entity";
 import { injectable } from "inversify";
 import 'reflect-metadata';
-import { ProjectFilter } from '@models/filters';
+import { ProjectFilter } from '../../_models/filters';
 @injectable()
 export class ProjectRepository extends RepositoryBase<ProjectEntity> implements IProjectRepository {
   constructor() {

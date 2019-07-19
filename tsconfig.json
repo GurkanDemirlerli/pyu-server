@@ -1,78 +1,77 @@
 {
   "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "./typings"],
     "baseUrl": ".",
     "module": "commonjs",
     "moduleResolution": "node",
-    "paths": {
-      "@models/*":[
-        "./src/_models/*"
-      ],
-      "@models":[
-        "./src/_models/index"
-      ],
-      "@middlewares/*":[
-        "./src/middlewares/*"
-      ],
-      "@middlewares":[
-        "./src/middlewares/index"
-      ],
-      "@controllers/*":[
-        "./src/@controllers/*"
-      ],
-      "@repositories/*":[
-        "./src/@repository/*"
-      ],
-      "@routes/*":[
-        "./src/@routes/*"
-      ],
-      "@routes":[
-        "./src/@routes/index"
-      ],
-      "@services/*":[
-        "./src/@services/*"
-      ],
-      "@entities/*":[
-        "./src/entities/*",
-      ],
-      "@enums/*":[
-        "./src/enums/*",
-      ],
-      "@enums":[
-        "./src/enums/index",
-      ],
-      "@common/*":[
-        "./src/common/*",
-      ],
-      "@errors/*":[
-        "./src/errors/*",
-      ],
-      "@ioc/*":[
-        "./src/ioc/*",
-      ],
-      "@ioc":[
-        "./src/ioc/index",
-      ],
-      "@seed/*":[
-        "./src/seed/*",
-      ],
-      "@helpers/*":[
-        "./src/helpers/*",
-      ],
-      "@exceptions/*":[
-        "./src/exceptions/*",
-      ]
-    },
+    // "paths": {
+    //   "@models/*": [
+    //     "./src/_models/*"
+    //   ],
+    //   "@models": [
+    //     "./src/_models/index"
+    //   ],
+    //   "@middlewares/*": [
+    //     "./src/middlewares/*"
+    //   ],
+    //   "@middlewares": [
+    //     "./src/middlewares/index"
+    //   ],
+    //   "@controllers/*": [
+    //     "./src/@controllers/*"
+    //   ],
+    //   "@repositories/*": [
+    //     "./src/@repository/*"
+    //   ],
+    //   "@routes/*": [
+    //     "./src/@routes/*"
+    //   ],
+    //   "@routes": [
+    //     "./src/@routes/index"
+    //   ],
+    //   "@services/*": [
+    //     "./src/@services/*"
+    //   ],
+    //   "@entities/*": [
+    //     "./src/entities/*",
+    //   ],
+    //   "@enums/*": [
+    //     "./src/enums/*",
+    //   ],
+    //   "@enums": [
+    //     "./src/enums/index",
+    //   ],
+    //   "@common/*": [
+    //     "./src/common/*",
+    //   ],
+    //   "@errors/*": [
+    //     "./src/errors/*",
+    //   ],
+    //   "@ioc/*": [
+    //     "./src/ioc/*",
+    //   ],
+    //   "@ioc": [
+    //     "./src/ioc/index",
+    //   ],
+    //   "@seed/*": [
+    //     "./src/seed/*",
+    //   ],
+    //   "@helpers/*": [
+    //     "./src/helpers/*",
+    //   ],
+    //   "@exceptions/*": [
+    //     "./src/exceptions/*",
+    //   ]
+    // },
     "outDir": "dist",
     "target": "es6",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
     "resolveJsonModule": true,
-  "sourceMap":true
+    "sourceMap": true
   },
-
   "include": [
-    "*.ts",
     "./typings/**/*",
     "./src/**/*"
   ],
@@ -80,27 +79,26 @@
     "node_modules",
     "dist"
   ],
-
   "formatCodeOptions": {
-      "baseIndentSize": 0,
-      "indentSize": 4,
-      "tabSize": 4,
-      "newLineCharacter": "\n",
-      "convertTabsToSpaces": true,
-      "indentStyle": "Smart",
-      "insertSpaceAfterCommaDelimiter": true,
-      "insertSpaceAfterSemicolonInForStatements": true,
-      "insertSpaceBeforeAndAfterBinaryOperators": true,
-      "insertSpaceAfterConstructor": false,
-      "insertSpaceAfterKeywordsInControlFlowStatements": true,
-      "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
-      "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
-      "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
-      "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
-      "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
-      "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
-      "insertSpaceBeforeFunctionParenthesis": false,
-      "placeOpenBraceOnNewLineForFunctions": false,
-      "placeOpenBraceOnNewLineForControlBlocks": false
+    "baseIndentSize": 0,
+    "indentSize": 4,
+    "tabSize": 4,
+    "newLineCharacter": "\n",
+    "convertTabsToSpaces": true,
+    "indentStyle": "Smart",
+    "insertSpaceAfterCommaDelimiter": true,
+    "insertSpaceAfterSemicolonInForStatements": true,
+    "insertSpaceBeforeAndAfterBinaryOperators": true,
+    "insertSpaceAfterConstructor": false,
+    "insertSpaceAfterKeywordsInControlFlowStatements": true,
+    "insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
+    "insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": false,
+    "insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets": false,
+    "insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+    "insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": false,
+    "insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces": false,
+    "insertSpaceBeforeFunctionParenthesis": false,
+    "placeOpenBraceOnNewLineForFunctions": false,
+    "placeOpenBraceOnNewLineForControlBlocks": false
   }
 }

@@ -1,13 +1,13 @@
-import { ICompanyService } from "@services/abstract";
+import { ICompanyService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
+import { InjectTypes } from "../../ioc";
 import {
 	ICompanyRepository,
 	ICompanyMembershipRepository,
 	IMembershipRequestRepository,
 	IStatusTemplateRepository,
 	IAbstractStatusRepository
-} from "@repositories/abstract";
+} from "../../@repository/abstract";
 import {
 	CompanyCreateDto,
 	CompanyListDto,
@@ -16,16 +16,16 @@ import {
 	CompanyUserRegisterDto,
 	AddStatusTemplateDto,
 	UserSummaryDto
-} from "@models/dtos";
-import { CompanyEntity } from "@entities/company.entity";
-import { CompanyFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
-import { CompanyMembershipEntity } from "@entities/company-membership.entity";
-import { MembershipRequestEntity } from "@entities/membership-request.entity";
-import { Uow } from "@repositories/uow";
-import { StatusTemplateEntity } from "@entities/status-template.entity";
-import { AbstractStatusEntity } from "@entities/abstract-status.entity";
-import { ProjectTreeItem, StatusTreeItem, TaskTreeItem } from "@models/project-tree";
+} from "../../_models/dtos";
+import { CompanyEntity } from "../../entities/company.entity";
+import { CompanyFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
+import { CompanyMembershipEntity } from "../../entities/company-membership.entity";
+import { MembershipRequestEntity } from "../../entities/membership-request.entity";
+import { Uow } from "../../@repository/uow";
+import { StatusTemplateEntity } from "../../entities/status-template.entity";
+import { AbstractStatusEntity } from "../../entities/abstract-status.entity";
+import { ProjectTreeItem, StatusTreeItem, TaskTreeItem } from "../../_models/project-tree";
 import * as _ from 'lodash';
 
 @injectable()

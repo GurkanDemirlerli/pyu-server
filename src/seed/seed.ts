@@ -12,24 +12,24 @@ import {
   IStatusTemplateRepository,
   ICompanyMembershipRepository,
   IProjectManagerRepository
-} from "@repositories/abstract";
-import { InjectTypes } from "@ioc";
+} from "../@repository/abstract";
+import { InjectTypes } from "../ioc";
 import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
-import { CompanyEntity } from "@entities/company.entity";
-import { UserEntity } from "@entities/user.entity";
-import { ProjectEntity } from "@entities/project.entity";
-import { TaskEntity } from "@entities/task.entity";
+import { CompanyEntity } from "../entities/company.entity";
+import { UserEntity } from "../entities/user.entity";
+import { ProjectEntity } from "../entities/project.entity";
+import { TaskEntity } from "../entities/task.entity";
 import faker = require("faker");
-import { StatusEntity } from "@entities/status.entity";
-import { BaseStatus, TaskTypes, ProjectTypes } from "@enums";
-import * as appConfig from "@common/app-config";
-import { ProjectMembershipEntity } from '@entities/project-membership.entity';
-import { TaskLabelEntity } from '@entities/task-label.entity';
-import { CompanyMembershipEntity } from '@entities/company-membership.entity';
-import { StatusTemplateEntity } from '@entities/status-template.entity';
-import { AbstractStatusEntity } from '@entities/abstract-status.entity';
-import { ProjectManagerEntity } from '@entities/project-manager.entity';
+import { StatusEntity } from "../entities/status.entity";
+import { BaseStatus} from "../enums";
+import * as appConfig from "../common/app-config";
+import { ProjectMembershipEntity } from '../entities/project-membership.entity';
+import { TaskLabelEntity } from '../entities/task-label.entity';
+import { CompanyMembershipEntity } from '../entities/company-membership.entity';
+import { StatusTemplateEntity } from '../entities/status-template.entity';
+import { AbstractStatusEntity } from '../entities/abstract-status.entity';
+import { ProjectManagerEntity } from '../entities/project-manager.entity';
 
 
 @injectable()
@@ -70,7 +70,7 @@ export class SeedDatabase {
 
   public async initialize() {
     console.log("INITIALIZING...");
-    let connection = await createConnection(appConfig.dbOptions);
+    let connection = await createConnection(appConfig);
     console.log("CONNECTED TO DB");
     try {
       await this.addUsers();

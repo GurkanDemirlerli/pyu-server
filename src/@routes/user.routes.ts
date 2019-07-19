@@ -1,8 +1,8 @@
 import * as express from 'express';
 import { IOC } from '../ioc';
-import { validationMiddleware } from '@middlewares';
-import { LoginDto } from '@models/dtos';
-import { UserController } from '@controllers/user.controller';
+import { validationMiddleware } from '../middlewares';
+import { LoginDto } from '../_models/dtos';
+import { UserController } from '../@controllers/user.controller';
 
 export class UserRoutes {
     public static configureRoutes(app: express.Application): void {

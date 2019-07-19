@@ -1,10 +1,10 @@
 import * as express from 'express';
 import 'reflect-metadata';
-import { TaskUpdateDto, TaskCreateDto, TaskStatusUpdateDto } from '@models/dtos';
-import { validationMiddleware } from '@middlewares';
-import { authorize } from '@middlewares';
-import { IOC } from '@ioc';
-import { TaskController } from '@controllers/task.controller';
+import { TaskUpdateDto, TaskCreateDto, TaskStatusUpdateDto } from '../_models/dtos';
+import { validationMiddleware } from '../middlewares';
+import { authorize } from '../middlewares';
+import { IOC } from '../ioc';
+import { TaskController } from '../@controllers/task.controller';
 
 export class TaskRoutes {
   public static configureRoutes(app: express.Application): void {

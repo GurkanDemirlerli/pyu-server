@@ -1,4 +1,4 @@
-import { UserSummaryDto, CommentSummaryDto, ProjectSummaryDto, StatusSummaryDto, IssueSummaryDto } from "@models/dtos";
+import { UserSummaryDto, CommentSummaryDto, ProjectSummaryDto, StatusSummaryDto, IssueSummaryDto } from "..";
 
 export class TaskDetailDto {
     id: number;

@@ -1,6 +1,6 @@
-import { IssueCreateDto, IssueUpdateDto, IssueDetailDto, IssueListDto } from "@models/dtos";
-import { IssueFilter } from "@models/filters";
-import { IssueEntity } from "@entities/issue.entity";
+import { IssueCreateDto, IssueUpdateDto, IssueDetailDto, IssueListDto } from "../../_models/dtos";
+import { IssueFilter } from "../../_models/filters";
+import { IssueEntity } from "../../entities/issue.entity";
 
 export interface IIssueService {
     add(model: IssueCreateDto): Promise<number>;

@@ -1,6 +1,6 @@
-import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto, TaskStatusUpdateDto } from "@models/dtos";
-import { TaskFilter } from "@models/filters";
-import { TaskEntity } from "@entities/task.entity";
+import { TaskCreateDto, TaskUpdateDto, TaskDetailDto, TaskListDto, TaskStatusUpdateDto } from "../../_models/dtos";
+import { TaskFilter } from "../../_models/filters";
+import { TaskEntity } from "../../entities/task.entity";
 
 export interface ITaskService {
   add(model: TaskCreateDto): Promise<number>;

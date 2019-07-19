@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { SeedDatabase } from './seed';
-import { IOC } from '@ioc';
+import { IOC } from '../ioc';
 
 console.log("veritabanı seedle çalıştırıldı.");
 

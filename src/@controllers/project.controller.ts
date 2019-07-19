@@ -1,11 +1,11 @@
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
-import { ProjectCreateDto, ProjectUpdateDto, ProjectUserRegisterDto } from "@models/dtos";
-import { IProjectService } from "@services/abstract";
-import { ProjectFilter } from "@models/filters/project-filter";
-import { ErrorHandler } from "@errors/error-handler";
-import { InjectTypes } from "@ioc/inject-types";
-import { AppError } from "@errors/app-error";
+import { ProjectCreateDto, ProjectUpdateDto, ProjectUserRegisterDto } from "../_models/dtos";
+import { IProjectService } from "../@services/abstract";
+import { ProjectFilter } from "../_models/filters/project-filter";
+import { ErrorHandler } from "../errors/error-handler";
+import { InjectTypes } from "../ioc/inject-types";
+import { AppError } from "../errors/app-error";
 
 @injectable()
 export class ProjectController {

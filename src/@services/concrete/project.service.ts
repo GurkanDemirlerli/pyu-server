@@ -1,18 +1,15 @@
-import { IProjectService } from "@services/abstract";
+import { IProjectService } from "../abstract";
 import { injectable, inject } from "inversify";
-import { InjectTypes } from "@ioc";
-import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository, IStatusTemplateRepository } from "@repositories/abstract";
-import { ProjectListDto, ProjectDetailDto, ProjectUpdateDto, UserSummaryDto, ProjectUserRegisterDto, ProjectCreateDto } from "@models/dtos";
-import { ProjectEntity } from "@entities/project.entity";
-import { ProjectFilter } from "@models/filters";
-import { AppError } from "@errors/app-error";
-import { StatusEntity } from "@entities/status.entity";
-import { BaseStatus } from "@enums";
-import { Uow } from "@repositories/uow";
-import { CompanyMembershipEntity } from "@entities/company-membership.entity";
-import { UserEntity } from "@entities/user.entity";
-import { ProjectMembershipEntity } from "@entities/project-membership.entity";
-import { TreeExplorerItem } from "@models";
+import { InjectTypes } from "../../ioc";
+import { IProjectRepository, IStatusRepository, ICompanyRepository, ICompanyMembershipRepository, IUserRepository, IProjectMembershipRepository, IStatusTemplateRepository } from "../../@repository/abstract";
+import { ProjectListDto, ProjectDetailDto, ProjectUpdateDto, UserSummaryDto, ProjectUserRegisterDto, ProjectCreateDto } from "../../_models/dtos";
+import { ProjectEntity } from "../../entities/project.entity";
+import { ProjectFilter } from "../../_models/filters";
+import { AppError } from "../../errors/app-error";
+import { StatusEntity } from "../../entities/status.entity";
+import { Uow } from "../../@repository/uow";
+import { CompanyMembershipEntity } from "../../entities/company-membership.entity";
+import { ProjectMembershipEntity } from "../../entities/project-membership.entity";
 
 @injectable()
 export class ProjectService implements IProjectService {

@@ -1,3 +1,5 @@
+// import 'module-alias/register';
+require('dotenv').config()
 console.log("Starting...")
 import 'reflect-metadata';
 import * as config from 'config';
