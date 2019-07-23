@@ -11,10 +11,10 @@ const config: ConnectionOptions = {
         __dirname + '/../**/*.entity{.ts,.js}',
     ],
     migrations: [
-        '../migrations/*.{.ts,.js}',
+        'src/migrations/*.ts',
     ],
     cli: {
-        migrationsDir: '../migrations',
+        migrationsDir: 'src/migrations',
     },
 };
 export = config;

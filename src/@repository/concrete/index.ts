@@ -1,18 +1,4 @@
-export { ProjectManagerRepository } from './project-manager.repository';
-export { QuestionRepository } from './question.repository';
-export { IssueRepository } from './issue.repository';
-export { AnswerRepository } from './answer.repository';
-export { StatusRepository } from './status.repository';
-export { ProjectRepository } from './project.repository';
-export { CompanyRepository } from './company.repository';
-export { UserRepository } from './user.repository';
-export { CommentRepository } from './comment.repository';
-export { TaskAssignmentRepository } from './task-assignment.repository';
-export { TaskRepository } from './task.repository';
-export { CompanyMembershipRepository } from './company-membership.repository';
-export { MembershipRequestRepository } from './membership-request.repository';
-export { ProjectMembershipRepository } from './project-membership.repository';
-export { LabelRepository } from './label.repository';
-export { TaskLabelRepository } from './task-label.repository';
-export { AbstractStatusRepository } from './abstract-status.repository';
-export { StatusTemplateRepository } from './status-template.repository';
+export { SubjectTaskRepository } from './subject-task.repository';
+export { SubjectItemRepository } from './subject-item.repository';
+export { WorkspaceRepository } from './workspace.repository';
+

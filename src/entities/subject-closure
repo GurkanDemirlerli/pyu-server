@@ -1,0 +1,33 @@
+import { SubjectItemEntity } from './subject-item.entity';
+import { SubjectTaskEntity } from './subject-task.entity';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToMany,
+    ManyToOne,
+    JoinColumn,
+    ManyToMany,
+    JoinTable,
+    OneToOne,
+    Tree,
+    TreeChildren,
+    TreeParent
+} from "typeorm";
+import { WorkspaceEntity } from "./workspace.entity";
+
+@Entity("subject_closure")
+export class SubjectClosureEntity {
+
+    @Column("int")
+    parentId: number;
+    @ManyToOne(type => SubjectItemEntity, ws => ws.subjects)
+    @JoinColumn({ name: "parentId" })
+    parent: WorkspaceEntity;
+
+    @Column("int")
+    childId: number;
+    @ManyToOne(type => SubjectItemEntity, ws => ws.subjects)
+    @JoinColumn({ name: "childId" })
+    child: WorkspaceEntity;
+}
