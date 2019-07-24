@@ -1,3 +1,5 @@
+import { SubjectDescriptionEntity } from './subject-description.entity';
+import { SubjectDomainEntity } from './subject-domain.entity';
 import { SubjectTaskEntity } from './subject-task.entity';
 import {
     Entity,
@@ -14,18 +16,13 @@ import {
 import { WorkspaceEntity } from "./workspace.entity";
 import { SubjectFolderEntity } from './subject-folder.entity';
 import { SubjectCustomFieldEntity } from './subject-custom-field.entity';
+import { SubjectCommentEntity } from './subject-comment.entity';
 
 @Entity("subject_item")
 export class SubjectItemEntity {
 
     @PrimaryGeneratedColumn()
     subjectId: number;
-
-    @OneToOne(type => SubjectTaskEntity, tsk => tsk.subject)
-    task: SubjectTaskEntity;
-
-    @OneToOne(type => SubjectFolderEntity, fld => fld.subject)
-    folder: SubjectFolderEntity;
 
     @Column("int")
     workspaceId: number;
@@ -35,9 +32,9 @@ export class SubjectItemEntity {
 
     // @Column("int")
     // creatorId: number;
-    // @ManyToOne(type => WorkspaceMemberEntity, wsm => wsm.createdSubjects)
+    // @ManyToOne(type => WorkspaceUserEntity, wsm => wsm.createdSubjects)
     // @JoinColumn({ name: "creatorId" })
-    // creator: WorkspaceMemberEntity;
+    // creator: WorkspaceUserEntity;
 
     @Column("int", { nullable: true })
     parentId: number;
@@ -65,5 +62,17 @@ export class SubjectItemEntity {
 
     @OneToMany(type => SubjectCustomFieldEntity, scf => scf.customField)
     subjectCustomFields: SubjectCustomFieldEntity[];
+
+    @OneToOne(type => SubjectTaskEntity, tsk => tsk.subject)
+    task: SubjectTaskEntity;
+
+    @OneToOne(type => SubjectFolderEntity, fld => fld.subject)
+    folder: SubjectFolderEntity;
+
+    @OneToOne(type => SubjectDescriptionEntity, sds => sds.subject)
+    description: SubjectDescriptionEntity;
+
+    @OneToMany(type => SubjectCommentEntity, scm => scm.creator)
+    comments: SubjectCommentEntity[];
 
 }
