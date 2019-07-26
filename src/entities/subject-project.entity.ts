@@ -6,6 +6,7 @@ import {
     OneToOne,
     ManyToOne,
 } from "typeorm";
+import { WorkflowStatusEntity } from './workflow-status.entity';
 
 @Entity("subject_project")
 export class SubjectProjectEntity {

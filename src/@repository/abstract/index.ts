@@ -1,4 +1,25 @@
+export { IWorkspaceUserRepository } from './i-workspace-user.repository';
+export { IWorkspaceMemberRepository } from './i-workspace-member.repository';
+export { IWorkspaceGroupUserRepository } from './i-workspace-group-user.repository';
+export { IWorkflowRepository } from './i-workflow.repository';
+export { IWorkflowStatusRepository } from './i-workflow-status.repository';
+export { IWorkScheduleRepository } from './i-work-schedule.repository';
+export { IWorkScheduleWeekRepository } from './i-work-schedule-week.repository';
+export { IWorkScheduleExclusionRepository } from './i-work-schedule-exclusion.repository';
+export { ITaskDependencyRepository } from './i-task-dependency.repository';
+export { ITaskAssignmentRepository } from './i-task-assignment.repository';
+export { ISubjectProjectRepository } from './i-subject-project.repository';
+export { ISubjectFolderRepository } from './i-subject-folder.repository';
+export { ISubjectDomainRepository } from './i-subject-domain.repository';
+export { ISubjectDescriptionRepository } from './i-subject-description.repository';
+export { ISubjectCustomFieldRepository } from './i-subject-custom-field.repository';
+export { ISubjectCommentContentRepository } from './i-subject-comment-content.repository';
+export { ISubjectCommentRepository } from './i-subject-comment.repository';
+export { IGroupRepository } from './i-group.repository';
+export { IFolderSharingRepository } from './i-folder-sharing.repository';
+export { IFolderRoleRepository } from './i-folder-role.repository';
+export { ICustomFieldRepository } from './i-custom-field.repository';
+export { IAccountRepository } from './i-account.repository';
 export { ISubjectItemRepository } from './i-subject-item.repository';
 export { ISubjectTaskRepository } from './i-subject-task.repository';
 export { IWorkspaceRepository } from './i-workspace.repository';
-

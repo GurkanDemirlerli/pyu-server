@@ -10,7 +10,7 @@ import {
     OneToOne,
 } from "typeorm";
 import { AccountEntity } from "./account.entity";
-import { WorkspaceMemberEntity } from "./workspace-member";
+import { WorkspaceMemberEntity } from "./workspace-member.entity";
 import { WorkspaceGroupUserEntity } from "./workspace-group-user.entity";
 import { WorkScheduleEntity } from './work-schedule.entity';
 import { TaskAssignmentEntity } from './task-assignment.entity';

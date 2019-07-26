@@ -1,5 +1,5 @@
 import { SubjectFolderEntity } from './subject-folder.entity';
-import { WorkspaceMemberEntity } from './workspace-member';
+import { WorkspaceMemberEntity } from './workspace-member.entity';
 
 import {
     Entity,

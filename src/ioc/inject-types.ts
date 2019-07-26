@@ -1,48 +1,58 @@
-// export module InjectTypes {
-//   export enum Repository {
-//     ANSWER = 'AnswerRepository',
-//     COMMENT = 'CommentRepository',
-//     COMPANY = 'CompanyRepository',
-//     ISSUE = 'IssueRepository',
-//     PROJECT = 'ProjectRepository',
-//     QUESTION = 'QuestionRepository',
-//     STATUS = 'StatusRepository',
-//     TASK = 'TaskRepository',
-//     USER = 'UserRepository',
-//     COMPANY_MEMBERSHIP = 'CompanyMembershipRepository',
-//     MEMBERSHIP_REQUEST = 'MembershipRequestRepository',
-//     TASK_ASSIGNMENT = 'TaskAssignmentRepository',
-//     PROJECT_MEMBERSHIP = 'ProjectMembershipRepository',
-//     LABEL = 'LabelRepository',
-//     TASK_LABEL = 'TaskLabelRepository',
-//     ABSTRACT_STATUS = 'AbstractStatusRepository',
-//     STATUS_TEMPLATE = 'StatusTemplateRepository',
-//     PROJECT_MANAGER = 'ProjectManagerRepository',
-//   }
-
-//   export enum Service {
-//     ANSWER = 'AnswerService',
-//     COMMENT = 'CommentService',
-//     COMPANY = 'CompanyService',
-//     ISSUE = 'IssueService',
-//     QUESTION = 'QuestionService',
-//     TASK = 'TaskService',
-//     USER = 'UserService',
-//     PROJECT = 'ProjectService'
-//   }
-
-// }
-
 export module InjectTypes {
   export enum Repository {
+    ACCOUNT = 'AccountRepository',
+    CUSTOM_FIELD = 'CustomFieldRepository',
+    FOLDER_ROLE = 'FolderRoleRepository',
+    FOLDER_SHARING = 'FolderSharingRepository',
+    GROUP = 'GroupRepository',
+    SUBJECT_COMMENT_CONTENT = 'SubjectCommentContentRepository',
+    SUBJECT_COMMENT = 'SubjectCommentRepository',
+    SUBJECT_CUSTOM_FIELD = 'SubjectCustomFieldRepository',
+    SUBJECT_DESCRIPTION = 'SubjectDescriptionRepository',
+    SUBJECT_DOMAIN = 'SubjectDomainRepository',
+    SUBJECT_FOLDER = 'SubjectFolderRepository',
     SUBJECT_ITEM = 'SubjectItemRepository',
+    SUBJECT_PROJECT = 'SubjectProjectRepository',
     SUBJECT_TASK = 'SubjectTaskRepository',
-    WORKSPACE = 'WorkspaceRepository'
+    TASK_ASSIGNMENT = 'TaskAssignmentRepository',
+    TASK_DEPENDENCY = 'TaskDependencyRepository',
+    WORK_SCHEDULE_EXCLUSION = 'WorkScheduleExclusionRepository',
+    WORK_SCHEDULE_WEEK = 'WorkScheduleWeekRepository',
+    WORK_SCHEDULE = 'WorkScheduleRepository',
+    WORKFLOW_STATUS = 'WorkflowStatusRepository',
+    WORKFLOW = 'WorkflowRepository',
+    WORKSPACE_GROUP_USER = 'WorkspaceGroupUserRepository',
+    WORKSPACE_MEMBER = 'WorkspaceMemberRepository',
+    WORKSPACE_USER = 'WorkspaceUserRepository',
+    WORKSPACE = 'WorkspaceRepository',
+
   }
 
   export enum Service {
+    ACCOUNT = 'AccountService',
+    CUSTOM_FIELD = 'CustomFieldService',
+    FOLDER_ROLE = 'FolderRoleService',
+    FOLDER_SHARING = 'FolderSharingService',
+    GROUP = 'GroupService',
+    SUBJECT_COMMENT_CONTENT = 'SubjectCommentContentService',
+    SUBJECT_COMMENT = 'SubjectCommentService',
+    SUBJECT_CUSTOM_FIELD = 'SubjectCustomFieldService',
+    SUBJECT_DESCRIPTION = 'SubjectDescriptionService',
+    SUBJECT_DOMAIN = 'SubjectDomainService',
+    SUBJECT_FOLDER = 'SubjectFolderService',
     SUBJECT_ITEM = 'SubjectItemService',
+    SUBJECT_PROJECT = 'SubjectProjectService',
     SUBJECT_TASK = 'SubjectTaskService',
-    WORKSPACE = 'WorkspaceService'
+    TASK_ASSIGNMENT = 'TaskAssignmentService',
+    TASK_DEPENDENCY = 'TaskDependencyService',
+    WORK_SCHEDULE_EXCLUSION = 'WorkScheduleExclusionService',
+    WORK_SCHEDULE_WEEK = 'WorkScheduleWeekService',
+    WORK_SCHEDULE = 'WorkScheduleService',
+    WORKFLOW_STATUS = 'WorkflowStatusService',
+    WORKFLOW = 'WorkflowService',
+    WORKSPACE_GROUP_USER = 'WorkspaceGroupUserService',
+    WORKSPACE_MEMBER = 'WorkspaceMemberService',
+    WORKSPACE_USER = 'WorkspaceUserService',
+    WORKSPACE = 'WorkspaceService',
   }
 }

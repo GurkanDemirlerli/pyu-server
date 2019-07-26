@@ -10,7 +10,7 @@ import {
 import { SubjectItemEntity } from "./subject-item.entity";
 import { WorkflowEntity } from "./workflow.entity";
 import { AccountEntity } from "./account.entity";
-import { WorkspaceMemberEntity } from "./workspace-member";
+import { WorkspaceMemberEntity } from "./workspace-member.entity";
 
 @Entity("workspace")
 export class WorkspaceEntity {

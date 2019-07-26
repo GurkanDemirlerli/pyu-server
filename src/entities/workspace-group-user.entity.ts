@@ -1,6 +1,5 @@
 import { WorkspaceUserEntity } from './workspace-user.entity';
 import { GroupEntity } from './group.entity';
-import { WorkspaceMemberEntity } from './workspace-member';
 
 import {
     Entity,

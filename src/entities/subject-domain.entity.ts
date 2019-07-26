@@ -4,7 +4,6 @@ import {
     Column,
     JoinColumn,
     OneToOne,
-    ManyToOne,
 } from "typeorm";
 
 @Entity("subject_domain")

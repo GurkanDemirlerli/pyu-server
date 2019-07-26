@@ -17,6 +17,7 @@ import { WorkspaceEntity } from "./workspace.entity";
 import { SubjectFolderEntity } from './subject-folder.entity';
 import { SubjectCustomFieldEntity } from './subject-custom-field.entity';
 import { SubjectCommentEntity } from './subject-comment.entity';
+import { WorkspaceUserEntity } from './workspace-user.entity';
 
 @Entity("subject_item")
 export class SubjectItemEntity {
@@ -30,11 +31,11 @@ export class SubjectItemEntity {
     @JoinColumn({ name: "workspaceId" })
     workspace: WorkspaceEntity;
 
-    // @Column("int")
-    // creatorId: number;
-    // @ManyToOne(type => WorkspaceUserEntity, wsm => wsm.createdSubjects)
-    // @JoinColumn({ name: "creatorId" })
-    // creator: WorkspaceUserEntity;
+    @Column("int")
+    creatorId: number;
+    @ManyToOne(type => WorkspaceUserEntity, wsm => wsm.createdSubjects)
+    @JoinColumn({ name: "creatorId" })
+    creator: WorkspaceUserEntity;
 
     @Column("int", { nullable: true })
     parentId: number;

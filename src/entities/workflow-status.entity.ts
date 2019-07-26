@@ -6,7 +6,6 @@ import {
     ManyToOne,
     JoinColumn,
 } from "typeorm";
-import { WorkspaceEntity } from "./workspace.entity";
 import { WorkflowEntity } from "./workflow.entity";
 import { SubjectFolderEntity } from "./subject-folder.entity";
 import { SubjectTaskEntity } from "./subject-task.entity";

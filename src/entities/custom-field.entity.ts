@@ -6,7 +6,6 @@ import {
     PrimaryGeneratedColumn,
     OneToMany,
 } from "typeorm";
-import { SubjectItemEntity } from "./subject-item.entity";
 import { SubjectCustomFieldEntity } from "./subject-custom-field.entity";
 
 @Entity("custom_field")

@@ -6,7 +6,7 @@ import {
     OneToOne,
     OneToMany,
 } from "typeorm";
-import { WorkspaceMemberEntity } from "./workspace-member";
+import { WorkspaceMemberEntity } from "./workspace-member.entity";
 
 @Entity("group")
 export class GroupEntity {

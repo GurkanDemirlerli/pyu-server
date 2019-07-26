@@ -1,4 +1,25 @@
-export { SubjectTaskRepository } from './subject-task.repository';
+export { WorkspaceUserRepository } from './workspace-user.repository';
+export { WorkspaceMemberRepository } from './workspace-member.repository';
+export { WorkspaceGroupUserRepository } from './workspace-group-user.repository';
+export { WorkflowRepository } from './workflow.repository';
+export { WorkflowStatusRepository } from './workflow-status.repository';
+export { WorkScheduleRepository } from './work-schedule.repository';
+export { WorkScheduleWeekRepository } from './work-schedule-week.repository';
+export { WorkScheduleExclusionRepository } from './work-schedule-exclusion.repository';
+export { TaskDependencyRepository } from './task-dependency.repository';
+export { TaskAssignmentRepository } from './task-assignment.repository';
+export { SubjectProjectRepository } from './subject-project.repository';
+export { SubjectFolderRepository } from './subject-folder.repository';
+export { SubjectDomainRepository } from './subject-domain.repository';
+export { SubjectDescriptionRepository } from './subject-description.repository';
+export { SubjectCustomFieldRepository } from './subject-custom-field.repository';
+export { SubjectCommentContentRepository } from './subject-comment-content.repository';
+export { SubjectCommentRepository } from './subject-comment.repository';
+export { GroupRepository } from './group.repository';
+export { FolderSharingRepository } from './folder-sharing.repository';
+export { FolderRoleRepository } from './folder-role.repository';
+export { CustomFieldRepository } from './custom-field.repository';
+export { AccountRepository } from './account.repository';
 export { SubjectItemRepository } from './subject-item.repository';
+export { SubjectTaskRepository } from './subject-task.repository';
 export { WorkspaceRepository } from './workspace.repository';
-

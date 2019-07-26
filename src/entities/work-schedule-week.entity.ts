@@ -1,5 +1,3 @@
-import { WorkspaceUserEntity } from './workspace-user.entity';
-import { WorkspaceEntity } from './workspace.entity';
 import {
     Entity,
     Column,
