@@ -18,21 +18,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const repository_base_1 = require("./base/repository.base");
+const typeorm_1 = require("typeorm");
 const subject_item_entity_1 = require("./../../entities/subject-item.entity");
 const inversify_1 = require("inversify");
 require("reflect-metadata");
+const dottie = require("dottie");
 let SubjectItemRepository = class SubjectItemRepository extends repository_base_1.RepositoryBase {
     constructor() {
         super(subject_item_entity_1.SubjectItemEntity);
     }
-    getDescendants(entity) {
+    getDescendants(subjectId) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+            const rawRes = yield typeorm_1.getManager().query(`CALL get_descendants_subjects(?)`, [subjectId]);
+            let mapped = dottie.transform(rawRes[0]);
+            return mapped;
         });
     }
-    getAncestors(entity) {
+    getAncestors(subjectId) {
         return __awaiter(this, void 0, void 0, function* () {
-            throw new Error("Method not implemented.");
+            const rawRes = yield typeorm_1.getManager().query(`CALL get_ancestors_subjects(?)`, [subjectId]);
+            let mapped = [];
+            rawRes[0].map((item) => {
+                mapped.push(dottie.transform(item));
+            });
+            return mapped;
         });
     }
 };

@@ -1,49 +1,61 @@
 "use strict";
-// export module InjectTypes {
-//   export enum Repository {
-//     ANSWER = 'AnswerRepository',
-//     COMMENT = 'CommentRepository',
-//     COMPANY = 'CompanyRepository',
-//     ISSUE = 'IssueRepository',
-//     PROJECT = 'ProjectRepository',
-//     QUESTION = 'QuestionRepository',
-//     STATUS = 'StatusRepository',
-//     TASK = 'TaskRepository',
-//     USER = 'UserRepository',
-//     COMPANY_MEMBERSHIP = 'CompanyMembershipRepository',
-//     MEMBERSHIP_REQUEST = 'MembershipRequestRepository',
-//     TASK_ASSIGNMENT = 'TaskAssignmentRepository',
-//     PROJECT_MEMBERSHIP = 'ProjectMembershipRepository',
-//     LABEL = 'LabelRepository',
-//     TASK_LABEL = 'TaskLabelRepository',
-//     ABSTRACT_STATUS = 'AbstractStatusRepository',
-//     STATUS_TEMPLATE = 'StatusTemplateRepository',
-//     PROJECT_MANAGER = 'ProjectManagerRepository',
-//   }
 Object.defineProperty(exports, "__esModule", { value: true });
-//   export enum Service {
-//     ANSWER = 'AnswerService',
-//     COMMENT = 'CommentService',
-//     COMPANY = 'CompanyService',
-//     ISSUE = 'IssueService',
-//     QUESTION = 'QuestionService',
-//     TASK = 'TaskService',
-//     USER = 'UserService',
-//     PROJECT = 'ProjectService'
-//   }
-// }
 var InjectTypes;
 (function (InjectTypes) {
     let Repository;
     (function (Repository) {
+        Repository["ACCOUNT"] = "AccountRepository";
+        Repository["CUSTOM_FIELD"] = "CustomFieldRepository";
+        Repository["FOLDER_ROLE"] = "FolderRoleRepository";
+        Repository["FOLDER_SHARING"] = "FolderSharingRepository";
+        Repository["GROUP"] = "GroupRepository";
+        Repository["SUBJECT_COMMENT_CONTENT"] = "SubjectCommentContentRepository";
+        Repository["SUBJECT_COMMENT"] = "SubjectCommentRepository";
+        Repository["SUBJECT_CUSTOM_FIELD"] = "SubjectCustomFieldRepository";
+        Repository["SUBJECT_DESCRIPTION"] = "SubjectDescriptionRepository";
+        Repository["SUBJECT_DOMAIN"] = "SubjectDomainRepository";
+        Repository["SUBJECT_FOLDER"] = "SubjectFolderRepository";
         Repository["SUBJECT_ITEM"] = "SubjectItemRepository";
+        Repository["SUBJECT_PROJECT"] = "SubjectProjectRepository";
         Repository["SUBJECT_TASK"] = "SubjectTaskRepository";
+        Repository["TASK_ASSIGNMENT"] = "TaskAssignmentRepository";
+        Repository["TASK_DEPENDENCY"] = "TaskDependencyRepository";
+        Repository["WORK_SCHEDULE_EXCLUSION"] = "WorkScheduleExclusionRepository";
+        Repository["WORK_SCHEDULE_WEEK"] = "WorkScheduleWeekRepository";
+        Repository["WORK_SCHEDULE"] = "WorkScheduleRepository";
+        Repository["WORKFLOW_STATUS"] = "WorkflowStatusRepository";
+        Repository["WORKFLOW"] = "WorkflowRepository";
+        Repository["WORKSPACE_GROUP_USER"] = "WorkspaceGroupUserRepository";
+        Repository["WORKSPACE_MEMBER"] = "WorkspaceMemberRepository";
+        Repository["WORKSPACE_USER"] = "WorkspaceUserRepository";
         Repository["WORKSPACE"] = "WorkspaceRepository";
     })(Repository = InjectTypes.Repository || (InjectTypes.Repository = {}));
     let Service;
     (function (Service) {
+        Service["ACCOUNT"] = "AccountService";
+        Service["CUSTOM_FIELD"] = "CustomFieldService";
+        Service["FOLDER_ROLE"] = "FolderRoleService";
+        Service["FOLDER_SHARING"] = "FolderSharingService";
+        Service["GROUP"] = "GroupService";
+        Service["SUBJECT_COMMENT_CONTENT"] = "SubjectCommentContentService";
+        Service["SUBJECT_COMMENT"] = "SubjectCommentService";
+        Service["SUBJECT_CUSTOM_FIELD"] = "SubjectCustomFieldService";
+        Service["SUBJECT_DESCRIPTION"] = "SubjectDescriptionService";
+        Service["SUBJECT_DOMAIN"] = "SubjectDomainService";
+        Service["SUBJECT_FOLDER"] = "SubjectFolderService";
         Service["SUBJECT_ITEM"] = "SubjectItemService";
+        Service["SUBJECT_PROJECT"] = "SubjectProjectService";
         Service["SUBJECT_TASK"] = "SubjectTaskService";
+        Service["TASK_ASSIGNMENT"] = "TaskAssignmentService";
+        Service["TASK_DEPENDENCY"] = "TaskDependencyService";
+        Service["WORK_SCHEDULE_EXCLUSION"] = "WorkScheduleExclusionService";
+        Service["WORK_SCHEDULE_WEEK"] = "WorkScheduleWeekService";
+        Service["WORK_SCHEDULE"] = "WorkScheduleService";
+        Service["WORKFLOW_STATUS"] = "WorkflowStatusService";
+        Service["WORKFLOW"] = "WorkflowService";
+        Service["WORKSPACE_GROUP_USER"] = "WorkspaceGroupUserService";
+        Service["WORKSPACE_MEMBER"] = "WorkspaceMemberService";
+        Service["WORKSPACE_USER"] = "WorkspaceUserService";
         Service["WORKSPACE"] = "WorkspaceService";
     })(Service = InjectTypes.Service || (InjectTypes.Service = {}));
 })(InjectTypes = exports.InjectTypes || (exports.InjectTypes = {}));

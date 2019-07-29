@@ -23,26 +23,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const inversify_1 = require("inversify");
 const ioc_1 = require("../../ioc");
 const app_error_1 = require("../../errors/app-error");
+const _ = require("lodash");
 let SubjectItemService = class SubjectItemService {
     constructor(_subjectItemRepository) {
         this._subjectItemRepository = _subjectItemRepository;
     }
     getAncestors(id, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let sbjEn = yield this._subjectItemRepository.findOne(id, { relations: ["task"] });
-            if (!sbjEn)
-                throw new app_error_1.AppError('AppError', 'Subject not found.', 404);
-            const tree = yield this._subjectItemRepository.getAncestors(sbjEn);
-            return Promise.resolve(tree);
+            const flatList = yield this._subjectItemRepository.getAncestors(id);
+            let ppl = this.populateSubjects(flatList);
+            return Promise.resolve(ppl);
         });
     }
     getDescendants(id, requestorId) {
         return __awaiter(this, void 0, void 0, function* () {
-            let sbjEn = yield this._subjectItemRepository.findOne(id, { relations: ["task"] });
-            if (!sbjEn)
-                throw new app_error_1.AppError('AppError', 'Subject not found.', 404);
-            const tree = yield this._subjectItemRepository.getDescendants(sbjEn);
-            return Promise.resolve(tree);
+            const flatList = yield this._subjectItemRepository.getDescendants(id);
+            let ppl = this.populateSubjects(flatList);
+            return Promise.resolve(ppl);
         });
     }
     find(id, requestorId) {
@@ -52,6 +49,27 @@ let SubjectItemService = class SubjectItemService {
                 throw new app_error_1.AppError('AppError', 'Subject not found.', 404);
             return Promise.resolve(sbjEn);
         });
+    }
+    populateSubjects(flatList) {
+        let out = [];
+        let csGr = _.groupBy(flatList, "subjectId");
+        for (let sbKey in csGr) {
+            let it = Object.assign({}, ...csGr[sbKey], { customField: undefined }, { customFields: [] });
+            if (it.folder.subjectId === null)
+                it.folder = null;
+            if (it.task.subjectId === null)
+                it.task = null;
+            let gr = _.groupBy(csGr[sbKey], 'customField.customFieldId');
+            for (let csKey in gr) {
+                if (gr[csKey]["customFieldId"] !== null) {
+                    let x = Object.assign({}, ...(gr[csKey]));
+                    if (x.customField.customFieldId !== null)
+                        it.customFields.push(x.customField);
+                }
+            }
+            out.push(it);
+        }
+        return out;
     }
 };
 SubjectItemService = __decorate([

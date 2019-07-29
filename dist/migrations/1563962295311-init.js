@@ -1,0 +1,157 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+class init1563962295311 {
+    up(queryRunner) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield queryRunner.query("CREATE TABLE `subject_description` (`subjectId` int NOT NULL, `text` varchar(255) NOT NULL, UNIQUE INDEX `REL_41330b78c14f185a67d6020a2f` (`subjectId`), PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workspace_group_user` (`workspaceUserId` int NOT NULL, `groupId` int NOT NULL, `value` varchar(255) NOT NULL, PRIMARY KEY (`workspaceUserId`, `groupId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `group` (`workspaceMemberId` int NOT NULL, `name` varchar(255) NOT NULL, `createdAt` datetime NOT NULL, `removedAt` datetime NULL, UNIQUE INDEX `REL_26208b817c4e55008c6cfac965` (`workspaceMemberId`), PRIMARY KEY (`workspaceMemberId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workspace_member` (`workspaceMemberId` int NOT NULL AUTO_INCREMENT, `workspaceId` int NOT NULL, `memberType` int NOT NULL, PRIMARY KEY (`workspaceMemberId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `folder_role` (`folderRoleId` int NOT NULL AUTO_INCREMENT, `name` varchar(255) NOT NULL, `isBuiltin` tinyint NOT NULL, `right1` tinyint NOT NULL, `right2` tinyint NOT NULL, PRIMARY KEY (`folderRoleId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `folder_sharing` (`subjectFolderId` int NOT NULL, `workspaceMemberId` int NOT NULL, `folderRoleId` int NOT NULL, `value` varchar(255) NOT NULL, PRIMARY KEY (`subjectFolderId`, `workspaceMemberId`, `folderRoleId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_domain` (`subjectId` int NOT NULL, `color` varchar(255) NOT NULL, `isPublic` tinyint NOT NULL, `icon` varchar(255) NOT NULL, UNIQUE INDEX `REL_0522b31c7a437775e2833799eb` (`subjectId`), PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_project` (`subjectId` int NOT NULL, `statusId` int NOT NULL, `startDate` datetime NULL, `dueDate` datetime NULL, UNIQUE INDEX `REL_9278b72cff32aaefe21dcddc6e` (`subjectId`), PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_folder` (`subjectId` int NOT NULL, `workflowId` int NOT NULL, `defaultWorkflowStatusId` int NOT NULL, UNIQUE INDEX `REL_5bf2709859dd59a61e66dbd3cf` (`subjectId`), PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workflow` (`workflowId` int NOT NULL AUTO_INCREMENT, `workspaceId` int NULL, `name` varchar(60) NOT NULL, `createdAt` datetime NOT NULL, `deletedAt` datetime NULL, `isBuiltin` tinyint NOT NULL, PRIMARY KEY (`workflowId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workflow_status` (`workflowStatusId` int NOT NULL AUTO_INCREMENT, `workflowId` int NULL, `statusType` int NOT NULL, `name` varchar(255) NOT NULL, `color` varchar(255) NOT NULL, `order` int NOT NULL, `createdAt` datetime NOT NULL, `deletedAt` datetime NULL, PRIMARY KEY (`workflowStatusId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `task_dependency` (`predecessorId` int NOT NULL, `successorId` int NOT NULL, `creatorId` int NOT NULL, `dependencyType` int NOT NULL, `createdAt` datetime NOT NULL, `deletedAt` datetime NULL, PRIMARY KEY (`predecessorId`, `successorId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `task_assignment` (`subjectTaskId` int NOT NULL, `workspaceUserId` int NOT NULL, `createdAt` datetime NOT NULL, PRIMARY KEY (`subjectTaskId`, `workspaceUserId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_task` (`subjectId` int NOT NULL, `statusId` int NOT NULL, `priority` int NOT NULL, `completedAt` datetime NULL, `duration` int NOT NULL, `startDate` datetime NULL, `dueDate` datetime NULL, UNIQUE INDEX `REL_ecb6878c0870aee330fea88a3c` (`subjectId`), PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `custom_field` (`customFieldId` int NOT NULL AUTO_INCREMENT, `name` varchar(255) NOT NULL, `customFieldType` int NOT NULL, `createdAt` datetime NOT NULL, `lastUpdated` datetime NOT NULL, PRIMARY KEY (`customFieldId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_custom_field` (`subjectId` int NOT NULL, `customFieldId` int NOT NULL, `value` varchar(255) NOT NULL, PRIMARY KEY (`subjectId`, `customFieldId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_comment_content` (`subjectCommentId` int NOT NULL, `text` varchar(255) NOT NULL, UNIQUE INDEX `REL_058cd66a0b8327573768add404` (`subjectCommentId`), PRIMARY KEY (`subjectCommentId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_comment` (`subjectCommentId` int NOT NULL AUTO_INCREMENT, `subjectId` int NOT NULL, `creatorId` int NOT NULL, `createdAt` datetime NOT NULL, PRIMARY KEY (`subjectCommentId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `subject_item` (`subjectId` int NOT NULL AUTO_INCREMENT, `workspaceId` int NOT NULL, `creatorId` int NOT NULL, `parentId` int NULL, `subjectType` int NOT NULL, `name` varchar(60) NOT NULL, `createdAt` datetime NOT NULL, `lastUpdated` datetime NOT NULL, `subjectDeleteState` int NOT NULL, PRIMARY KEY (`subjectId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workspace_user` (`workspaceMemberId` int NOT NULL, `accountId` int NOT NULL, `workScheduleId` int NOT NULL, `userType` int NOT NULL, `createdAt` datetime NOT NULL, `removedAt` datetime NULL, UNIQUE INDEX `REL_e2d4123ef082098d7bca678d48` (`workspaceMemberId`), PRIMARY KEY (`workspaceMemberId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `work_schedule_week` (`workScheduleId` int NOT NULL, `isMondayActive` tinyint NOT NULL, `isTuesdayActive` tinyint NOT NULL, `isWednesdayActive` tinyint NOT NULL, `isThursdayActive` tinyint NOT NULL, `isFridayActive` tinyint NOT NULL, `isSaturdayActive` tinyint NOT NULL, `isSundayActive` tinyint NOT NULL, UNIQUE INDEX `REL_c1355d3b7f154bffa82f059dc1` (`workScheduleId`), PRIMARY KEY (`workScheduleId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `work_schedule_exclusion` (`workScheduleExclusionId` int NOT NULL AUTO_INCREMENT, `workScheduleId` int NOT NULL, `fromDate` datetime NOT NULL, `toDate` datetime NOT NULL, `isActiveDay` tinyint NOT NULL, `exclusionType` int NOT NULL, PRIMARY KEY (`workScheduleExclusionId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `work_schedule` (`workScheduleId` int NOT NULL AUTO_INCREMENT, `workspaceId` int NOT NULL, `name` varchar(255) NOT NULL, PRIMARY KEY (`workScheduleId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `workspace` (`workspaceId` int NOT NULL AUTO_INCREMENT, `ownerId` int NOT NULL, `name` varchar(60) NOT NULL, `createdAt` datetime NOT NULL, `workspaceType` int NOT NULL, PRIMARY KEY (`workspaceId`)) ENGINE=InnoDB");
+            yield queryRunner.query("CREATE TABLE `account` (`workflowId` int NOT NULL AUTO_INCREMENT, `firstname` varchar(255) NOT NULL, `lastname` varchar(255) NOT NULL, `email` varchar(255) NOT NULL, `phone` varchar(255) NOT NULL, `createdAt` datetime NOT NULL, `deletedAt` datetime NULL, PRIMARY KEY (`workflowId`)) ENGINE=InnoDB");
+            yield queryRunner.query("ALTER TABLE `subject_description` ADD CONSTRAINT `FK_41330b78c14f185a67d6020a2fe` FOREIGN KEY (`subjectId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_group_user` ADD CONSTRAINT `FK_eb95f13be26acbeb20dbc9b030a` FOREIGN KEY (`workspaceUserId`) REFERENCES `workspace_user`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_group_user` ADD CONSTRAINT `FK_9a2d330831bf5931689d19cef79` FOREIGN KEY (`groupId`) REFERENCES `group`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `group` ADD CONSTRAINT `FK_26208b817c4e55008c6cfac965b` FOREIGN KEY (`workspaceMemberId`) REFERENCES `workspace_member`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_member` ADD CONSTRAINT `FK_15b622cbfffabc30d7dbc52fede` FOREIGN KEY (`workspaceId`) REFERENCES `workspace`(`workspaceId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` ADD CONSTRAINT `FK_f9e98e60276219e21de59bf853f` FOREIGN KEY (`subjectFolderId`) REFERENCES `subject_folder`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` ADD CONSTRAINT `FK_8db27f1f18c018a14461f7d5f74` FOREIGN KEY (`workspaceMemberId`) REFERENCES `workspace_member`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` ADD CONSTRAINT `FK_0ebbd99e6ec2bec1691a8e2a98d` FOREIGN KEY (`folderRoleId`) REFERENCES `folder_role`(`folderRoleId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_domain` ADD CONSTRAINT `FK_0522b31c7a437775e2833799ebe` FOREIGN KEY (`subjectId`) REFERENCES `subject_folder`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_project` ADD CONSTRAINT `FK_9278b72cff32aaefe21dcddc6e1` FOREIGN KEY (`subjectId`) REFERENCES `subject_folder`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_project` ADD CONSTRAINT `FK_3436d5781a023868c455c46ce5b` FOREIGN KEY (`statusId`) REFERENCES `workflow_status`(`workflowStatusId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_folder` ADD CONSTRAINT `FK_5bf2709859dd59a61e66dbd3cfc` FOREIGN KEY (`subjectId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_folder` ADD CONSTRAINT `FK_fb398b8e3757766706c535576d9` FOREIGN KEY (`workflowId`) REFERENCES `workflow`(`workflowId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_folder` ADD CONSTRAINT `FK_4755edb7999cbf939cf8f21109d` FOREIGN KEY (`defaultWorkflowStatusId`) REFERENCES `workflow_status`(`workflowStatusId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workflow` ADD CONSTRAINT `FK_fbce9a986a577698821a7e301b6` FOREIGN KEY (`workspaceId`) REFERENCES `workspace`(`workspaceId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workflow_status` ADD CONSTRAINT `FK_aec8ced43541f87b411570511c1` FOREIGN KEY (`workflowId`) REFERENCES `workflow`(`workflowId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `task_dependency` ADD CONSTRAINT `FK_4524a4e4851bbd9895940c2a47a` FOREIGN KEY (`predecessorId`) REFERENCES `subject_task`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `task_dependency` ADD CONSTRAINT `FK_d60172b3c6c21f2773e1b0c692d` FOREIGN KEY (`successorId`) REFERENCES `subject_task`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `task_dependency` ADD CONSTRAINT `FK_c03027a81b084f6b426c274df90` FOREIGN KEY (`creatorId`) REFERENCES `workspace_user`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `task_assignment` ADD CONSTRAINT `FK_51a2a2a31ed78f833215068a9a2` FOREIGN KEY (`subjectTaskId`) REFERENCES `subject_task`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `task_assignment` ADD CONSTRAINT `FK_5ed246f84faff9f821bd3fdec10` FOREIGN KEY (`workspaceUserId`) REFERENCES `workspace_user`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_task` ADD CONSTRAINT `FK_ecb6878c0870aee330fea88a3c5` FOREIGN KEY (`subjectId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_task` ADD CONSTRAINT `FK_085855f78460e258c3e86c190e7` FOREIGN KEY (`statusId`) REFERENCES `workflow_status`(`workflowStatusId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_custom_field` ADD CONSTRAINT `FK_b7694e85f0f7559a19431fd1739` FOREIGN KEY (`subjectId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_custom_field` ADD CONSTRAINT `FK_1d36138db13dbda295bd7846095` FOREIGN KEY (`customFieldId`) REFERENCES `custom_field`(`customFieldId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_comment_content` ADD CONSTRAINT `FK_058cd66a0b8327573768add4042` FOREIGN KEY (`subjectCommentId`) REFERENCES `subject_comment`(`subjectCommentId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_comment` ADD CONSTRAINT `FK_2ac8475fd8de4ddc6d13ab74c5d` FOREIGN KEY (`subjectId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_comment` ADD CONSTRAINT `FK_e4203dc5d901c31f804b611f047` FOREIGN KEY (`creatorId`) REFERENCES `workspace_user`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_item` ADD CONSTRAINT `FK_e4110b73082c85a8b02e05787ab` FOREIGN KEY (`workspaceId`) REFERENCES `workspace`(`workspaceId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_item` ADD CONSTRAINT `FK_e4345ef8dede0139d608aa562b0` FOREIGN KEY (`creatorId`) REFERENCES `workspace_user`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `subject_item` ADD CONSTRAINT `FK_5be93818848ecdf698b82f5a5fd` FOREIGN KEY (`parentId`) REFERENCES `subject_item`(`subjectId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_user` ADD CONSTRAINT `FK_e2d4123ef082098d7bca678d48f` FOREIGN KEY (`workspaceMemberId`) REFERENCES `workspace_member`(`workspaceMemberId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_user` ADD CONSTRAINT `FK_820b0088847ac3869c1c2f92e12` FOREIGN KEY (`accountId`) REFERENCES `account`(`workflowId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace_user` ADD CONSTRAINT `FK_e20e4230434cbc6c5749378ef18` FOREIGN KEY (`workScheduleId`) REFERENCES `work_schedule`(`workScheduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `work_schedule_week` ADD CONSTRAINT `FK_c1355d3b7f154bffa82f059dc18` FOREIGN KEY (`workScheduleId`) REFERENCES `work_schedule`(`workScheduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `work_schedule_exclusion` ADD CONSTRAINT `FK_89adfbca82ee7fc65e3b91e12b4` FOREIGN KEY (`workScheduleId`) REFERENCES `work_schedule`(`workScheduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `work_schedule` ADD CONSTRAINT `FK_f4d278bcfe0a73e4733cb47335d` FOREIGN KEY (`workspaceId`) REFERENCES `workspace`(`workspaceId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+            yield queryRunner.query("ALTER TABLE `workspace` ADD CONSTRAINT `FK_51f2194e4a415202512807d2f63` FOREIGN KEY (`ownerId`) REFERENCES `account`(`workflowId`) ON DELETE NO ACTION ON UPDATE NO ACTION");
+        });
+    }
+    down(queryRunner) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield queryRunner.query("ALTER TABLE `workspace` DROP FOREIGN KEY `FK_51f2194e4a415202512807d2f63`");
+            yield queryRunner.query("ALTER TABLE `work_schedule` DROP FOREIGN KEY `FK_f4d278bcfe0a73e4733cb47335d`");
+            yield queryRunner.query("ALTER TABLE `work_schedule_exclusion` DROP FOREIGN KEY `FK_89adfbca82ee7fc65e3b91e12b4`");
+            yield queryRunner.query("ALTER TABLE `work_schedule_week` DROP FOREIGN KEY `FK_c1355d3b7f154bffa82f059dc18`");
+            yield queryRunner.query("ALTER TABLE `workspace_user` DROP FOREIGN KEY `FK_e20e4230434cbc6c5749378ef18`");
+            yield queryRunner.query("ALTER TABLE `workspace_user` DROP FOREIGN KEY `FK_820b0088847ac3869c1c2f92e12`");
+            yield queryRunner.query("ALTER TABLE `workspace_user` DROP FOREIGN KEY `FK_e2d4123ef082098d7bca678d48f`");
+            yield queryRunner.query("ALTER TABLE `subject_item` DROP FOREIGN KEY `FK_5be93818848ecdf698b82f5a5fd`");
+            yield queryRunner.query("ALTER TABLE `subject_item` DROP FOREIGN KEY `FK_e4345ef8dede0139d608aa562b0`");
+            yield queryRunner.query("ALTER TABLE `subject_item` DROP FOREIGN KEY `FK_e4110b73082c85a8b02e05787ab`");
+            yield queryRunner.query("ALTER TABLE `subject_comment` DROP FOREIGN KEY `FK_e4203dc5d901c31f804b611f047`");
+            yield queryRunner.query("ALTER TABLE `subject_comment` DROP FOREIGN KEY `FK_2ac8475fd8de4ddc6d13ab74c5d`");
+            yield queryRunner.query("ALTER TABLE `subject_comment_content` DROP FOREIGN KEY `FK_058cd66a0b8327573768add4042`");
+            yield queryRunner.query("ALTER TABLE `subject_custom_field` DROP FOREIGN KEY `FK_1d36138db13dbda295bd7846095`");
+            yield queryRunner.query("ALTER TABLE `subject_custom_field` DROP FOREIGN KEY `FK_b7694e85f0f7559a19431fd1739`");
+            yield queryRunner.query("ALTER TABLE `subject_task` DROP FOREIGN KEY `FK_085855f78460e258c3e86c190e7`");
+            yield queryRunner.query("ALTER TABLE `subject_task` DROP FOREIGN KEY `FK_ecb6878c0870aee330fea88a3c5`");
+            yield queryRunner.query("ALTER TABLE `task_assignment` DROP FOREIGN KEY `FK_5ed246f84faff9f821bd3fdec10`");
+            yield queryRunner.query("ALTER TABLE `task_assignment` DROP FOREIGN KEY `FK_51a2a2a31ed78f833215068a9a2`");
+            yield queryRunner.query("ALTER TABLE `task_dependency` DROP FOREIGN KEY `FK_c03027a81b084f6b426c274df90`");
+            yield queryRunner.query("ALTER TABLE `task_dependency` DROP FOREIGN KEY `FK_d60172b3c6c21f2773e1b0c692d`");
+            yield queryRunner.query("ALTER TABLE `task_dependency` DROP FOREIGN KEY `FK_4524a4e4851bbd9895940c2a47a`");
+            yield queryRunner.query("ALTER TABLE `workflow_status` DROP FOREIGN KEY `FK_aec8ced43541f87b411570511c1`");
+            yield queryRunner.query("ALTER TABLE `workflow` DROP FOREIGN KEY `FK_fbce9a986a577698821a7e301b6`");
+            yield queryRunner.query("ALTER TABLE `subject_folder` DROP FOREIGN KEY `FK_4755edb7999cbf939cf8f21109d`");
+            yield queryRunner.query("ALTER TABLE `subject_folder` DROP FOREIGN KEY `FK_fb398b8e3757766706c535576d9`");
+            yield queryRunner.query("ALTER TABLE `subject_folder` DROP FOREIGN KEY `FK_5bf2709859dd59a61e66dbd3cfc`");
+            yield queryRunner.query("ALTER TABLE `subject_project` DROP FOREIGN KEY `FK_3436d5781a023868c455c46ce5b`");
+            yield queryRunner.query("ALTER TABLE `subject_project` DROP FOREIGN KEY `FK_9278b72cff32aaefe21dcddc6e1`");
+            yield queryRunner.query("ALTER TABLE `subject_domain` DROP FOREIGN KEY `FK_0522b31c7a437775e2833799ebe`");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` DROP FOREIGN KEY `FK_0ebbd99e6ec2bec1691a8e2a98d`");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` DROP FOREIGN KEY `FK_8db27f1f18c018a14461f7d5f74`");
+            yield queryRunner.query("ALTER TABLE `folder_sharing` DROP FOREIGN KEY `FK_f9e98e60276219e21de59bf853f`");
+            yield queryRunner.query("ALTER TABLE `workspace_member` DROP FOREIGN KEY `FK_15b622cbfffabc30d7dbc52fede`");
+            yield queryRunner.query("ALTER TABLE `group` DROP FOREIGN KEY `FK_26208b817c4e55008c6cfac965b`");
+            yield queryRunner.query("ALTER TABLE `workspace_group_user` DROP FOREIGN KEY `FK_9a2d330831bf5931689d19cef79`");
+            yield queryRunner.query("ALTER TABLE `workspace_group_user` DROP FOREIGN KEY `FK_eb95f13be26acbeb20dbc9b030a`");
+            yield queryRunner.query("ALTER TABLE `subject_description` DROP FOREIGN KEY `FK_41330b78c14f185a67d6020a2fe`");
+            yield queryRunner.query("DROP TABLE `account`");
+            yield queryRunner.query("DROP TABLE `workspace`");
+            yield queryRunner.query("DROP TABLE `work_schedule`");
+            yield queryRunner.query("DROP TABLE `work_schedule_exclusion`");
+            yield queryRunner.query("DROP INDEX `REL_c1355d3b7f154bffa82f059dc1` ON `work_schedule_week`");
+            yield queryRunner.query("DROP TABLE `work_schedule_week`");
+            yield queryRunner.query("DROP INDEX `REL_e2d4123ef082098d7bca678d48` ON `workspace_user`");
+            yield queryRunner.query("DROP TABLE `workspace_user`");
+            yield queryRunner.query("DROP TABLE `subject_item`");
+            yield queryRunner.query("DROP TABLE `subject_comment`");
+            yield queryRunner.query("DROP INDEX `REL_058cd66a0b8327573768add404` ON `subject_comment_content`");
+            yield queryRunner.query("DROP TABLE `subject_comment_content`");
+            yield queryRunner.query("DROP TABLE `subject_custom_field`");
+            yield queryRunner.query("DROP TABLE `custom_field`");
+            yield queryRunner.query("DROP INDEX `REL_ecb6878c0870aee330fea88a3c` ON `subject_task`");
+            yield queryRunner.query("DROP TABLE `subject_task`");
+            yield queryRunner.query("DROP TABLE `task_assignment`");
+            yield queryRunner.query("DROP TABLE `task_dependency`");
+            yield queryRunner.query("DROP TABLE `workflow_status`");
+            yield queryRunner.query("DROP TABLE `workflow`");
+            yield queryRunner.query("DROP INDEX `REL_5bf2709859dd59a61e66dbd3cf` ON `subject_folder`");
+            yield queryRunner.query("DROP TABLE `subject_folder`");
+            yield queryRunner.query("DROP INDEX `REL_9278b72cff32aaefe21dcddc6e` ON `subject_project`");
+            yield queryRunner.query("DROP TABLE `subject_project`");
+            yield queryRunner.query("DROP INDEX `REL_0522b31c7a437775e2833799eb` ON `subject_domain`");
+            yield queryRunner.query("DROP TABLE `subject_domain`");
+            yield queryRunner.query("DROP TABLE `folder_sharing`");
+            yield queryRunner.query("DROP TABLE `folder_role`");
+            yield queryRunner.query("DROP TABLE `workspace_member`");
+            yield queryRunner.query("DROP INDEX `REL_26208b817c4e55008c6cfac965` ON `group`");
+            yield queryRunner.query("DROP TABLE `group`");
+            yield queryRunner.query("DROP TABLE `workspace_group_user`");
+            yield queryRunner.query("DROP INDEX `REL_41330b78c14f185a67d6020a2f` ON `subject_description`");
+            yield queryRunner.query("DROP TABLE `subject_description`");
+        });
+    }
+}
+exports.init1563962295311 = init1563962295311;
+//# sourceMappingURL=1563962295311-init.js.map

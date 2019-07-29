@@ -10,7 +10,7 @@ import {
 export class AccountEntity {
 
     @PrimaryGeneratedColumn()
-    workflowId: number;
+    accountId: number;
 
     @Column()
     firstname: string;

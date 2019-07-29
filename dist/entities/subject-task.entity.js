@@ -11,6 +11,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const typeorm_1 = require("typeorm");
 const subject_item_entity_1 = require("./subject-item.entity");
+const workflow_status_entity_1 = require("./workflow-status.entity");
+const task_dependency_entity_1 = require("./task-dependency.entity");
+const task_assignment_entity_1 = require("./task-assignment.entity");
 let SubjectTaskEntity = class SubjectTaskEntity {
 };
 __decorate([
@@ -25,7 +28,44 @@ __decorate([
 __decorate([
     typeorm_1.Column("int"),
     __metadata("design:type", Number)
+], SubjectTaskEntity.prototype, "statusId", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => workflow_status_entity_1.WorkflowStatusEntity, wfs => wfs.tasks),
+    typeorm_1.JoinColumn({ name: "statusId" }),
+    __metadata("design:type", workflow_status_entity_1.WorkflowStatusEntity)
+], SubjectTaskEntity.prototype, "status", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
 ], SubjectTaskEntity.prototype, "priority", void 0);
+__decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Date)
+], SubjectTaskEntity.prototype, "completedAt", void 0);
+__decorate([
+    typeorm_1.Column("int"),
+    __metadata("design:type", Number)
+], SubjectTaskEntity.prototype, "duration", void 0);
+__decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Date)
+], SubjectTaskEntity.prototype, "startDate", void 0);
+__decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", Date)
+], SubjectTaskEntity.prototype, "dueDate", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_dependency_entity_1.TaskDependencyEntity, wsu => wsu.predecessor),
+    __metadata("design:type", Array)
+], SubjectTaskEntity.prototype, "predecessorDependecies", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_dependency_entity_1.TaskDependencyEntity, wsu => wsu.successor),
+    __metadata("design:type", Array)
+], SubjectTaskEntity.prototype, "successorDependencies", void 0);
+__decorate([
+    typeorm_1.OneToMany(type => task_assignment_entity_1.TaskAssignmentEntity, tasg => tasg.task),
+    __metadata("design:type", Array)
+], SubjectTaskEntity.prototype, "assignments", void 0);
 SubjectTaskEntity = __decorate([
     typeorm_1.Entity("subject_task")
 ], SubjectTaskEntity);
