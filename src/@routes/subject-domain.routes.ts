@@ -5,7 +5,7 @@ import { SubjectDomainController } from '../@controllers/subject-domain.controll
 
 export class SubjectDomainRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/domains";
         const ctrl = IOC.container.get(SubjectDomainController);
 
         app.route(root + '/')
@@ -22,5 +22,9 @@ export class SubjectDomainRoutes {
 
         app.route(root + '/:id')
             .delete((req, res, next) => ctrl.delete(req, res, next));
+
+        app.route(root + '/activeDomains/:workspaceId')
+            .get((req, res, next) => ctrl.getActiveDomains(req, res, next));
+        
     }
 }

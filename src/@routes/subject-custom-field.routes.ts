@@ -5,7 +5,7 @@ import { SubjectCustomFieldController } from '../@controllers/subject-custom-fie
 
 export class SubjectCustomFieldRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/subject-custom-fields";
         const ctrl = IOC.container.get(SubjectCustomFieldController);
 
         app.route(root + '/')

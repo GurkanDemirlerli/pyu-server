@@ -5,7 +5,7 @@ import { WorkflowController } from '../@controllers/workflow.controller';
 
 export class WorkflowRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/workflows";
         const ctrl = IOC.container.get(WorkflowController);
 
         app.route(root + '/')

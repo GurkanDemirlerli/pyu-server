@@ -33,7 +33,7 @@ export class SubjectTaskEntity {
     @Column({ nullable: true })
     completedAt: Date;
 
-    @Column("int")
+    @Column("int", { nullable: true })
     duration: number;
 
     @Column({ nullable: true })
@@ -41,7 +41,7 @@ export class SubjectTaskEntity {
 
     @Column({ nullable: true })
     dueDate: Date;
-    
+
     @OneToMany(type => TaskDependencyEntity, wsu => wsu.predecessor)
     predecessorDependecies: TaskDependencyEntity[];
 

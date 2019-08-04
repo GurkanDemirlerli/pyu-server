@@ -5,7 +5,7 @@ import { WorkspaceUserController } from '../@controllers/workspace-user.controll
 
 export class WorkspaceUserRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/workspace-users";
         const ctrl = IOC.container.get(WorkspaceUserController);
 
         app.route(root + '/')

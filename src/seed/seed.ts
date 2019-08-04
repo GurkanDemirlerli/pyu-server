@@ -58,7 +58,7 @@ import { injectable, inject } from "inversify";
 import { createConnection } from "typeorm";
 import faker = require("faker");
 import * as appConfig from "../common/app-config";
-import { WorkspaceTypes, SubjectTypes, StatusTypes, MemberTypes, UserTypes } from '../enums';
+import { WorkspaceTypes, SubjectTypes, StatusTypes, MemberTypes, UserTypes, SubjectDeletedStates, TaskPriorityTypes } from '../enums';
 import _ = require('lodash');
 
 @injectable()
@@ -112,39 +112,6 @@ export class SeedDatabase {
     process.exit(0);
   }
 
-  // public async addWorkspaces() {
-  //   for (let i = 0; i < this.WORKSPACE_COUNT; i++) {
-  //     let workspaceEn = new WorkspaceEntity();
-  //     workspaceEn.name = faker.name.lastName();
-  //     workspaceEn.createdAt = new Date();
-  //     let createdWs = await this._workspaceRepository.insert(workspaceEn);
-  //     createdWs.subjects = [];
-  //     let prevsbj: SubjectItemEntity = null;
-  //     for (let i = 0; i < 15; i++) {
-  //       let sbjEn = new SubjectItemEntity();
-  //       sbjEn.createdAt = new Date();
-  //       sbjEn.lastUpdated = new Date();
-  //       sbjEn.name = faker.name.jobType();
-  //       sbjEn.subjectDeleteState = 0;
-  //       sbjEn.subjectType = 0;
-  //       sbjEn.workspaceId = createdWs.workspaceId;
-  //       if (prevsbj !== null) {
-  //         sbjEn.parentId = prevsbj.subjectId;
-  //       }
-  //       let createdSbj = await this._subjectItemRepository.insert(sbjEn);
-  //       prevsbj = createdSbj;
-  //       let tskEn = new SubjectTaskEntity();
-  //       tskEn.priority = 1;
-  //       tskEn.subjectId = createdSbj.subjectId;
-
-  //       let createdTsk = await this._subjectTaskRepository.insert(tskEn);
-  //       createdSbj.task = createdTsk;
-  //       createdWs.subjects.push(createdSbj);
-  //     }
-  //     this.workspaces.push(createdWs);
-  //   }
-  // }
-
   public async addAccounts() {
     let accEn = new AccountEntity();
     accEn.createdAt = new Date();
@@ -161,7 +128,7 @@ export class SeedDatabase {
     grknAcc.lastname = "demirlerli";
     grknAcc.phone = "901234567890";
     grknAcc = await this._accountRepository.insert(grknAcc);
-    grknAcc = await this.addWorkspaces(grknAcc, 4);
+    grknAcc = await this.addWorkspaces(grknAcc, 2);
   }
 
   public async addWorkspaces(account: AccountEntity, count: number) {
@@ -179,7 +146,8 @@ export class SeedDatabase {
       wspEn = await this.addWorkSchedule(wspEn);
       wspEn = await this.addMembers(wspEn);
       wspEn = await this.addDomains(wspEn, 5);
-      wspEn = await this.addProjects(wspEn, 50);
+      wspEn = await this.addProjects(wspEn, 20);
+      wspEn = await this.addTasks(wspEn, 200);
 
       account.workspaces.push(wspEn);
 
@@ -329,6 +297,37 @@ export class SeedDatabase {
 
       workspace.subjects.push(sbjEn);
 
+    }
+    return workspace;
+  }
+
+  public async addTasks(workspace: WorkspaceEntity, count: number) {
+    for (let i = 0; i < count; i++) {
+      let sbjEn = new SubjectItemEntity();
+      sbjEn.createdAt = new Date();
+      sbjEn.lastUpdated = new Date();
+      sbjEn.name = faker.name.jobType();
+      sbjEn.subjectDeleteState = SubjectDeletedStates.PERSISTENT;
+      sbjEn.creatorId = workspace.members[0].workspaceMemberId;
+      sbjEn.subjectType = SubjectTypes.TASK;
+      sbjEn.workspaceId = workspace.workspaceId;
+      let sbjs = [...workspace.subjects];
+      sbjs = _.shuffle(sbjs);
+      sbjEn.parentId = sbjs[0].subjectId;
+      sbjs = null;
+      sbjEn = await this._subjectItemRepository.insert(sbjEn);
+
+      let tskEn = new SubjectTaskEntity();
+      tskEn.duration = 2;
+      tskEn.priority = TaskPriorityTypes.MEDIUM;
+      let stss = workspace.workflows[0].statuses;
+      stss = _.shuffle(stss);
+      tskEn.statusId = stss[0].workflowStatusId;
+      stss = null;
+      tskEn.subjectId = sbjEn.subjectId;
+      tskEn = await this._subjectTaskRepository.insert(tskEn);
+      sbjEn.task = tskEn;
+      workspace.subjects.push(sbjEn);
     }
     return workspace;
   }

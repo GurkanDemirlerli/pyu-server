@@ -5,7 +5,7 @@ import { FolderSharingController } from '../@controllers/folder-sharing.controll
 
 export class FolderSharingRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/folder-sharings";
         const ctrl = IOC.container.get(FolderSharingController);
 
         app.route(root + '/')

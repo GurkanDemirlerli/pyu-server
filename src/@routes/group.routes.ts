@@ -5,7 +5,7 @@ import { GroupController } from '../@controllers/group.controller';
 
 export class GroupRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/groups";
         const ctrl = IOC.container.get(GroupController);
 
         app.route(root + '/')

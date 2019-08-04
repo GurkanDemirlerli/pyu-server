@@ -11,4 +11,8 @@ export class AccountRepository extends RepositoryBase<AccountEntity> implements 
             AccountEntity
         );
     }
+
+    findByLogin(email: string, password: string) {
+        return getManager().getRepository(AccountEntity).findOne({ email: email, password: password })
+    }
 }

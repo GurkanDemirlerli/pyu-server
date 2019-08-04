@@ -5,7 +5,7 @@ import { WorkScheduleExclusionController } from '../@controllers/work-schedule-e
 
 export class WorkScheduleExclusionRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/work-schedule-exclusions";
         const ctrl = IOC.container.get(WorkScheduleExclusionController);
 
         app.route(root + '/')

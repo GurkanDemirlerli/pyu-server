@@ -4,4 +4,5 @@ export interface ISubjectDomainService {
     find(id: number, requestorId: number): Promise<any>;
     update(id: number, model: any, requestorId: number): Promise<any>;
     delete(id: number, requestorId: number): Promise<void>;
+    getActiveDomains(workspaceId: number, requestorId: number): Promise<any>;
 }

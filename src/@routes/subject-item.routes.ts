@@ -17,5 +17,8 @@ export class SubjectItemRoutes {
         app.route(root + '/:id')
             .get((req, res, next) => ctrl.find(req, res, next));
 
+        app.route(root + '/move')
+            .post((req, res, next) => ctrl.move(req, res, next));
+
     }
 }

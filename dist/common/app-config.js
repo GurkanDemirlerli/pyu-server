@@ -9,7 +9,6 @@ const config = {
     entities: [
         __dirname + '/../**/*.entity{.ts,.js}',
     ],
-
 };
 module.exports = config;
 //# sourceMappingURL=app-config.js.map

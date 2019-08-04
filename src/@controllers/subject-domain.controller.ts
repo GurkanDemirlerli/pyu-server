@@ -71,4 +71,16 @@ export class SubjectDomainController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'SubjectDomainController');
         });
     }
+
+    getActiveDomains(req: Request, res: Response, next: NextFunction) {
+        const workspaceId: number = +req.params.workspaceId;
+        this._subjectDomainService.getActiveDomains(workspaceId, 11111).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data:result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'getActiveDomains', 'SubjectDomainController');
+        });
+    }
 }

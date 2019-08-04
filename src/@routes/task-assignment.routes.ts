@@ -5,7 +5,7 @@ import { TaskAssignmentController } from '../@controllers/task-assignment.contro
 
 export class TaskAssignmentRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/task-assignments";
         const ctrl = IOC.container.get(TaskAssignmentController);
 
         app.route(root + '/')

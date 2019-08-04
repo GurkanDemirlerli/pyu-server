@@ -30,6 +30,8 @@ export class SubjectItemRepository extends RepositoryBase<SubjectItemEntity> imp
         return mapped;
     }
 
+
+
     // async move(childId: number, newParentId: number) {
     //     await getManager()
     //         .createQueryBuilder()

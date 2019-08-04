@@ -5,7 +5,7 @@ import { CustomFieldController } from '../@controllers/custom-field.controller';
 
 export class CustomFieldRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/custom-fields";
         const ctrl = IOC.container.get(CustomFieldController);
 
         app.route(root + '/')

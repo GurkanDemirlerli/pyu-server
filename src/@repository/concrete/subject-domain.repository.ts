@@ -11,4 +11,7 @@ export class SubjectDomainRepository extends RepositoryBase<SubjectDomainEntity>
             SubjectDomainEntity
         );
     }
+
+
+
 }

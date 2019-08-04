@@ -43,7 +43,7 @@ __decorate([
     __metadata("design:type", Date)
 ], SubjectTaskEntity.prototype, "completedAt", void 0);
 __decorate([
-    typeorm_1.Column("int"),
+    typeorm_1.Column("int", { nullable: true }),
     __metadata("design:type", Number)
 ], SubjectTaskEntity.prototype, "duration", void 0);
 __decorate([

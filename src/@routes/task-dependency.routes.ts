@@ -5,7 +5,7 @@ import { TaskDependencyController } from '../@controllers/task-dependency.contro
 
 export class TaskDependencyRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/task-dependencies";
         const ctrl = IOC.container.get(TaskDependencyController);
 
         app.route(root + '/')

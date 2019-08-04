@@ -5,7 +5,7 @@ import { FolderRoleController } from '../@controllers/folder-role.controller';
 
 export class FolderRoleRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/folder-roles";
         const ctrl = IOC.container.get(FolderRoleController);
 
         app.route(root + '/')

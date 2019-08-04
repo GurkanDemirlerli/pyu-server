@@ -24,6 +24,10 @@ export class AccountEntity {
     @Column()
     phone: string;
 
+    //Hashle
+    @Column()
+    password: string;
+
     @Column()
     createdAt: Date;
 

@@ -1,31 +1,30 @@
-import { IsString, IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, IsNumber, IsDate, IsArray } from 'class-validator';
 
 export class ProjectCreateDto {
 
   @IsString()
-  public title: string;
-
-  @IsString()
-  public description: string;
-
-  @IsString()
-  public prefix: string;
+  public name: string;
 
   @IsNumber()
-  public companyId: number;
-
-  // @IsNumber()
   public parentId: number;
 
-  // @IsNumber()
-  public statusId: number;
+  @IsDate()
+  public startDate: Date;
+
+  @IsDate()
+  public dueDate: Date;
+
+  @IsArray()
+  public sharings: any[];
 
   @IsNumber()
-  public templateId: number;
+  public workspaceId: number;
 
-  public members: number[]
+  @IsNumber()
+  public workflowId: number;
 
-  public creatorId: number;
+  @IsNumber()
+  public defaultWorkflowStatusId: number;
 
 }
 

@@ -5,7 +5,7 @@ import { WorkflowStatusController } from '../@controllers/workflow-status.contro
 
 export class WorkflowStatusRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/workflow-statuses";
         const ctrl = IOC.container.get(WorkflowStatusController);
 
         app.route(root + '/')

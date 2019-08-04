@@ -5,7 +5,7 @@ import { SubjectCommentContentController } from '../@controllers/subject-comment
 
 export class SubjectCommentContentRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/subject-comments-contents";
         const ctrl = IOC.container.get(SubjectCommentContentController);
 
         app.route(root + '/')

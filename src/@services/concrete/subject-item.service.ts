@@ -1,3 +1,4 @@
+import { SubjectMoveDto } from './../../_models/dtos/subject/subject-move.dto';
 import { ISubjectItemService } from "../abstract";
 import { injectable, inject } from "inversify";
 import { InjectTypes } from "../../ioc";
@@ -31,6 +32,16 @@ export class SubjectItemService implements ISubjectItemService {
         return Promise.resolve(sbjEn);
     }
 
+    async move(model: SubjectMoveDto, requestorId: number) {
+        let updatedSubject: SubjectItemEntity;
+        let oldSubject: SubjectItemEntity = await this._subjectItemRepository.findById(model.childId);
+        if (!oldSubject) throw new AppError('AppError', 'Subject not found.', 404);
+        updatedSubject = Object.assign(oldSubject, {parentId:model.parentId});
+        updatedSubject.parentId = model.parentId;
+        await this._subjectItemRepository.update(model.childId, updatedSubject);
+        return Promise.resolve(updatedSubject);
+    }
+
     private populateSubjects(flatList) {
         let out = [];
         let csGr = _.groupBy(flatList, "subjectId");
@@ -38,6 +49,12 @@ export class SubjectItemService implements ISubjectItemService {
             let it = Object.assign({}, ...csGr[sbKey], { customField: undefined }, { customFields: [] });
             if (it.folder.subjectId === null)
                 it.folder = null;
+            else {
+                if (it.folder.project.subjectId === null)
+                    it.folder.project = null;
+                if (it.folder.domain.subjectId === null)
+                    it.folder.domain = null;
+            }
             if (it.task.subjectId === null)
                 it.task = null;
             let gr = _.groupBy(csGr[sbKey], 'customField.customFieldId');
@@ -47,7 +64,6 @@ export class SubjectItemService implements ISubjectItemService {
                     if (x.customField.customFieldId !== null)
                         it.customFields.push(x.customField);
                 }
-
             }
             out.push(it);
         }

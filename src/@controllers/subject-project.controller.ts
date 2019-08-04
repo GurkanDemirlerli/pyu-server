@@ -22,9 +22,9 @@ export class SubjectProjectController {
     }
 
     insert(req: Request, res: Response, next: NextFunction) {
-        let wspDto = Object.assign({}, req.body);
-        wspDto.creatorId = req.decoded.id;
-        this._subjectProjectService.add(wspDto).then((createdId) => {
+        let prjDto = Object.assign({}, req.body);
+        prjDto.creatorId = req.decoded.id;
+        this._subjectProjectService.add(prjDto, req.decoded.id).then((createdId) => {
             return this._subjectProjectService.find(createdId, req.decoded.id);
         }).then((result) => {
             return res.status(201).json({

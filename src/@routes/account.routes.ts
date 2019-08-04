@@ -2,25 +2,20 @@ import * as express from 'express';
 import 'reflect-metadata';
 import { IOC } from '../ioc';
 import { AccountController } from '../@controllers/account.controller';
+import { validationMiddleware } from '../middlewares';
+import { LoginDto } from '../_models/dtos';
 
 export class AccountRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/accounts";
         const ctrl = IOC.container.get(AccountController);
 
-        app.route(root + '/')
-            .get((req, res, next) => ctrl.list(req, res, next));
+        app.route(root + '/register')
+            .post((req, res, next) => ctrl.register(req, res, next));
 
-        app.route(root + '/:id')
-            .get((req, res, next) => ctrl.find(req, res, next));
+        app.route(root + '/login')
+            .post(validationMiddleware(LoginDto), (req, res, next) => ctrl.login(req, res, next));
 
-        app.route(root + '/')
-            .post((req, res, next) => ctrl.insert(req, res, next));
 
-        app.route(root + '/:id')
-            .put((req, res, next) => ctrl.update(req, res, next));
-
-        app.route(root + '/:id')
-            .delete((req, res, next) => ctrl.delete(req, res, next));
     }
 }

@@ -5,7 +5,7 @@ import { SubjectDescriptionController } from '../@controllers/subject-descriptio
 
 export class SubjectDescriptionRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/subject-descriptions";
         const ctrl = IOC.container.get(SubjectDescriptionController);
 
         app.route(root + '/')

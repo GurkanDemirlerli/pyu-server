@@ -5,7 +5,7 @@ import { SubjectFolderController } from '../@controllers/subject-folder.controll
 
 export class SubjectFolderRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/folders";
         const ctrl = IOC.container.get(SubjectFolderController);
 
         app.route(root + '/')

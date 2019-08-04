@@ -5,7 +5,7 @@ import { WorkScheduleWeekController } from '../@controllers/work-schedule-week.c
 
 export class WorkScheduleWeekRoutes {
     public static configureRoutes(app: express.Application): void {
-        const root = "/api/mocks";
+        const root = "/api/work-schedule-weeks";
         const ctrl = IOC.container.get(WorkScheduleWeekController);
 
         app.route(root + '/')

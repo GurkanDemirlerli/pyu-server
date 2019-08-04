@@ -30,6 +30,7 @@ const subject_folder_entity_1 = require("./../entities/subject-folder.entity");
 const subject_domain_entity_1 = require("./../entities/subject-domain.entity");
 const account_entity_1 = require("./../entities/account.entity");
 const subject_item_entity_1 = require("./../entities/subject-item.entity");
+const subject_task_entity_1 = require("./../entities/subject-task.entity");
 const workspace_entity_1 = require("./../entities/workspace.entity");
 require("reflect-metadata");
 const ioc_1 = require("../ioc");
@@ -150,7 +151,8 @@ let SeedDatabase = class SeedDatabase {
                 wspEn = yield this.addWorkSchedule(wspEn);
                 wspEn = yield this.addMembers(wspEn);
                 wspEn = yield this.addDomains(wspEn, 5);
-                wspEn = yield this.addProjects(wspEn, 50);
+                wspEn = yield this.addProjects(wspEn, 30);
+                wspEn = yield this.addTasks(wspEn, 300);
                 account.workspaces.push(wspEn);
             }
             return account;
@@ -280,6 +282,37 @@ let SeedDatabase = class SeedDatabase {
                 prjEn = yield this._subjectProjectRepository.insert(prjEn);
                 fldEn.project = prjEn;
                 sbjEn.folder = fldEn;
+                workspace.subjects.push(sbjEn);
+            }
+            return workspace;
+        });
+    }
+    addTasks(workspace, count) {
+        return __awaiter(this, void 0, void 0, function* () {
+            for (let i = 0; i < count; i++) {
+                let sbjEn = new subject_item_entity_1.SubjectItemEntity();
+                sbjEn.createdAt = new Date();
+                sbjEn.lastUpdated = new Date();
+                sbjEn.name = faker.name.jobType();
+                sbjEn.subjectDeleteState = enums_1.SubjectDeletedStates.PERSISTENT;
+                sbjEn.creatorId = workspace.members[0].workspaceMemberId;
+                sbjEn.subjectType = enums_1.SubjectTypes.TASK;
+                sbjEn.workspaceId = workspace.workspaceId;
+                let sbjs = [...workspace.subjects];
+                sbjs = _.shuffle(sbjs);
+                sbjEn.parentId = sbjs[0].subjectId;
+                sbjs = null;
+                sbjEn = yield this._subjectItemRepository.insert(sbjEn);
+                let tskEn = new subject_task_entity_1.SubjectTaskEntity();
+                tskEn.duration = 2;
+                tskEn.priority = enums_1.TaskPriorityTypes.MEDIUM;
+                let stss = workspace.workflows[0].statuses;
+                stss = _.shuffle(stss);
+                tskEn.statusId = stss[0].workflowStatusId;
+                stss = null;
+                tskEn.subjectId = sbjEn.subjectId;
+                tskEn = yield this._subjectTaskRepository.insert(tskEn);
+                sbjEn.task = tskEn;
                 workspace.subjects.push(sbjEn);
             }
             return workspace;
