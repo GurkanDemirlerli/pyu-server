@@ -2,6 +2,7 @@ import * as express from 'express';
 import 'reflect-metadata';
 import { IOC } from '../ioc';
 import { WorkspaceMemberController } from '../@controllers/workspace-member.controller';
+import { authorize } from 'src/middlewares';
 
 export class WorkspaceMemberRoutes {
     public static configureRoutes(app: express.Application): void {
@@ -10,6 +11,9 @@ export class WorkspaceMemberRoutes {
 
         app.route(root + '/')
             .get((req, res, next) => ctrl.list(req, res, next));
+
+        app.route(root + '/getWorkspaceMembers/:workspaceId')
+            .get(authorize,(req, res, next) => ctrl.getWorkspaceMembers(req, res, next));
 
         app.route(root + '/:id')
             .get((req, res, next) => ctrl.find(req, res, next));

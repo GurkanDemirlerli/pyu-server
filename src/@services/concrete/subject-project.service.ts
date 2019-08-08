@@ -23,6 +23,11 @@ export class SubjectProjectService implements ISubjectProjectService {
 
         //TODO yetki kontrol
 
+        let parentEn = await this._subjectItemRepository.findOne(model.parentId, { relations: ["folder"] });
+        if (!parentEn)
+            throw new AppError('AppError', 'Parent not found.', 404);
+        if (!(parentEn.subjectType == SubjectTypes.DOMAIN || parentEn.subjectType == SubjectTypes.FOLDER || parentEn.subjectType == SubjectTypes.PROJECT))
+            throw new AppError('AppError', 'Parent must be a domain, folder or project', 404);
         let sbjEn, fldEn, prjEn;
         let uow = new Uow();
         await uow.start();
@@ -34,15 +39,15 @@ export class SubjectProjectService implements ISubjectProjectService {
             sbjEn.subjectDeleteState = 0;
             sbjEn.creatorId = requestorId;
             sbjEn.subjectType = SubjectTypes.PROJECT;
-            sbjEn.workspaceId = model.workspaceId;
+            sbjEn.workspaceId = parentEn.workspaceId;
             sbjEn.parentId = model.parentId;
             sbjEn = await this._subjectItemRepository.insert(sbjEn, uow.getManager());
 
 
             fldEn = new SubjectFolderEntity();
-            fldEn.defaultWorkflowStatusId = model.defaultWorkflowStatusId;
+            fldEn.defaultWorkflowStatusId = parentEn.folder.defaultWorkflowStatusId;
             fldEn.subjectId = sbjEn.subjectId;
-            fldEn.workflowId = model.workflowId;
+            fldEn.workflowId = parentEn.folder.workflowId;
 
             fldEn = await this._subjectFolderRepository.insert(fldEn, uow.getManager());
 
@@ -51,10 +56,10 @@ export class SubjectProjectService implements ISubjectProjectService {
             prjEn.startDate = model.startDate;
 
             //HARD-CODING null'ı parentinin default statusIdsi yap
-            prjEn.statusId = null
+            prjEn.statusId = parentEn.folder.defaultWorkflowStatusId;
             prjEn.subjectId = fldEn.subjectId;
 
-            prjEn = await this._subjectProjectRepository.insert(prjEn);
+            prjEn = await this._subjectProjectRepository.insert(prjEn, uow.getManager());
 
             await uow.commit();
         } catch (err) { await uow.rollback(); throw err; } finally { await uow.release(); }

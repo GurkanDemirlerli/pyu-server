@@ -71,4 +71,16 @@ export class WorkspaceMemberController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'WorkspaceMemberController');
         });
     }
+
+    getWorkspaceMembers(req: Request, res: Response, next: NextFunction) {
+        const workspaceId = req.params.workspaceId;
+        this._workspaceMemberService.getWorkspaceMembers(workspaceId, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'getWorkspaceMembers', 'WorkspaceMemberController');
+        });
+    }
 }

@@ -27,16 +27,16 @@ export class AccountService implements IAccountService {
                 }
                 console.log("Found User : ", found_account);
                 let decodedToken: DecodedTokenModel = {
-                    id: found_account.id,
+                    id: found_account.accountId,
                     email: found_account.email,
-                    firstname: found_account.name,
-                    lastname: found_account.surname
+                    firstname: found_account.firstname,
+                    lastname: found_account.lastname
                 }
                 let token = jwt.sign({
                     ...decodedToken
                 }, 'MySecret', { expiresIn: 86400000 });
                 let loginResult: any = {
-                    id: found_account.id,
+                    id: found_account.accountId,
                     email: found_account.email,
                     token: token
                 }

@@ -140,7 +140,28 @@ export class SeedDatabase {
       wspEn.ownerId = account.accountId;
       wspEn.workspaceType = WorkspaceTypes.ENTERPRISE;
 
-      wspEn = await this._workspaceRepository.insert(wspEn);
+
+      // wspEn = await this._workspaceRepository.insert(wspEn);
+
+
+      // let wmemEn = new WorkspaceMemberEntity();
+      // wmemEn.memberType = MemberTypes.USER;
+      // wmemEn.workspaceId = wspEn.workspaceId;
+  
+      // wmemEn = await this._workspaceMemberRepository.insert(wmemEn);
+  
+      // let wsu = new WorkspaceUserEntity();
+      // wsu.accountId = workspace.ownerId;
+      // wsu.createdAt = new Date();
+      // wsu.userType = UserTypes.REGULAR;
+      // wsu.workScheduleId = workspace.schedules[0].workScheduleId;
+      // wsu.workspaceMemberId = wmemEn.workspaceMemberId;
+      // wsu = await this._workspaceUserRepository.insert(wsu);
+      // wmemEn.user = wsu;
+  
+      // workspace.members.push(wmemEn);
+      // return workspace;
+
 
       wspEn = await this.addWorkflows(wspEn, 2);
       wspEn = await this.addWorkSchedule(wspEn);

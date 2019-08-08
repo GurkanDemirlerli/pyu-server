@@ -71,4 +71,16 @@ export class WorkflowController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'WorkflowController');
         });
     }
+
+    getActiveWorkflow(req: Request, res: Response, next: NextFunction) {
+        const folderId: number = +req.params.folderId;
+        this._workflowService.getActiveWorkflow(folderId, req.decoded.id).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'getActiveWorkflow', 'WorkflowController');
+        });
+    }
 }

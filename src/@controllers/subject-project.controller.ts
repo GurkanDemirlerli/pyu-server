@@ -1,3 +1,4 @@
+import { ISubjectItemService } from './../@services/abstract/i-subject-item.service';
 import { injectable, inject } from "inversify";
 import { Request, Response, NextFunction } from "express";
 import { ISubjectProjectService } from "../@services/abstract";
@@ -8,7 +9,8 @@ import { InjectTypes } from "../ioc/inject-types";
 export class SubjectProjectController {
 
     constructor(
-        @inject(InjectTypes.Service.SUBJECT_PROJECT) private readonly _subjectProjectService: ISubjectProjectService
+        @inject(InjectTypes.Service.SUBJECT_PROJECT) private readonly _subjectProjectService: ISubjectProjectService,
+        @inject(InjectTypes.Service.SUBJECT_ITEM) private readonly _subjectItemService: ISubjectItemService
     ) { }
     list(req: Request, res: Response, next: NextFunction) {
         this._subjectProjectService.list({}, req.decoded.id).then((result) => {
@@ -25,7 +27,7 @@ export class SubjectProjectController {
         let prjDto = Object.assign({}, req.body);
         prjDto.creatorId = req.decoded.id;
         this._subjectProjectService.add(prjDto, req.decoded.id).then((createdId) => {
-            return this._subjectProjectService.find(createdId, req.decoded.id);
+            return this._subjectItemService.find(createdId, req.decoded.id);
         }).then((result) => {
             return res.status(201).json({
                 success: true,

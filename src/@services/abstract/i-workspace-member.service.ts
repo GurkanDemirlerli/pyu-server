@@ -4,4 +4,5 @@ export interface IWorkspaceMemberService {
     find(id: number, requestorId: number): Promise<any>;
     update(id: number, model: any, requestorId: number): Promise<any>;
     delete(id: number, requestorId: number): Promise<void>;
+    getWorkspaceMembers(workspaceId: number, requestorId: number): Promise<any>;
 }

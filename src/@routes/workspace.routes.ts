@@ -2,6 +2,7 @@ import * as express from 'express';
 import 'reflect-metadata';
 import { IOC } from '../ioc';
 import { WorkspaceController } from '../@controllers/workspace.controller';
+import { authorize } from 'src/middlewares';
 
 export class WorkspaceRoutes {
     public static configureRoutes(app: express.Application): void {
@@ -9,7 +10,7 @@ export class WorkspaceRoutes {
         const ctrl = IOC.container.get(WorkspaceController);
 
         app.route(root + '/')
-            .get((req, res, next) => ctrl.list(req, res, next));
+            .get(authorize, (req, res, next) => ctrl.list(req, res, next));
 
         app.route(root + '/:id')
             .get((req, res, next) => ctrl.find(req, res, next));

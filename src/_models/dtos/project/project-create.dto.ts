@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsNotEmpty, IsNumber, IsDate, IsArray } from 'class-validator';
+import { IsString, IsInt, IsNotEmpty, IsNumber, IsDate, IsArray, IsDateString } from 'class-validator';
 
 export class ProjectCreateDto {
 
@@ -8,23 +8,14 @@ export class ProjectCreateDto {
   @IsNumber()
   public parentId: number;
 
-  @IsDate()
+  @IsDateString()
   public startDate: Date;
 
-  @IsDate()
+  @IsDateString()
   public dueDate: Date;
 
   @IsArray()
   public sharings: any[];
-
-  @IsNumber()
-  public workspaceId: number;
-
-  @IsNumber()
-  public workflowId: number;
-
-  @IsNumber()
-  public defaultWorkflowStatusId: number;
 
 }
 

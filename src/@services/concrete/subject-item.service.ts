@@ -27,7 +27,7 @@ export class SubjectItemService implements ISubjectItemService {
     }
 
     async find(id: number, requestorId: number): Promise<any> {
-        let sbjEn: SubjectItemEntity = await this._subjectItemRepository.findOne(id, { relations: ["task"] });
+        let sbjEn: SubjectItemEntity = await this._subjectItemRepository.findOne(id, { relations: ["task", "folder", "folder.project", "folder.domain"] });
         if (!sbjEn) throw new AppError('AppError', 'Subject not found.', 404);
         return Promise.resolve(sbjEn);
     }
@@ -36,7 +36,7 @@ export class SubjectItemService implements ISubjectItemService {
         let updatedSubject: SubjectItemEntity;
         let oldSubject: SubjectItemEntity = await this._subjectItemRepository.findById(model.childId);
         if (!oldSubject) throw new AppError('AppError', 'Subject not found.', 404);
-        updatedSubject = Object.assign(oldSubject, {parentId:model.parentId});
+        updatedSubject = Object.assign(oldSubject, { parentId: model.parentId });
         updatedSubject.parentId = model.parentId;
         await this._subjectItemRepository.update(model.childId, updatedSubject);
         return Promise.resolve(updatedSubject);
