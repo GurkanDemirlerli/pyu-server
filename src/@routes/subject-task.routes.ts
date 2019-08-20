@@ -22,5 +22,8 @@ export class SubjectTaskRoutes {
 
         app.route(root + '/:id')
             .delete((req, res, next) => ctrl.delete(req, res, next));
+
+        app.route(root + '/:id/updateStatus')
+            .patch((req, res, next) => ctrl.updateStatus(req, res, next))
     }
 }

@@ -20,5 +20,7 @@ export class SubjectItemRoutes {
         app.route(root + '/move')
             .post((req, res, next) => ctrl.move(req, res, next));
 
+
+
     }
 }

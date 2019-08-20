@@ -42,6 +42,10 @@ export class SubjectItemService implements ISubjectItemService {
         return Promise.resolve(updatedSubject);
     }
 
+    async getDescendantFamily(id: number, requestorId: number): Promise<any> {
+        
+    }
+
     private populateSubjects(flatList) {
         let out = [];
         let csGr = _.groupBy(flatList, "subjectId");

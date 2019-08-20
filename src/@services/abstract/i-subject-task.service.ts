@@ -4,4 +4,5 @@ export interface ISubjectTaskService {
     find(id: number, requestorId: number): Promise<any>;
     update(id: number, model: any, requestorId: number): Promise<any>;
     delete(id: number, requestorId: number): Promise<void>;
+    updateStatus(subjectId: number, model: any, requestorId: number): Promise<void>;
 }

@@ -71,4 +71,17 @@ export class SubjectTaskController {
             return ErrorHandler.handleErrorResponses(error, res, 'delete', 'SubjectTaskController');
         });
     }
+
+    updateStatus(req: Request, res: Response, next: NextFunction) {
+        const id: number = req.params.id;
+        const dto = Object.assign({}, req.body);
+        this._subjectTaskService.updateStatus(id, dto, 0).then((result) => {
+            return res.status(200).json({
+                success: true,
+                data: result
+            });
+        }).catch((error: Error) => {
+            return ErrorHandler.handleErrorResponses(error, res, 'updateStatus', 'SubjectTaskController');
+        });
+    }
 }
